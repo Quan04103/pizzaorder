@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pizzaorder/pizzaorder/presentation/widget/pages/user_list.dart';
+import 'package:pizzaorder/home_page.dart';
+import 'package:pizzaorder/location_page.dart';
+import 'package:pizzaorder/history_page.dart';
+import 'package:pizzaorder/pizza_card_gird.dart';
+import 'package:pizzaorder/all_product_page.dart';
+import 'package:pizzaorder/favorites_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,12 +13,10 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Flutter Demo',
-      home: UserList(),
+    return MaterialApp(
+      home: Scaffold(body: AllProductPage()),
     );
   }
 }
