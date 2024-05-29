@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'pizza_card_gird.dart';
-import 'category_carousel.dart';
-import 'shopping_cart_btn.dart';
-import 'dropdown_home.dart';
-import 'search.dart';
+import '../components/pizza_card_gird.dart';
+import '../components/category_carousel.dart';
+import '../components/shopping_cart_btn.dart';
+import '../components/dropdown_home.dart';
+import '../components/search.dart';
 
 class AllProductPage extends StatelessWidget {
   const AllProductPage({super.key});

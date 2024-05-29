@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pizza_card.dart';
+import '../components/pizza_card.dart';
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});

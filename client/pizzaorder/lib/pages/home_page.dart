@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'category_carousel.dart';
-import 'pizza_card.dart';
-import 'shopping_cart_btn.dart';
-import 'dropdown_home.dart';
-import 'slide.dart';
-import 'search.dart';
+import '../components/category_carousel.dart';
+import '../components/pizza_card.dart';
+import '../components/shopping_cart_btn.dart';
+import '../components/dropdown_home.dart';
+import '../components/slide.dart';
+import '../components/search.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
