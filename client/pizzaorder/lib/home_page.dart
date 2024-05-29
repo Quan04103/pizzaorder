@@ -7,6 +7,8 @@ import 'slide.dart';
 import 'search.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,78 +18,80 @@ class HomePage extends StatelessWidget {
           backgroundColor: Colors.red,
         ),
         backgroundColor: Colors.green[50],
-        body: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    DropdownHome(),
-                    Icon(
-                      Icons.favorite_border,
-                      color: Colors.black,
-                      size: 35,
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DropdownHome(),
+                      const Icon(
+                        Icons.favorite_border,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Search(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  slide(),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 270),
+                    child: Text(
+                      'Categories',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Search(),
-                SizedBox(
-                  height: 10,
-                ),
-                slide(),
-                Padding(
-                  padding: EdgeInsets.only(right: 270),
-                  child: Text(
-                    'Categories',
-                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                ),
-                SizedBox(height: 5),
-                SizedBox(
-                  height: 100,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: CategoriesCarousel(),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 300),
-                  child: Text(
-                    'Newest',
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                ),
-                SizedBox(height: 5),
-                SizedBox(
-                  height: 280,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    height: 100,
                     child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ProductsCarousel(),
+                      alignment: Alignment.topCenter,
+                      child: CategoriesCarousel(),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Positioned(
-              bottom: 130,
-              right: 10,
-              child: ShoppingCartButton(
-                onPressed: () {
-                  // Xử lý khi nhấn vào nút giỏ hàng
-                },
+                  const Padding(
+                    padding: EdgeInsets.only(right: 300),
+                    child: Text(
+                      'Newest',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const SizedBox(
+                    height: 280,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ProductsCarousel(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              Positioned(
+                bottom: 130,
+                right: 10,
+                child: ShoppingCartButton(
+                  onPressed: () {
+                    // Xử lý khi nhấn vào nút giỏ hàng
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -95,21 +99,23 @@ class HomePage extends StatelessWidget {
 }
 
 class ProductsCarousel extends StatelessWidget {
+  const ProductsCarousel({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          SizedBox(width: 20), // Khoảng cách từ lề bên trái
+          const SizedBox(width: 20), // Khoảng cách từ lề bên trái
           PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          const SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
           PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          const SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
           PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          const SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
           PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách từ lề bên phải
+          const SizedBox(width: 20), // Khoảng cách từ lề bên phải
         ],
       ),
     );

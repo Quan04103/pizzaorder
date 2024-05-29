@@ -8,10 +8,11 @@ const userSchema = new Schema({
     username: {
         type: String,
         lowercase: true,
-        required: true
+        required: true,
     },
     password: {
         type: String,
+        required: true
     },
     nameProfile: {
         type: String,
@@ -19,7 +20,7 @@ const userSchema = new Schema({
     },
     number: {
         type: String,
-        required: true
+        required: true,
     },
     address: {
         type: String,
@@ -32,10 +33,10 @@ const userSchema = new Schema({
     },
 }, { collection: 'user' });
 
-userSchema.pre('save', async function(){
+userSchema.pre('save', async function () {
     try {
         var user = this;
-        const salt = await(bcrypt.genSalt(10));
+        const salt = await (bcrypt.genSalt(10));
         const hashpass = await bcrypt.hash(user.password, salt);
 
         user.password = hashpass;
@@ -44,7 +45,7 @@ userSchema.pre('save', async function(){
     }
 });
 
-userSchema.methods.comparePassword = async function(userPassword){
+userSchema.methods.comparePassword = async function (userPassword) {
     try {
         const isMatch = await bcrypt.compare(userPassword, this.password);
         return isMatch;
