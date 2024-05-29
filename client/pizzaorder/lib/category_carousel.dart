@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CategoriesCarousel extends StatelessWidget {
+  const CategoriesCarousel({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       scrollDirection: Axis.horizontal,
-      children: [
+      children: const [
         SizedBox(width: 4), // Khoảng cách từ lề bên trái
         CategoryCard(),
         SizedBox(width: 4), // Khoảng cách từ lề bên trái
@@ -32,6 +34,8 @@ class CategoriesCarousel extends StatelessWidget {
 }
 
 class CategoryCard extends StatelessWidget {
+  const CategoryCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PizzaCard extends StatefulWidget {
+  const PizzaCard({super.key});
+
   @override
   _PizzaCardState createState() => _PizzaCardState();
 }
@@ -13,7 +15,7 @@ class _PizzaCardState extends State<PizzaCard> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       elevation: 10,
-      child: Container(
+      child: SizedBox(
         width: 170,
         height: 260,
         child: Stack(
@@ -28,14 +30,14 @@ class _PizzaCardState extends State<PizzaCard> {
                     color: isFavorite
                         ? Colors.orange
                         : Colors.red, // Chuyển màu của Container từ đỏ sang cam
-                    borderRadius: BorderRadius.vertical(
+                    borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(30.0),
                     ),
                   ),
                 ),
               ],
             ),
-            Positioned(
+            const Positioned(
               top: 30, // Điều chỉnh giá trị này để ảnh nổi lên
               left: 0,
               right: 0,
@@ -60,7 +62,7 @@ class _PizzaCardState extends State<PizzaCard> {
                 child: Container(
                   width: 38,
                   height: 38,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
                   ),
@@ -71,13 +73,13 @@ class _PizzaCardState extends State<PizzaCard> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 155,
               left: 0,
               right: 0,
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Spicy Diablo',
                     style: TextStyle(
@@ -106,12 +108,12 @@ class _PizzaCardState extends State<PizzaCard> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 10, // Điều chỉnh khoảng cách từ dưới lên
               left: 15,
               right: 0,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
                   '\$62',
                   style: TextStyle(
@@ -128,7 +130,7 @@ class _PizzaCardState extends State<PizzaCard> {
               height: 45,
               width: 45,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
@@ -136,7 +138,7 @@ class _PizzaCardState extends State<PizzaCard> {
                   ),
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.add, color: Colors.white),
+                  icon: const Icon(Icons.add, color: Colors.white),
                   onPressed: () {
                     // Add your onPressed code here!
                   },

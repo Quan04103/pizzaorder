@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class LocationPage extends StatelessWidget {
+  const LocationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             // Handle back action
           },
         ),
-        title: Text(
+        title: const Text(
           'Vị trí',
           style: TextStyle(color: Colors.white),
         ),
@@ -23,32 +25,32 @@ class LocationPage extends StatelessWidget {
           children: [
             TextField(
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 hintText: 'Search...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ListTile(
-              leading: Icon(Icons.my_location, color: Colors.red),
-              title: Text('Use Current Location'),
+              leading: const Icon(Icons.my_location, color: Colors.red),
+              title: const Text('Use Current Location'),
               onTap: () {
                 // Handle current location
               },
             ),
-            Divider(),
+            const Divider(),
             Expanded(
               child: ListView(
                 children: [
                   ListTile(
-                    leading: Icon(Icons.location_on, color: Colors.red),
-                    title: Text('Home'),
-                    subtitle: Text(
+                    leading: const Icon(Icons.location_on, color: Colors.red),
+                    title: const Text('Home'),
+                    subtitle: const Text(
                         'F-7, Kabir Enclave, Opp. AxisBank, Opp. Hdfc Bank, Bopal-Ghuma road, Ahmedabad'),
                     trailing: IconButton(
-                      icon: Icon(Icons.edit, color: Colors.red),
+                      icon: const Icon(Icons.edit, color: Colors.red),
                       onPressed: () {
                         // Handle edit location
                       },
@@ -72,10 +74,10 @@ class LocationPage extends StatelessWidget {
                   //   ),
                   // ),
                   ListTile(
-                    leading: Icon(Icons.location_on, color: Colors.red),
-                    title: Text('Thêm vị trí mới'),
+                    leading: const Icon(Icons.location_on, color: Colors.red),
+                    title: const Text('Thêm vị trí mới'),
                     trailing: IconButton(
-                      icon: Icon(Icons.edit, color: Colors.red),
+                      icon: const Icon(Icons.edit, color: Colors.red),
                       onPressed: () {
                         // Handle add new location
                       },

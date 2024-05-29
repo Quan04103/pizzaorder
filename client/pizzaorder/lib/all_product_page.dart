@@ -6,6 +6,8 @@ import 'dropdown_home.dart';
 import 'search.dart';
 
 class AllProductPage extends StatelessWidget {
+  const AllProductPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,21 +20,21 @@ class AllProductPage extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 DropdownHome(),
-                Icon(
+                const Icon(
                   Icons.favorite_border,
                   color: Colors.black,
                   size: 35,
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Search(),
@@ -48,7 +50,7 @@ class AllProductPage extends StatelessWidget {
                     right: 0,
                     height: MediaQuery.of(context).size.height *
                         0.2, // 20% of the height
-                    child: CategoriesCarousel(),
+                    child: const CategoriesCarousel(),
                   ),
                   Positioned(
                     top: MediaQuery.of(context).size.height *
@@ -56,7 +58,7 @@ class AllProductPage extends StatelessWidget {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: PizzaCardGird(),
+                    child: const PizzaCardGird(),
                   ),
                   Positioned(
                     bottom: 130,

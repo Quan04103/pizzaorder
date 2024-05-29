@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatelessWidget {
+  const HistoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             // Handle back action
           },
         ),
-        title: Text(
+        title: const Text(
           'Lịch sử hoạt động',
           style: TextStyle(color: Colors.white),
         ),
@@ -21,14 +23,14 @@ class HistoryPage extends StatelessWidget {
         children: List.generate(10, (index) {
           return Column(
             children: [
-              if (index == 0) SizedBox(height: 40),
-              HistoryItem(
+              if (index == 0) const SizedBox(height: 40),
+              const HistoryItem(
                 image: 'assets/pizza.jpg',
                 title: 'PIZZA HẢI SẢN...',
                 price: '109.000 đ',
                 date: '14 THG 4 2024, 19:01',
               ),
-              Divider(),
+              const Divider(),
             ],
           );
         }),
@@ -43,7 +45,8 @@ class HistoryItem extends StatelessWidget {
   final String price;
   final String date;
 
-  HistoryItem({
+  const HistoryItem({
+    super.key,
     required this.image,
     required this.title,
     required this.price,
@@ -62,7 +65,7 @@ class HistoryItem extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
@@ -70,7 +73,7 @@ class HistoryItem extends StatelessWidget {
       subtitle: Text(date),
       trailing: Text(
         price,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: 20,

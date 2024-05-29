@@ -20,8 +20,7 @@ Widget slide() {
         autoPlay: true,
         aspectRatio: 2,
         enableInfiniteScroll: true,
-        autoPlayInterval: Duration(seconds: 3),
-         
+        autoPlayInterval: const Duration(seconds: 3),
       ),
       items: banners);
 }

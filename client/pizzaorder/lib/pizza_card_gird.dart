@@ -14,7 +14,7 @@ class PizzaCardGird extends StatelessWidget {
         // Bạn có thể thay đổi giá trị của aspectRatio để phù hợp với nhu cầu của bạn
         childAspectRatio: 1 / 1.35,
         children: List.generate(10, (index) {
-          return Center(child: PizzaCard());
+          return const Center(child: PizzaCard());
         }),
       ),
     );

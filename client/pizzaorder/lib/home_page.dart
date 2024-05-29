@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                     child: Align(
                       alignment: Alignment.topCenter,
@@ -106,16 +106,16 @@ class ProductsCarousel extends StatelessWidget {
     return SizedBox(
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: [
-          const SizedBox(width: 20), // Khoảng cách từ lề bên trái
+        children: const [
+          SizedBox(width: 20), // Khoảng cách từ lề bên trái
           PizzaCard(),
-          const SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
           PizzaCard(),
-          const SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
           PizzaCard(),
-          const SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
           PizzaCard(),
-          const SizedBox(width: 20), // Khoảng cách từ lề bên phải
+          SizedBox(width: 20), // Khoảng cách từ lề bên phải
         ],
       ),
     );

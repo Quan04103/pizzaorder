@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'pizza_card.dart';
 
 class FavoritesPage extends StatelessWidget {
+  const FavoritesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -9,12 +11,12 @@ class FavoritesPage extends StatelessWidget {
         backgroundColor: Colors.green[50],
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
               // Handle back action
             },
           ),
-          title: Text(
+          title: const Text(
             'Yêu thích',
             style: TextStyle(color: Colors.white),
           ),
@@ -28,7 +30,7 @@ class FavoritesPage extends StatelessWidget {
             // Bạn có thể thay đổi giá trị của aspectRatio để phù hợp với nhu cầu của bạn
             childAspectRatio: 1 / 1.35,
             children: List.generate(10, (index) {
-              return Center(child: PizzaCard());
+              return const Center(child: PizzaCard());
             }),
           ),
         ),

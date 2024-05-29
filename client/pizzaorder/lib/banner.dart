@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 Widget banner(int color) {
   return Container(
-    margin: EdgeInsets.all(10),
-    padding: EdgeInsets.all(15),
+    margin: const EdgeInsets.all(10),
+    padding: const EdgeInsets.all(15),
     width: 350,
     height: 150,
     decoration: BoxDecoration(
@@ -19,7 +19,7 @@ Widget banner(int color) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Special Offer\nfor March',
                 style: TextStyle(
                   color: Colors.white,
@@ -27,15 +27,15 @@ Widget banner(int color) {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10), // Sử dụng SizedBox để tạo khoảng cách
-              Text(
+              const SizedBox(height: 10), // Sử dụng SizedBox để tạo khoảng cách
+              const Text(
                 'We are here with the best\n pizzas in town.',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 8,
                 ),
               ),
-              SizedBox(height: 10), // Sử dụng SizedBox để tạo khoảng cách
+              const SizedBox(height: 10), // Sử dụng SizedBox để tạo khoảng cách
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.red,
@@ -43,10 +43,10 @@ Widget banner(int color) {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  minimumSize: Size(60, 30),
+                  minimumSize: const Size(60, 30),
                 ),
                 onPressed: () {},
-                child: Text('Buy Now'),
+                child: const Text('Buy Now'),
               ),
             ],
           ),
