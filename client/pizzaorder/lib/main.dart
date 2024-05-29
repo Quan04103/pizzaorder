@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pizzaorder/home_page.dart';
-import 'package:pizzaorder/location_page.dart';
-import 'package:pizzaorder/history_page.dart';
-import 'package:pizzaorder/pizza_card_gird.dart';
-import 'package:pizzaorder/all_product_page.dart';
-import 'package:pizzaorder/favorites_page.dart';
+import 'package:pizzaorder/pages/home_page.dart';
+import 'package:pizzaorder/pages/location_page.dart';
+import 'package:pizzaorder/pages/history_page.dart';
+import 'package:pizzaorder/components/pizza_card_gird.dart';
+import 'package:pizzaorder/pages/all_product_page.dart';
+import 'package:pizzaorder/pages/favorites_page.dart';
 
 void main() {
   runApp(const MyApp());
