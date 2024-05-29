@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const mongooseConnection = require("./config/db");
 const app = require('./app');
 const cors = require('cors');
-const UserModel = require('./model/user.model')
+const UserModel = require('./model/user.model');
+const ProductModel = require('./model/product.model')
 const PORT = 5000;
 
 app.use(cors());

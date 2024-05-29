@@ -11,15 +11,15 @@ class UserService {
             throw new Error(error.message);
         }
     }
-    static async checkUser(username){
+    static async checkUser(username) {
         try {
-            return await UserModel.findOne({username})
+            return await UserModel.findOne({ username })
         } catch (error) {
             throw error;
         }
     }
-    static async generateToken(tokenData, secretKey, jwt_expire){
-        return jwt.sign(tokenData, secretKey, {expiresIn: jwt_expire});
+    static async generateToken(tokenData, secretKey, jwt_expire) {
+        return jwt.sign(tokenData, secretKey, { expiresIn: jwt_expire });
     }
 }
 
