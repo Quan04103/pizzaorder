@@ -5,7 +5,7 @@ import 'package:pizzaorder/pages/history_page.dart';
 import 'package:pizzaorder/components/pizza_card_gird.dart';
 import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
-import 'package:pizzaorder/pages/log_in.dart';
+import 'package:pizzaorder/pages/giohang.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(body: Login()),
+      home: Scaffold(body: GioHang()),
     );
   }
 }
