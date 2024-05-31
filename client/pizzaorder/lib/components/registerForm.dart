@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pizzaorder/components/login_button_2.dart';
 import 'package:http/http.dart' as http;
-import '../ui/log_in.dart';
+import '../pages/log_in.dart';
 import 'textField.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -36,50 +36,41 @@ class _RegisterFormState extends State<RegisterForm> {
     });
   }
 
-  // void registerUser() async {
-  //   if (_nameController.text.isNotEmpty &&
-  //       _phoneController.text.isNotEmpty &&
-  //       _emailController.text.isNotEmpty &&
-  //       _userNameController.text.isNotEmpty &&
-  //       _passwordController.text.isNotEmpty &&
-  //       _confirmPasswordController.text.isNotEmpty) {
-  //     if (_passwordController.text == _confirmPasswordController.text) {
-  //       var regBody = {
-  //         "email": _emailController.text,
-  //       };
-  //       print('ok');
-  //     }
-  //   } else {
-  //     setState(() {
-  //       _isNotValidate = true;
-  //     });
-  //   }
-  // }
-
   void registerUser() async {
     _validateFields();
     if (!_isNotValidate) {
       var regBody = {
-        "nameProfile": _nameController.text,
-        "number": _phoneController.text,
-        "email": _emailController.text,
         "username": _userNameController.text,
         "password": _passwordController.text,
-        "address": null
+        "nameProfile": _nameController.text,
+        "number": _phoneController.text,
+        "address": "Tp.HCM",
+        "email": _emailController.text
       };
 
-      var response = await http.post(
-        Uri.parse('http://localhost:5000/registration'),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(regBody),
-      );
-      var jsonResponse = jsonDecode(response.body);
+      try {
+        var response = await http.post(
+          Uri.parse(
+              'http://10.0.2.2:5000/registration'), // Adjust IP if using an emulator
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody),
+        );
 
-      print(jsonResponse['status']);
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print(jsonResponse['status']);
+        } else {
+          print('Request failed with status: ${response.statusCode}.');
+          // Hiển thị thông báo lỗi từ server
+        }
 
-      //print("Data : $regBody");
+        print("Data : $regBody");
+      } catch (e) {
+        print('Error: $e');
+      }
+    } else {
+      print("Please fill all fields");
     }
-    // username, password, nameProfile, number, address, email   IPv4 Address. . . . . . . . . . . : 192.168.1.9
   }
 
   @override
@@ -139,7 +130,9 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _emailController,
             labelText: 'Địa chỉ email',
             height: 70,
-            errorText: _isNotValidate ? 'Đây là thông tin bắt buộc' : null,
+            errorText: _isNotValidate && _emailController.text.isEmpty
+                ? 'Đây là thông tin bắt buộc'
+                : null,
           ),
           const SizedBox(
             height: 5,
@@ -148,7 +141,9 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _passwordController,
             labelText: 'Mật khẩu',
             height: 70,
-            errorText: _isNotValidate ? 'Đây là thông tin bắt buộc' : null,
+            errorText: _isNotValidate && _passwordController.text.isEmpty
+                ? 'Đây là thông tin bắt buộc'
+                : null,
           ),
           const SizedBox(
             height: 5,
@@ -157,7 +152,9 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _confirmPasswordController,
             labelText: 'Xác nhận mật khẩu',
             height: 70,
-            errorText: _isNotValidate ? 'Đây là thông tin bắt buộc' : null,
+            errorText: _isNotValidate && _confirmPasswordController.text.isEmpty
+                ? 'Đây là thông tin bắt buộc'
+                : null,
           ),
           Align(
             alignment: Alignment.bottomRight,

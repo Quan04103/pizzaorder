@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pizzaorder/components/textField.dart';
-import 'package:pizzaorder/ui/home.dart';
 import 'dart:convert';
 import 'login_button_2.dart';
 
@@ -13,18 +12,46 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _usernameController = TextEditingController();
+  final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isNotValidate = false;
   void _validateFields() {
     setState(() {
       _isNotValidate =
-          _usernameController.text.isEmpty || _passwordController.text.isEmpty;
+          _userNameController.text.isEmpty || _passwordController.text.isEmpty;
     });
   }
 
-  void _login() async {
-    var response = {};
+  void loginUser() async {
+    _validateFields();
+    if (!_isNotValidate) {
+      var regBody = {
+        "username": _userNameController.text,
+        "password": _passwordController.text
+      };
+
+      try {
+        var response = await http.post(
+          Uri.parse('http://10.0.2.2:5000/login'),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody),
+        );
+
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print(jsonResponse['status']);
+        } else {
+          print('Request failed with status: ${response.statusCode}.');
+          // Hiển thị thông báo lỗi từ server
+        }
+
+        print("Data : $regBody");
+      } catch (e) {
+        print('Error: $e');
+      }
+    } else {
+      print("Please fill all fields");
+    }
   }
 
   @override
@@ -48,15 +75,19 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           RoundedTextField(
-            controller: _usernameController,
+            controller: _userNameController,
             labelText: 'Tài khoản',
-            errorText: 'Vui lòng điền vào ô này',
+            errorText: _isNotValidate && _userNameController.text.isEmpty
+                ? 'Đây là thông tin bắt buộc'
+                : null,
             height: 70,
           ),
           RoundedTextField(
             controller: _passwordController,
             labelText: 'Mật khẩu',
-            errorText: 'Vui lòng điền vào ô này',
+            errorText: _isNotValidate && _passwordController.text.isEmpty
+                ? 'Đây là thông tin bắt buộc'
+                : null,
             height: 70,
           ),
           const SizedBox(
@@ -68,12 +99,12 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.only(right: 25),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const HomePage(),
+                  //   ),
+                  // );
                 },
                 child: const Text(
                   'Quên mật khẩu ?',
@@ -89,11 +120,12 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(
             height: 5,
           ),
-          const LoginButton2(
+          LoginButton2(
             value: 'Đăng nhập',
             height: 200,
             width: 40,
             fontSize: 30,
+            onPressed: loginUser,
           )
         ],
       ),
