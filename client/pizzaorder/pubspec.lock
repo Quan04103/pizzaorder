@@ -347,6 +347,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+<<<<<<< HEAD
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -387,6 +388,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   http:
     dependency: "direct main"
     description:
@@ -395,6 +398,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+<<<<<<< HEAD
   http_multi_server:
     dependency: transitive
     description:
@@ -403,6 +407,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   http_parser:
     dependency: transitive
     description:
@@ -411,6 +417,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+<<<<<<< HEAD
   intl:
     dependency: "direct main"
     description:
@@ -443,6 +450,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   leak_tracker:
     dependency: transitive
     description:
@@ -831,7 +840,12 @@ packages:
       sha256: "5c2f730018264d276c20e4f1503fd1308dfbbae39ec8ee63c5236311ac06954b"
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "0.6.1"
+=======
+<<<<<<< HEAD
+    version: "0.7.0"
+>>>>>>> 2uangLyng-Linh
   timing:
     dependency: transitive
     description:
@@ -848,6 +862,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+=======
+    version: "0.6.1"
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   typed_data:
     dependency: transitive
     description:
@@ -856,6 +873,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+<<<<<<< HEAD
   uuid:
     dependency: transitive
     description:
@@ -864,6 +882,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.0"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   vector_math:
     dependency: transitive
     description:
@@ -879,7 +899,12 @@ packages:
       sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "13.0.0"
+=======
+<<<<<<< HEAD
+    version: "14.2.1"
+>>>>>>> 2uangLyng-Linh
   watcher:
     dependency: transitive
     description:
@@ -888,6 +913,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+=======
+    version: "13.0.0"
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   web:
     dependency: transitive
     description:
@@ -896,6 +924,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+<<<<<<< HEAD
   web_socket_channel:
     dependency: transitive
     description:
@@ -928,6 +957,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
 sdks:
   dart: ">=3.3.4 <4.0.0"
   flutter: ">=3.16.6"

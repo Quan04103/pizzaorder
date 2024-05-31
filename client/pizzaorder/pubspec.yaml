@@ -37,6 +37,7 @@ dependencies:
   floor: ^1.5.0
   flutter:
     sdk: flutter
+<<<<<<< HEAD
   flutter_bloc: ^8.1.5
   flutter_hooks: ^0.20.5
   get_it: ^7.7.0
@@ -46,6 +47,9 @@ dependencies:
   retrofit_generator: ^8.1.0
   carousel_slider: ^4.2.1
   font_awesome_flutter: ^9.0.0
+=======
+  http: ^1.2.1
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
 
 dev_dependencies:
   flutter_lints: ^3.0.0
@@ -61,6 +65,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+<<<<<<< HEAD
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/pizza.jpg
@@ -88,3 +93,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+=======
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/images/
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
