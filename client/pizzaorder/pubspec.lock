@@ -347,6 +347,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+<<<<<<< HEAD
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -387,6 +388,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   http:
     dependency: "direct main"
     description:
@@ -395,6 +398,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+<<<<<<< HEAD
   http_multi_server:
     dependency: transitive
     description:
@@ -403,6 +407,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   http_parser:
     dependency: transitive
     description:
@@ -411,6 +417,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+<<<<<<< HEAD
   intl:
     dependency: "direct main"
     description:
@@ -443,6 +450,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   leak_tracker:
     dependency: transitive
     description:
@@ -831,6 +840,7 @@ packages:
       sha256: "9955ae474176f7ac8ee4e989dadfb411a58c30415bcfb648fa04b2b8a03afa7f"
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "0.7.0"
   timing:
     dependency: transitive
@@ -848,6 +858,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+=======
+    version: "0.6.1"
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   typed_data:
     dependency: transitive
     description:
@@ -856,6 +869,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+<<<<<<< HEAD
   uuid:
     dependency: transitive
     description:
@@ -864,6 +878,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.0"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   vector_math:
     dependency: transitive
     description:
@@ -879,6 +895,7 @@ packages:
       sha256: "3923c89304b715fb1eb6423f017651664a03bf5f4b29983627c4da791f74a4ec"
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "14.2.1"
   watcher:
     dependency: transitive
@@ -888,6 +905,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+=======
+    version: "13.0.0"
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
   web:
     dependency: transitive
     description:
@@ -896,6 +916,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+<<<<<<< HEAD
   web_socket_channel:
     dependency: transitive
     description:
@@ -928,6 +949,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+=======
+>>>>>>> ca086a72241af67e7e0802b0b3fc697a1cf12ecc
 sdks:
   dart: ">=3.3.4 <4.0.0"
   flutter: ">=3.18.0-18.0.pre.54"
