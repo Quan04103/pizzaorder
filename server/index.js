@@ -7,6 +7,7 @@ const UserModel = require('./model/user.model');
 const ProductModel = require('./model/product.model')
 const PORT = 5000;
 
+
 app.use(cors());
 
 

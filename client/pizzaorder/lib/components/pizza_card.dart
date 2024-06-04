@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../pizzaorder/models/product.dart';
 
 class PizzaCard extends StatefulWidget {
-  const PizzaCard({super.key});
+  final ProductModel product;
+  const PizzaCard({super.key, required this.product});
 
   @override
   _PizzaCardState createState() => _PizzaCardState();
@@ -98,9 +100,9 @@ class _PizzaCardState extends State<PizzaCard> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    'Classic Tomato Sauce, Mozzarella Cheese, Fresh Basil Leaves',
+                    widget.product.name ?? '',
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: 10,
                       color: Colors.grey[600],
                     ),
                     textAlign: TextAlign.left, // Căn giữa dòng chữ

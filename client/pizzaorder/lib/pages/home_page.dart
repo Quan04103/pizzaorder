@@ -107,15 +107,15 @@ class ProductsCarousel extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: const [
-          SizedBox(width: 20), // Khoảng cách từ lề bên trái
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách từ lề bên phải
+          // SizedBox(width: 20), // Khoảng cách từ lề bên trái
+          // PizzaCard(),
+          // SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          // PizzaCard(),
+          // SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          // PizzaCard(),
+          // SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
+          // PizzaCard(),
+          // SizedBox(width: 20), // Khoảng cách từ lề bên phải
         ],
       ),
     );

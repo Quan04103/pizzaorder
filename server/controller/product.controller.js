@@ -12,3 +12,17 @@ exports.getProduct = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.getNewestProduct = async (req, res, next) => {
+    try {
+        const listProduct = await ProductService.getNewestProduct();
+        if (!listProduct || listProduct.length === 0) {
+            return res.status(404).json({ message: 'Product newest not found' });
+        }
+        console.log(listProduct.length);
+        res.json(listProduct);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
