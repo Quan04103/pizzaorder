@@ -55,10 +55,11 @@ class _RegisterFormState extends State<RegisterForm> {
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(regBody),
         );
-
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          print(jsonResponse['status']);
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse['status']);
+        if (jsonResponse['status']) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Login()));
         } else {
           print('Request failed with status: ${response.statusCode}.');
           // Hiển thị thông báo lỗi từ server

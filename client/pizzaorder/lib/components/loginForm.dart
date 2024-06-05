@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pizzaorder/components/textField.dart';
+import 'package:pizzaorder/pages/account.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'login_button_2.dart';
 
@@ -15,11 +17,24 @@ class _LoginFormState extends State<LoginForm> {
   final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isNotValidate = false;
+  String? _errorMessage;
+  late SharedPreferences pref;
+
   void _validateFields() {
     setState(() {
       _isNotValidate =
           _userNameController.text.isEmpty || _passwordController.text.isEmpty;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initSharedPref();
+  }
+
+  void initSharedPref() async {
+    pref = await SharedPreferences.getInstance();
   }
 
   void loginUser() async {
@@ -39,18 +54,38 @@ class _LoginFormState extends State<LoginForm> {
 
         if (response.statusCode == 200) {
           var jsonResponse = jsonDecode(response.body);
-          print(jsonResponse['status']);
-        } else {
-          print('Request failed with status: ${response.statusCode}.');
-          // Hiển thị thông báo lỗi từ server
-        }
+          if (jsonResponse['status']) {
+            var myToken = jsonResponse['token'];
+            pref.setString('token', myToken);
 
-        print("Data : $regBody");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Account(
+                  token: myToken,
+                ),
+              ),
+            );
+          } else {
+            setState(() {
+              _errorMessage = 'Đăng nhập thất bại: ${jsonResponse['message']}';
+            });
+          }
+        } else {
+          setState(() {
+            _errorMessage =
+                'Request failed with status: ${response.statusCode}.';
+          });
+        }
       } catch (e) {
-        print('Error: $e');
+        setState(() {
+          _errorMessage = 'Error: $e';
+        });
       }
     } else {
-      print("Please fill all fields");
+      setState(() {
+        _errorMessage = 'Vui lòng nhập tài khoản và mật khẩu.';
+      });
     }
   }
 
@@ -98,14 +133,7 @@ class _LoginFormState extends State<LoginForm> {
             child: Padding(
               padding: const EdgeInsets.only(right: 25),
               child: GestureDetector(
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const HomePage(),
-                  //   ),
-                  // );
-                },
+                onTap: () {},
                 child: const Text(
                   'Quên mật khẩu ?',
                   style: TextStyle(
@@ -126,7 +154,15 @@ class _LoginFormState extends State<LoginForm> {
             width: 40,
             fontSize: 30,
             onPressed: loginUser,
-          )
+          ),
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(
+                _errorMessage!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
         ],
       ),
     );

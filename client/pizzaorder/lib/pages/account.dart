@@ -1,17 +1,29 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pizzaorder/components/select_card.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class UserAvatar extends StatelessWidget {
-  final String name;
+class Account extends StatefulWidget {
+  final String token;
 
-  const UserAvatar({super.key, required this.name});
+  const Account({super.key, required this.token});
+
+  @override
+  State<Account> createState() => _AccountState();
+}
+
+class _AccountState extends State<Account> {
+  late String nameProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    nameProfile = jwtDecodedToken['nameProfile'] ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
-    String initial = getInitialFromLastWord(name);
+    String initial = getInitialFromLastWord(nameProfile);
     return Scaffold(
       backgroundColor: const Color.fromARGB(235, 255, 255, 255),
       body: Stack(
@@ -30,11 +42,16 @@ class UserAvatar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10, left: 20),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -47,7 +64,7 @@ class UserAvatar extends StatelessWidget {
                             top: 120,
                             left: 50,
                             child: Text(
-                              name.toUpperCase(),
+                              nameProfile.toUpperCase(),
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -250,16 +267,12 @@ class UserAvatar extends StatelessWidget {
       ),
     );
   }
-}
 
-// Phương thức lấy ký tự đầu tiên của từ cuối cùng
-String getInitialFromLastWord(String name) {
-  if (name.isEmpty) {
-    return '?';
+  String getInitialFromLastWord(String name) {
+    List<String> words = name.split(' ');
+    if (words.isNotEmpty) {
+      return words.last[0].toUpperCase();
+    }
+    return '';
   }
-
-  List<String> words = name.trim().split(' ');
-  String lastWord = words.last;
-
-  return lastWord.isNotEmpty ? lastWord[0].toUpperCase() : '?';
 }
