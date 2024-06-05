@@ -39,15 +39,19 @@ class _PizzaCardState extends State<PizzaCard> {
                 ),
               ],
             ),
-            const Positioned(
+            Positioned(
               top: 30, // Điều chỉnh giá trị này để ảnh nổi lên
               left: 0,
               right: 0,
               child: Center(
-                child: Image(
-                  image: AssetImage('assets/pizza.jpg'),
-                  width: 160, // Điều chỉnh kích thước của hình ảnh
-                  height: 160,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: Image(
+                    image: NetworkImage(widget.product.image ?? ''),
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -75,16 +79,16 @@ class _PizzaCardState extends State<PizzaCard> {
                 ),
               ),
             ),
-            const Positioned(
+            Positioned(
               top: 155,
               left: 0,
               right: 0,
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Spicy Diablo',
-                    style: TextStyle(
+                    widget.product.name ?? '',
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
@@ -100,7 +104,7 @@ class _PizzaCardState extends State<PizzaCard> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    widget.product.name ?? '',
+                    widget.product.description ?? '',
                     style: TextStyle(
                       fontSize: 10,
                       color: Colors.grey[600],

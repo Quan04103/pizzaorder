@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pizzaorder/pizzaorder/bloc/product/product_event.dart';
+import 'package:pizzaorder/pizzaorder/bloc/pizza/pizza_event.dart';
 import 'pizza_card.dart';
-import '../pizzaorder/bloc/product/product_bloc.dart';
-import '../pizzaorder/bloc/product/product_state.dart';
-
-import '../pizzaorder/bloc/product/product_bloc.dart';
-import '../pizzaorder/bloc/product/product_state.dart';
+import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
+import '../pizzaorder/bloc/pizza/pizza_state.dart';
 
 class PizzaCardGird extends StatefulWidget {
   const PizzaCardGird({super.key});
@@ -16,43 +13,36 @@ class PizzaCardGird extends StatefulWidget {
 }
 
 class _PizzaCardGirdState extends State<PizzaCardGird> {
-  late ProductBloc productBloc;
+  late PizzaBloc pizzaBloc;
 
   @override
   void initState() {
     super.initState();
-    productBloc = ProductBloc();
-    productBloc.send(LoadProduct.load);
+    pizzaBloc = PizzaBloc();
+    pizzaBloc.add(LoadProduct.load);
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProductState>(
-      stream: productBloc.state,
-      builder: (context, snapshot) {
-        final state = snapshot.data;
+    return BlocBuilder<PizzaBloc, PizzaState>(
+      bloc: pizzaBloc,
+      builder: (context, state) {
         print('State: $state');
-        if (state == null) {
+        if (state.isLoading) {
           return const CircularProgressIndicator();
-        } else if (state.isLoading) {
-          return const CircularProgressIndicator();
-        } else if (state.isLoaded) {
-          final products = state.products;
-          if (products == null) {
-            return const SizedBox();
-          } else {
-            return SizedBox(
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 1.35,
-                children: List.generate(products.length, (index) {
-                  return Center(child: PizzaCard(product: products[index]));
-                }),
-              ),
-            );
-          }
-        } else {
+        } else if (state.products == null || !state.isLoaded) {
           return const SizedBox();
+        } else {
+          return SizedBox(
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 1 / 1.35,
+              children: List.generate(state.products!.length, (index) {
+                return Center(
+                    child: PizzaCard(product: state.products![index]));
+              }),
+            ),
+          );
         }
       },
     );
@@ -60,7 +50,7 @@ class _PizzaCardGirdState extends State<PizzaCardGird> {
 
   @override
   void dispose() {
-    productBloc.dispose();
+    pizzaBloc.close();
     super.dispose();
   }
 }

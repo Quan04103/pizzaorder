@@ -1,7 +1,7 @@
 const ProductModel = require('../model/product.model')
 
 class ProductService {
-    static async getProduct() {
+    static async getAllProduct() {
         try {
             return await ProductModel.find()
         } catch (error) {
@@ -19,6 +19,15 @@ class ProductService {
         try {
             return await ProductModel.find().where('dateadded').gte(fiveDaysAgo)
                 .lte(today);
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+    static async getProductByCategory(categoryId) {
+        try {
+            const products = await ProductModel.find({ categoryId: categoryId });
+            return products;
         } catch (error) {
             throw error.message;
         }

@@ -8,8 +8,9 @@ import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/giohang.dart';
 import './pages/all_product_page.dart';
-import 'pizzaorder/bloc/product/product_bloc.dart';
+import 'pizzaorder/bloc/pizza/pizza_bloc.dart';
 import 'pizzaorder/services/product_service.dart';
+import './pages/giohang.dart';
 
 void main() {
   runApp(const MyApp());

@@ -6,7 +6,8 @@ import 'package:pizzaorder/pizzaorder/services/product_service.dart';
 
 void main() async {
   ProductService productService = ProductService('http://localhost:5000');
-  List<ProductModel> product = await productService.getProduct();
+  List<ProductModel> product =
+      await productService.getProductByCategoryId('6646fc283146973b72ad5eb2');
   print('Received id: ${product.length}');
   for (var element in product) {
     print('Product id: ${element.id}');

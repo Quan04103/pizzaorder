@@ -1,6 +1,6 @@
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 
-class ProductState {
+class PizzaState {
   final bool isLoading;
   final bool isLoaded;
   final bool isError;
@@ -11,29 +11,29 @@ class ProductState {
     return 'ProductState: isLoading: $isLoading, isLoaded: $isLoaded, products: $products';
   }
 
-  ProductState({
+  PizzaState({
     required this.isLoading,
     required this.isLoaded,
     required this.isError,
     this.products,
   });
 
-  factory ProductState.initial() {
-    return ProductState(
+  factory PizzaState.initial() {
+    return PizzaState(
       isLoading: false,
       isLoaded: false,
       isError: false,
     );
   }
-  factory ProductState.loadding() {
-    return ProductState(
+  factory PizzaState.loadding() {
+    return PizzaState(
       isLoading: true,
       isLoaded: false,
       isError: false,
     );
   }
-  factory ProductState.loadded(List<ProductModel> products) {
-    return ProductState(
+  factory PizzaState.loadded(List<ProductModel> products) {
+    return PizzaState(
       isLoading: false,
       isLoaded: true,
       isError: false,
@@ -41,8 +41,8 @@ class ProductState {
     );
   }
 
-  factory ProductState.error(String string) {
-    return ProductState(
+  factory PizzaState.error(String string) {
+    return PizzaState(
       isLoading: false,
       isLoaded: false,
       isError: true,

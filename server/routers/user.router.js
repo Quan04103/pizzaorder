@@ -7,5 +7,4 @@ router.post('/registration', UserController.register);
 router.post('/login', UserController.login);
 router.get('/getUserInfo', authenticateJWT, UserController.getUserInfo);
 
-
 module.exports = router;

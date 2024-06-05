@@ -1,13 +1,26 @@
 const ProductService = require('../services/product.services');
 require('dotenv').config();
 
-exports.getProduct = async (req, res, next) => {
+exports.getAllProduct = async (req, res, next) => {
     try {
-        const listProduct = await ProductService.getProduct();
+        const listProduct = await ProductService.getAllProduct();
         if (!listProduct) {
             throw new Error('Product not found');
         }
         res.json(listProduct);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getProductByCategory = async (req, res, next) => {
+    try {
+        const categoryId = req.params.categoryId;
+        const products = await ProductService.getProductByCategory(categoryId);
+        if (!products || products.length === 0) {
+            throw new Error('No products found for this category');
+        }
+        res.json(products);
     } catch (error) {
         next(error);
     }
