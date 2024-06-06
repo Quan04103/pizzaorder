@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DropdownHome extends StatefulWidget {
+  const DropdownHome({super.key});
+
   @override
   _DropdownHomeState createState() => _DropdownHomeState();
 }
@@ -41,7 +43,7 @@ class _DropdownHomeState extends State<DropdownHome> {
                   color: Colors.red[800],
                 ),
               ),
-              Text('113 Phan Huy Ích',
+              const Text('113 Phan Huy Ích',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14,

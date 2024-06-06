@@ -1,15 +1,15 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/user.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserService {
-  final String baseUrl;
-
-  UserService(this.baseUrl);
+  final apiUrl = dotenv.env['API_URL'];
+  UserService();
 
   Future<UserModel> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$apiUrl/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -38,7 +38,7 @@ class UserService {
 
   Future<UserModel> getUserInfo(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/getUserInfo'),
+      Uri.parse('$apiUrl/getUserInfo'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -55,7 +55,7 @@ class UserService {
         nameProfile: result['nameProfile'],
         email: result['email'],
         phone: result['phone'],
-        address: result['address'], 
+        address: result['address'],
       );
     } else {
       throw Exception('Failed to get user info');

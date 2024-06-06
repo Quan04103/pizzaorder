@@ -12,8 +12,10 @@ import 'pizzaorder/bloc/pizza/pizza_bloc.dart';
 import 'pizzaorder/services/product_service.dart';
 import './pages/giohang.dart';
 import './pages/detail_Product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async{
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(body: PizzaDetails()),
+      home: Scaffold(body: HomePage()),
     );
   }
 }

@@ -47,8 +47,10 @@ dependencies:
   carousel_slider: ^4.2.1
   font_awesome_flutter: ^9.0.0
   bloc_test: ^9.1.7
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
+  test: any
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
@@ -66,3 +68,4 @@ flutter:
     - assets/
     - assets/icons/
     - assets/images/
+    - .env

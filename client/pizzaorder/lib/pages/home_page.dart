@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       DropdownHome(),
-                      const Icon(
+                      Icon(
                         Icons.favorite_border,
                         color: Colors.black,
                         size: 35,

@@ -1,11 +1,11 @@
-import 'package:pizzaorder/pizzaorder/models/product.dart';
-import 'package:pizzaorder/pizzaorder/services/product_service.dart';
+import '../models/product.dart';
+import '../services/product_service.dart';
 
 //How to test this file by Quân
 // D:\flutter\pizzaorder\client\pizzaorder\lib\pizzaorder\apiTest> dart run test.dart
 
 void main() async {
-  ProductService productService = ProductService('http://localhost:5000');
+  ProductService productService = ProductService();
   List<ProductModel> product =
       await productService.getProductByCategoryId('6646fc283146973b72ad5eb2');
   print('Received id: ${product.length}');
