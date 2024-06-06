@@ -6,6 +6,7 @@ class PizzaDetails extends StatefulWidget {
   @override
   State<PizzaDetails> createState() => _PizzaDetailsState();
 }
+
 class _PizzaDetailsState extends State<PizzaDetails> {
   int _quantity = 1;
   String? _selectedSupplement1;
@@ -116,7 +117,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                   children: [
                     Image.asset('assets/images/woodplate.png'),
                     Center(
-                      child: Image.asset('assets/images/pizza3.png'),
+                      child: Image.asset('assets/images/ghati_2.png'),
                     ),
                   ],
                 ),
@@ -240,79 +241,80 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     );
   }
 
- Widget _buildTitleRow() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(
-          'Capricciosa',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  Widget _buildTitleRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text(
+            'Capricciosa',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          children: [
-            _buildQuantityButton(
-              icon: Icons.remove,
-              onPressed: _decrementQuantity,
-              buttonColor: Colors.white,
-              iconColor: Colors.red,
-              borderColor: Colors.red,
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                // borderRadius: BorderRadius.circular(8.0),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Row(
+            children: [
+              _buildQuantityButton(
+                icon: Icons.remove,
+                onPressed: _decrementQuantity,
+                buttonColor: Colors.white,
+                iconColor: Colors.red,
+                borderColor: Colors.red,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
-              child: Text(
-                '$_quantity',
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  // borderRadius: BorderRadius.circular(8.0),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
+                child: Text(
+                  '$_quantity',
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                ),
               ),
-            ),
-            _buildQuantityButton(
-              icon: Icons.add,
-              onPressed: _incrementQuantity,
-              buttonColor: Colors.white,
-              iconColor: Colors.green,
-              borderColor: Colors.green,
-            ),
-          ],
+              _buildQuantityButton(
+                icon: Icons.add,
+                onPressed: _incrementQuantity,
+                buttonColor: Colors.white,
+                iconColor: Colors.green,
+                borderColor: Colors.green,
+              ),
+            ],
+          ),
         ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 
-Widget _buildQuantityButton({
-  required IconData icon,
-  required VoidCallback onPressed,
-  required Color buttonColor,
-  required Color iconColor,
-  required Color borderColor,
-}) {
-  return Container(
-    decoration: BoxDecoration(
-      shape: BoxShape.rectangle,
-      border: Border.all(color: borderColor, width: 1), // Thinner border
-      color: buttonColor,
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    child: IconButton(
-      icon: Icon(icon, color: iconColor),
-      onPressed: onPressed,
-      padding: EdgeInsets.zero, // Removes extra padding
-      constraints: const BoxConstraints(),
-    ),
-  );
-}
+  Widget _buildQuantityButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+    required Color buttonColor,
+    required Color iconColor,
+    required Color borderColor,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        border: Border.all(color: borderColor, width: 1), // Thinner border
+        color: buttonColor,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: iconColor),
+        onPressed: onPressed,
+        padding: EdgeInsets.zero, // Removes extra padding
+        constraints: const BoxConstraints(),
+      ),
+    );
+  }
 
   Widget _buildIngredientItem(String ingredient, String imagePath) {
     return Column(
@@ -409,50 +411,51 @@ Widget _buildQuantityButton({
     );
   }
 
- Widget _buildExtrasSection() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        'Extras',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-      for (var extra in selectedExtras.keys)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              extra,
-              style: const TextStyle(fontSize: 16),
-            ),
-            Row(
-              children: [
-                Text(
-                  '\$${extrasPrices[extra]!.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 16, color: Colors.red),
-                ),
-                Theme(
-                  data: Theme.of(context).copyWith(
-                    unselectedWidgetColor: Colors.red, // màu checkbox khi không được chọn
-                  ),
-                  child: Checkbox(
-                    value: selectedExtras[extra],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        selectedExtras[extra] = value ?? false;
-                        _updateTotalPrice();
-                      });
-                    },
-                    activeColor: Colors.red, // màu checkbox khi được chọn
-                  ),
-                ),
-              ],
-            ),
-          ],
+  Widget _buildExtrasSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Extras',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-    ],
-  );
-}
+        for (var extra in selectedExtras.keys)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                extra,
+                style: const TextStyle(fontSize: 16),
+              ),
+              Row(
+                children: [
+                  Text(
+                    '\$${extrasPrices[extra]!.toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 16, color: Colors.red),
+                  ),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      unselectedWidgetColor:
+                          Colors.red, // màu checkbox khi không được chọn
+                    ),
+                    child: Checkbox(
+                      value: selectedExtras[extra],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          selectedExtras[extra] = value ?? false;
+                          _updateTotalPrice();
+                        });
+                      },
+                      activeColor: Colors.red, // màu checkbox khi được chọn
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+      ],
+    );
+  }
 
   Widget _buildTotalPriceRow() {
     return Container(

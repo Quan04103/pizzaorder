@@ -11,6 +11,7 @@ import './pages/all_product_page.dart';
 import 'pizzaorder/bloc/pizza/pizza_bloc.dart';
 import 'pizzaorder/services/product_service.dart';
 import './pages/giohang.dart';
+import './pages/detail_Product.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(body: HomePage()),
+      home: Scaffold(body: PizzaDetails()),
     );
   }
 }
