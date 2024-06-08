@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/pizzaorder/models/product.dart';
 import '../components/category_carousel.dart';
 import '../components/pizza_card.dart';
 import '../components/shopping_cart_btn.dart';
@@ -123,6 +125,11 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
     pizzaBloc.add(LoadProduct.loadNewest);
   }
 
+  void _onProductPressed(ProductModel product) {
+    final router = GoRouter.of(context);
+    router.go('/detail', extra: product);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PizzaBloc, PizzaState>(
@@ -137,7 +144,14 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
             scrollDirection: Axis.horizontal,
             itemCount: state.products!.length,
             itemBuilder: (context, index) {
-              return PizzaCard(product: state.products![index]);
+              return GestureDetector(
+                onTap: () {
+                  _onProductPressed(state.products![index]);
+                },
+                child: PizzaCard(
+                  product: state.products![index],
+                ),
+              );
             },
           );
         }

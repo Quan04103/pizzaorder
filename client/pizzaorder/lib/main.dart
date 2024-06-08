@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/home_page.dart';
 import 'package:pizzaorder/pages/location_page.dart';
 import 'package:pizzaorder/pages/history_page.dart';
@@ -13,19 +14,25 @@ import 'pizzaorder/services/product_service.dart';
 import './pages/giohang.dart';
 import './pages/detail_Product.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'app_router.dart';
 
-void main() async{
+void main() async {
   await dotenv.load();
-  runApp(const MyApp());
+  final AppRouter appRouter = AppRouter();
+
+  runApp(MyApp(router: appRouter.router));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GoRouter router;
+  const MyApp({super.key, required this.router});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: HomePage()),
+    return MaterialApp.router(
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
     );
   }
 }

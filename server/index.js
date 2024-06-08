@@ -12,7 +12,7 @@ app.use(cors());
 
 
 app.get('/', (req, res) => {
-  res.send("Hello world.....")
+  res.send("SERVER IS RUNNING")
 })
 
 mongooseConnection.on("connected", () => {

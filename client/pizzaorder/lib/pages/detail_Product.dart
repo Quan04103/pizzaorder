@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/pizzaorder/models/product.dart';
+import 'package:intl/intl.dart';
 
 class PizzaDetails extends StatefulWidget {
-  const PizzaDetails({super.key});
+  final ProductModel product;
+  const PizzaDetails({super.key, required this.product});
 
   @override
   State<PizzaDetails> createState() => _PizzaDetailsState();
@@ -11,7 +15,20 @@ class _PizzaDetailsState extends State<PizzaDetails> {
   int _quantity = 1;
   String? _selectedSupplement1;
   String? _selectedSupplement2;
-  double _totalPrice = 30.00;
+  num _totalPrice = 0.0;
+  num _unitPrice = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _unitPrice = widget.product.price ?? 0;
+        _updateTotalPrice();
+      });
+    });
+  }
+
   bool _isFavorite = false; // Biến trạng thái để theo dõi trạng thái trái tim
 
   final Map<String, double> extrasPrices = {
@@ -29,10 +46,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
   };
 
   void _updateTotalPrice() {
-    double newTotal = 30.00 * _quantity;
-    selectedExtras.forEach((key, value) {
-      if (value) newTotal += extrasPrices[key]!;
-    });
+    num newTotal = _unitPrice * _quantity;
     setState(() {
       _totalPrice = newTotal;
     });
@@ -92,7 +106,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       leading: _buildCircleIconButton(
         icon: Icons.arrow_back,
         onPressed: () {
-          Navigator.pop(context);
+          GoRouter.of(context).go('/');
         },
       ),
       actions: [
@@ -111,13 +125,13 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             ),
             child: Center(
               child: SizedBox(
-                height: 350,
-                width: 350,
+                height: 250,
+                width: 250,
                 child: Stack(
                   children: [
                     Image.asset('assets/images/woodplate.png'),
                     Center(
-                      child: Image.asset('assets/images/ghati_2.png'),
+                      child: Image.network(widget.product.image ?? ''),
                     ),
                   ],
                 ),
@@ -150,8 +164,8 @@ class _PizzaDetailsState extends State<PizzaDetails> {
   SliverPersistentHeader _buildSliverPersistentHeader() {
     return SliverPersistentHeader(
       delegate: _SliverAppBarDelegate(
-        minHeight: 60.0,
-        maxHeight: 60.0,
+        minHeight: 180.0,
+        maxHeight: 200.0,
         child: Container(
           color: const Color(0xFFEEF8EB),
           child: _buildTitleRow(),
@@ -168,9 +182,9 @@ class _PizzaDetailsState extends State<PizzaDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Tomato sauce, Mozzarella cheese, Ham, Pineapple chunks',
-              style: TextStyle(color: Color.fromARGB(255, 255, 0, 0)),
+            Text(
+              widget.product.description ?? '',
+              style: const TextStyle(color: Color.fromARGB(255, 255, 0, 0)),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -181,10 +195,9 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildIngredientItem(
-                    'Mozzarella', 'assets/icons/cheese_pic.png'),
-                _buildIngredientItem('Tomato', 'assets/icons/tomato_pic.png'),
-                _buildIngredientItem('Onion', 'assets/icons/onion.png'),
+                _buildIngredientItem('Mozzarella', 'assets/images/ghati_2.png'),
+                _buildIngredientItem('Tomato', 'assets/images/ghati_2.png'),
+                _buildIngredientItem('Onion', 'assets/images/ghati_2.png'),
               ],
             ),
             const SizedBox(height: 16),
@@ -202,11 +215,11 @@ class _PizzaDetailsState extends State<PizzaDetails> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildSupplementItem(
-                    'Fries', 'assets/icons/fried.png', _selectedSupplement1),
-                _buildSupplementItem('Potatoes', 'assets/icons/potaetos.png',
+                    'Fries', 'assets/images/ghati_2.png', _selectedSupplement1),
+                _buildSupplementItem('Potatoes', 'assets/images/ghati_2.png',
                     _selectedSupplement1),
                 _buildSupplementItem('Chicken Nuggets',
-                    'assets/icons/pngegg.png', _selectedSupplement1),
+                    'assets/images/ghati_2.png', _selectedSupplement1),
               ],
             ),
             const SizedBox(height: 16),
@@ -222,14 +235,14 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             const SizedBox(height: 8),
             Column(
               children: [
-                _buildSupplementRadio('Coca-Cola', 'assets/images/coca.png',
+                _buildSupplementRadio('Coca-Cola', 'assets/images/ghati_2.png',
                     _selectedSupplement2),
                 _buildSupplementRadio(
-                    'Pepsi', 'assets/images/coca.png', _selectedSupplement2),
+                    'Pepsi', 'assets/images/ghati_2.png', _selectedSupplement2),
+                _buildSupplementRadio('Sprite', 'assets/images/ghati_2.png',
+                    _selectedSupplement2),
                 _buildSupplementRadio(
-                    'Sprite', 'assets/images/sprite.png', _selectedSupplement2),
-                _buildSupplementRadio(
-                    'Fanta', 'assets/images/fanta.png', _selectedSupplement2),
+                    'Fanta', 'assets/images/ghati_2.png', _selectedSupplement2),
               ],
             ),
             const SizedBox(height: 16),
@@ -245,11 +258,17 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Capricciosa',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              widget.product.name ?? '',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              softWrap: true,
+            ),
           ),
         ),
         Container(
@@ -476,7 +495,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${_totalPrice.toStringAsFixed(3)} đ',
+            '${NumberFormat('#,###', 'de_DE').format(_totalPrice)} đ',
             style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
