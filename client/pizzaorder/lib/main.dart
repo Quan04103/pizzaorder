@@ -15,12 +15,16 @@ import './pages/giohang.dart';
 import './pages/detail_Product.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app_router.dart';
+import 'multiple_bloc_provider.dart';
 
 void main() async {
   await dotenv.load();
   final AppRouter appRouter = AppRouter();
-
-  runApp(MyApp(router: appRouter.router));
+  runApp(
+    createBlocProviders(
+      child: MyApp(router: appRouter.router),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

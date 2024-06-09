@@ -121,7 +121,7 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   @override
   void initState() {
     super.initState();
-    pizzaBloc = PizzaBloc();
+    pizzaBloc = BlocProvider.of<PizzaBloc>(context);
     pizzaBloc.add(LoadProduct.loadNewest);
   }
 
