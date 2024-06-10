@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_event.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
+import 'package:pizzaorder/pizzaorder/models/order_item_in_cart.dart';
 import '../pizzaorder/models/product.dart';
 
 class PizzaCard extends StatefulWidget {
@@ -11,6 +17,10 @@ class PizzaCard extends StatefulWidget {
 
 class _PizzaCardState extends State<PizzaCard> {
   bool isFavorite = false;
+  late OrderItem orderItem = OrderItem(
+    idproduct: widget.product.id ?? '',
+    quantity: 1,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -144,11 +154,12 @@ class _PizzaCardState extends State<PizzaCard> {
                   ),
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                ),
+                    icon: const Icon(Icons.add, color: Colors.white),
+                    onPressed: () {
+                      context.read<CartBloc>().add(AddProducts(orderItem));
+
+                      // Add your onPressed code here!
+                    }),
               ),
             ),
           ],

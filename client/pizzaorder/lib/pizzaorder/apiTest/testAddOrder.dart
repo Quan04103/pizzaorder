@@ -6,7 +6,6 @@ void main() async {
   OrderService orderService = OrderService();
   OrderModel order = await orderService.addOrder('testUser',
       [OrderItem(idproduct: '1', quantity: 1)], 10.0, DateTime.now());
-  print('Received order ID: ${order.id}');
   print('Received user ID: ${order.userId}');
   print('Received price: ${order.price}');
 }

@@ -9,7 +9,7 @@ abstract class CartEvent extends Equatable {
 }
 
 class AddProducts extends CartEvent {
-  final List<OrderItem> products;
+  final OrderItem products;
 
   const AddProducts(this.products);
 

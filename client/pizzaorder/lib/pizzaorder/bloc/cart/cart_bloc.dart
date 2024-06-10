@@ -15,10 +15,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddProducts>((event, emit) async {
       try {
         // print('Adding products: ${event.products}');
-        cartItems.addAll(event.products);
+        cartItems.add(event.products);
         emit(CartState.updated(cartItems));
         print('New state: updated');
-        print(state.products);
+        print(state.cartItems);
       } catch (e) {
         emit(CartState.error(e.toString()));
         print('New state: error - ${e.toString()}');
@@ -32,7 +32,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         product.quantity++;
         emit(CartState.updated(cartItems));
         print('New state: updated');
-        print(state.products);
+        print(state.cartItems);
       } catch (e) {
         emit(CartState.error(e.toString()));
       }
@@ -46,7 +46,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           product.quantity--;
           emit(CartState.updated(cartItems));
           print('New state: updated');
-          print(state.products);
+          print(state.cartItems);
         } else {
           cartItems.remove(product);
         }
@@ -62,7 +62,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         cartItems.remove(product);
         emit(CartState.updated(cartItems));
         print('New state: updated');
-        print(state.products);
+        print(state.cartItems);
       } catch (e) {
         emit(CartState.error(e.toString()));
       }
@@ -77,7 +77,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           DateTime.now(),
         );
         cartItems.clear();
-        emit(CartState.submitted(order));
+        emit(CartState.submitted(order, cartItems));
       } catch (e) {
         emit(CartState.error(e.toString()));
       }

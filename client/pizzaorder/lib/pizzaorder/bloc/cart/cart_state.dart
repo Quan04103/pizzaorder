@@ -8,14 +8,15 @@ class CartState extends Equatable {
   final bool isError;
   final bool isSubmitted;
   final OrderModel? order;
-  List<OrderItem>? products;
+  List<OrderItem>? cartItems;
 
   @override
-  List<Object> get props => [isUpdated, isError, isSubmitted, order ?? [], products ?? []];
+  List<Object> get props =>
+      [isUpdated, isError, isSubmitted, order ?? [], cartItems ?? []];
 
   @override
   String toString() {
-    return 'CartState: isUpdated: $isUpdated, isSubmitted: $isSubmitted, order: $order, products: $products';
+    return 'CartState: isUpdated: $isUpdated, isSubmitted: $isSubmitted, order: $order, products: $cartItems';
   }
 
   CartState({
@@ -23,7 +24,7 @@ class CartState extends Equatable {
     required this.isError,
     required this.isSubmitted,
     this.order,
-    this.products,
+    this.cartItems,
   });
 
   factory CartState.initial() {
@@ -34,12 +35,12 @@ class CartState extends Equatable {
     );
   }
 
-  factory CartState.updated(List<OrderItem> products) {
+  factory CartState.updated(List<OrderItem> cartItem) {
     return CartState(
       isUpdated: true,
       isError: false,
       isSubmitted: false,
-      products: products,
+      cartItems: cartItem,
     );
   }
 
@@ -51,12 +52,12 @@ class CartState extends Equatable {
     );
   }
 
-  factory CartState.submitted(OrderModel order) {
+  factory CartState.submitted(OrderModel order, List<OrderItem> cartItems) {
     return CartState(
-      isUpdated: false,
-      isError: false,
-      isSubmitted: true,
-      order: order,
-    );
+        isUpdated: false,
+        isError: false,
+        isSubmitted: true,
+        order: order,
+        cartItems: cartItems);
   }
 }

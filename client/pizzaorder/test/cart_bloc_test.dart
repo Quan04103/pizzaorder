@@ -44,7 +44,7 @@ void main() async {
       build: () => cartBloc,
       act: (bloc) async {
         var product = OrderItem(idproduct: '1', quantity: 1);
-        bloc.add(AddProducts([product]));
+        bloc.add(AddProducts(product));
         bloc.add(IncreaseQuantityProduct(product));
       },
       expect: () => [
@@ -57,7 +57,7 @@ void main() async {
       build: () => cartBloc,
       act: (bloc) async {
         var product = OrderItem(idproduct: '1', quantity: 2);
-        bloc.add(AddProducts([product]));
+        bloc.add(AddProducts(product));
         bloc.add(DecreaseQuantityProduct(product));
       },
       expect: () => [
@@ -69,7 +69,7 @@ void main() async {
       build: () => cartBloc,
       act: (bloc) async {
         var product = OrderItem(idproduct: '1', quantity: 2);
-        bloc.add(AddProducts([product]));
+        bloc.add(AddProducts(product));
         bloc.add(RemoveProduct(product));
       },
       expect: () => [

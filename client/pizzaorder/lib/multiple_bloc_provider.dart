@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/pizza/pizza_bloc.dart';
 
 MultiBlocProvider createBlocProviders({required Widget child}) {
@@ -8,6 +9,9 @@ MultiBlocProvider createBlocProviders({required Widget child}) {
       BlocProvider<PizzaBloc>(
         create: (context) => PizzaBloc(),
       ),
+      BlocProvider(
+        create: (context) => CartBloc(),
+      )
       // BlocProvider<AnotherBloc>(
       //   create: (context) => AnotherBloc(),
       // ),

@@ -17,7 +17,6 @@ void main() async {
         ],
         320000,
         DateTime.now());
-    print('Received order ID: ${order.id}');
     print('Received user ID: ${order.userId}');
     print('Received price: ${order.price}');
   });
