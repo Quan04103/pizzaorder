@@ -5,6 +5,7 @@ class RoundedTextField extends StatelessWidget {
   final String labelText;
   final double height;
   final String? errorText;
+  final bool isPassword;
 
   const RoundedTextField({
     super.key,
@@ -12,6 +13,7 @@ class RoundedTextField extends StatelessWidget {
     required this.labelText,
     this.height = 0,
     required this.errorText,
+    required this.isPassword,
   });
 
   @override
@@ -19,6 +21,7 @@ class RoundedTextField extends StatelessWidget {
     return SizedBox(
       height: height,
       child: TextField(
+        obscureText: isPassword,
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,

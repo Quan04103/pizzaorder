@@ -27,7 +27,6 @@ class _AccountState extends State<Account> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(235, 255, 255, 255),
       body: Stack(
-        clipBehavior: Clip.none,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -60,16 +59,12 @@ class _AccountState extends State<Account> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Positioned(
-                            top: 120,
-                            left: 50,
-                            child: Text(
-                              nameProfile.toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                          Text(
+                            nameProfile.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                           Stack(
@@ -123,61 +118,62 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * .7,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, left: 20),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
+              Expanded(
+                child: Container(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // Remaining widgets
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, left: 20),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Tài khoản của tôi',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      SelectCard(content: 'Yêu thích'),
-                      SelectCard(content: 'Phương thức thanh toán'),
-                      SelectCard(content: 'Vị trí'),
-                      SelectCard(content: 'Lịch sử đặt hàng'),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Tổng Quát',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          'Tài khoản của tôi',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      SelectCard(
-                        content: 'Trợ giúp',
-                      ),
-                      SelectCard(content: 'Cài đặt'),
-                      SelectCard(content: 'Ngôn ngữ'),
-                      SelectCard(content: 'Chia sẻ phản hồi'),
-                      SelectCard(content: 'Về chúng tôi'),
-                    ],
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SelectCard(content: 'Yêu thích'),
+                        SelectCard(content: 'Phương thức thanh toán'),
+                        SelectCard(content: 'Vị trí'),
+                        SelectCard(content: 'Lịch sử đặt hàng'),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Tổng Quát',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SelectCard(
+                          content: 'Trợ giúp',
+                        ),
+                        SelectCard(content: 'Cài đặt'),
+                        SelectCard(content: 'Ngôn ngữ'),
+                        SelectCard(content: 'Chia sẻ phản hồi'),
+                        SelectCard(content: 'Về chúng tôi'),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -186,9 +182,9 @@ class _AccountState extends State<Account> {
           Positioned(
             top: 240,
             left: 55,
+            height: MediaQuery.of(context).size.height * .05,
             width: MediaQuery.of(context).size.width * .7,
             child: Container(
-              height: 45,
               decoration: BoxDecoration(
                 color: Colors.yellow[300],
                 borderRadius: const BorderRadius.all(
