@@ -1,6 +1,4 @@
-class AuthState {
-  
-}
+class AuthState {}
 
 class AuthInitial extends AuthState {}
 
@@ -21,3 +19,5 @@ class AuthRegisterFailure extends AuthState {
   final String message;
   AuthRegisterFailure(this.message);
 }
+
+class AuthLogoutSuccess extends AuthState {}

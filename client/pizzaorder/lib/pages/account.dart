@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/select_card.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -19,6 +20,11 @@ class _AccountState extends State<Account> {
     super.initState();
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     nameProfile = jwtDecodedToken['nameProfile'] ?? '';
+  }
+
+  void _onPressLogOut() {
+    final router = GoRouter.of(context);
+    router.go('/logout');
   }
 
   @override
@@ -45,7 +51,14 @@ class _AccountState extends State<Account> {
                         padding: const EdgeInsets.only(top: 10, left: 20),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            if (GoRouter.of(context).canPop()) {
+                              context
+                                  .pop(); // Quay lại màn hình trước nếu có thể
+                            } else {
+                              context.go(
+                                '/home',
+                              ); // Chuyển đến màn hình Home nếu không có màn hình trước
+                            }
                           },
                           child: const Icon(
                             Icons.arrow_back_ios,
@@ -224,38 +237,43 @@ class _AccountState extends State<Account> {
             bottom: 30,
             left: 55,
             width: MediaQuery.of(context).size.width * .7,
-            child: Container(
-              height: 40,
-              width: 80,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 78, 194, 28),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color.fromARGB(66, 0, 0, 0), // Màu của bóng
-                    blurRadius: 10.0, // Độ mờ của bóng
-                    spreadRadius: 2.0, // Độ rộng của bóng
-                    offset: Offset(2, 10), // Vị trí của bóng
+            child: GestureDetector(
+              onTap: () {
+                _onPressLogOut();
+              },
+              child: Container(
+                height: 40,
+                width: 80,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 78, 194, 28),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
                   ),
-                ],
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.logout),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Đăng xuất',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(66, 0, 0, 0), // Màu của bóng
+                      blurRadius: 10.0, // Độ mờ của bóng
+                      spreadRadius: 2.0, // Độ rộng của bóng
+                      offset: Offset(2, 10), // Vị trí của bóng
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Đăng xuất',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
