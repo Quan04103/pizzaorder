@@ -5,16 +5,16 @@ import 'package:pizzaorder/pizzaorder/bloc/auth/auth_state.dart';
 import 'dart:convert';
 import '../models/user.dart';
 import '../bloc/Result.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserService {
-  final String baseUrl;
-
-  UserService(this.baseUrl);
+  final apiUrl = dotenv.env['API_URL'];
+  UserService();
 
   Future<Result<UserModel>> login(String username, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/login'),
+        Uri.parse('$apiUrl/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -48,7 +48,7 @@ class UserService {
       String nameProfile, String phone, String email, String address) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/registration'),
+        Uri.parse('$apiUrl/registration'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -87,7 +87,7 @@ class UserService {
   Future<Result<UserModel>> getUserInfo(String token) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/getUserInfo'),
+        Uri.parse('$apiUrl/getUserInfo'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token',

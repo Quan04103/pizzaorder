@@ -1,0 +1,4 @@
+enum LoadProduct{
+  load,
+  loadNewest
+}

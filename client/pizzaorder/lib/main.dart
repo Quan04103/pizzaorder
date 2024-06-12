@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/home_page.dart';
 import 'package:pizzaorder/pages/location_page.dart';
 import 'package:pizzaorder/pages/history_page.dart';
@@ -6,18 +8,35 @@ import 'package:pizzaorder/components/pizza_card_gird.dart';
 import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/giohang.dart';
+import './pages/all_product_page.dart';
+import 'pizzaorder/bloc/pizza/pizza_bloc.dart';
+import 'pizzaorder/services/product_service.dart';
+import './pages/giohang.dart';
+import './pages/detail_Product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'app_router.dart';
+import 'multiple_bloc_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await dotenv.load();
+  final AppRouter appRouter = AppRouter();
+  runApp(
+    createBlocProviders(
+      child: MyApp(router: appRouter.router),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GoRouter router;
+  const MyApp({super.key, required this.router});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: GioHang()),
+    return MaterialApp.router(
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
     );
   }
 }

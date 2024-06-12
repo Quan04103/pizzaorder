@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/pizzaorder/models/product.dart';
 import '../components/category_carousel.dart';
 import '../components/pizza_card.dart';
 import '../components/shopping_cart_btn.dart';
 import '../components/dropdown_home.dart';
 import '../components/slide.dart';
 import '../components/search.dart';
+import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
+import '../pizzaorder/bloc/pizza/pizza_state.dart';
+import '../pizzaorder/bloc/pizza/pizza_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,11 +38,11 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       DropdownHome(),
-                      const Icon(
+                      Icon(
                         Icons.favorite_border,
                         color: Colors.black,
                         size: 35,
@@ -98,26 +109,53 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class ProductsCarousel extends StatelessWidget {
+class ProductsCarousel extends StatefulWidget {
   const ProductsCarousel({super.key});
+  @override
+  _ProductsCarouselState createState() => _ProductsCarouselState();
+}
+
+class _ProductsCarouselState extends State<ProductsCarousel> {
+  late PizzaBloc pizzaBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    pizzaBloc = BlocProvider.of<PizzaBloc>(context);
+    pizzaBloc.add(LoadProduct.loadNewest);
+  }
+
+  void _onProductPressed(ProductModel product) {
+    final router = GoRouter.of(context);
+    router.go('/detail', extra: product);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: const [
-          SizedBox(width: 20), // Khoảng cách từ lề bên trái
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách giữa các PizzaCard
-          PizzaCard(),
-          SizedBox(width: 20), // Khoảng cách từ lề bên phải
-        ],
-      ),
+    return BlocBuilder<PizzaBloc, PizzaState>(
+      bloc: pizzaBloc,
+      builder: (context, state) {
+        if (state.isLoading) {
+          return const CircularProgressIndicator();
+        } else if (state.products == null || !state.isLoaded) {
+          return const SizedBox();
+        } else {
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: state.products!.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  _onProductPressed(state.products![index]);
+                },
+                child: PizzaCard(
+                  product: state.products![index],
+                ),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_event.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
+import 'package:pizzaorder/pizzaorder/models/order_item_in_cart.dart';
+import '../pizzaorder/models/product.dart';
 
 class PizzaCard extends StatefulWidget {
-  const PizzaCard({super.key});
+  final ProductModel product;
+  const PizzaCard({super.key, required this.product});
 
   @override
   _PizzaCardState createState() => _PizzaCardState();
@@ -9,6 +17,10 @@ class PizzaCard extends StatefulWidget {
 
 class _PizzaCardState extends State<PizzaCard> {
   bool isFavorite = false;
+  late OrderItem orderItem = OrderItem(
+    idproduct: widget.product.id ?? '',
+    quantity: 1,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +49,19 @@ class _PizzaCardState extends State<PizzaCard> {
                 ),
               ],
             ),
-            const Positioned(
+            Positioned(
               top: 30, // Điều chỉnh giá trị này để ảnh nổi lên
               left: 0,
               right: 0,
               child: Center(
-                child: Image(
-                  image: AssetImage('assets/pizza.jpg'),
-                  width: 160, // Điều chỉnh kích thước của hình ảnh
-                  height: 160,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: Image(
+                    image: NetworkImage(widget.product.image ?? ''),
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -54,6 +70,9 @@ class _PizzaCardState extends State<PizzaCard> {
               right: 15,
               child: GestureDetector(
                 onTap: () {
+                  context
+                      .read<CartBloc>()
+                      .add(const SubmitCart('6648cec207ad9afaf8850219', 20000));
                   setState(() {
                     isFavorite =
                         !isFavorite; // Thay đổi trạng thái khi click vào Icons.favorite
@@ -73,16 +92,16 @@ class _PizzaCardState extends State<PizzaCard> {
                 ),
               ),
             ),
-            const Positioned(
+            Positioned(
               top: 155,
               left: 0,
               right: 0,
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Spicy Diablo',
-                    style: TextStyle(
+                    widget.product.name ?? '',
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
@@ -98,9 +117,9 @@ class _PizzaCardState extends State<PizzaCard> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    'Classic Tomato Sauce, Mozzarella Cheese, Fresh Basil Leaves',
+                    widget.product.description ?? '',
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: 10,
                       color: Colors.grey[600],
                     ),
                     textAlign: TextAlign.left, // Căn giữa dòng chữ
@@ -138,11 +157,11 @@ class _PizzaCardState extends State<PizzaCard> {
                   ),
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                ),
+                    icon: const Icon(Icons.add, color: Colors.white),
+                    onPressed: () {
+                      context.read<CartBloc>().add(AddProducts(orderItem));
+                      // Add your onPressed code here!
+                    }),
               ),
             ),
           ],

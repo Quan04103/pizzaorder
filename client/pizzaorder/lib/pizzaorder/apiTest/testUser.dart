@@ -6,7 +6,7 @@ import '../services/user_service.dart';
 // D:\flutter\pizzaorder\client\pizzaorder\lib\pizzaorder\apiTest> dart run test.dart
 
 void main() async {
-  UserService userService = UserService('http://localhost:5000');
+  UserService userService = UserService();
   UserModel user = await userService.login('test123123', '123456');
   print('Received token: ${user.token}');
   print('Response status: ${user.status}');

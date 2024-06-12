@@ -32,6 +32,10 @@ const productSchema = new Schema({
         type: String,
         required: true,
     },
+    dateadded: {
+        type: Date,
+        required: true,
+    }
 }, { collection: 'product' });
 
 const ProductModel = db.model('product', productSchema);
