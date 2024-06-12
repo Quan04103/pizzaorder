@@ -30,3 +30,5 @@ class AuthTimeOut extends AuthEvent {}
 class AuthLoginWithGoogle extends AuthEvent {}
 
 class AuthLoginWithFacebook extends AuthEvent {}
+
+class AuthLogoutStarted extends AuthEvent {}
