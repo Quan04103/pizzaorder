@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:pizzaorder/pizzaorder/services/order_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'cart_event.dart';
 import 'cart_state.dart';
 import '../../models/order.dart';
@@ -70,11 +71,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<SubmitCart>((event, emit) async {
       try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String token = prefs.getString('token') ?? '';
         var order = await orderService.addOrder(
-          event.userId,
           cartItems,
           event.total,
           DateTime.now(),
+          token
         );
         cartItems.clear();
         emit(CartState.submitted(order, cartItems));

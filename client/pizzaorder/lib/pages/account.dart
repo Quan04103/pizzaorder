@@ -24,7 +24,12 @@ class _AccountState extends State<Account> {
 
   void _onPressLogOut() {
     final router = GoRouter.of(context);
-    router.go('/logout');
+    router.go('/homepage');
+  }
+
+  void _onPressBack(BuildContext context) {
+    final router = GoRouter.of(context);
+    router.go('/home');
   }
 
   @override
@@ -51,14 +56,7 @@ class _AccountState extends State<Account> {
                         padding: const EdgeInsets.only(top: 10, left: 20),
                         child: GestureDetector(
                           onTap: () {
-                            if (GoRouter.of(context).canPop()) {
-                              context
-                                  .pop(); // Quay lại màn hình trước nếu có thể
-                            } else {
-                              context.go(
-                                '/home',
-                              ); // Chuyển đến màn hình Home nếu không có màn hình trước
-                            }
+                            _onPressBack(context);
                           },
                           child: const Icon(
                             Icons.arrow_back_ios,

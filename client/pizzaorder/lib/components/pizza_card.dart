@@ -70,9 +70,7 @@ class _PizzaCardState extends State<PizzaCard> {
               right: 15,
               child: GestureDetector(
                 onTap: () {
-                  context
-                      .read<CartBloc>()
-                      .add(const SubmitCart('6648cec207ad9afaf8850219', 20000));
+                  context.read<CartBloc>().add(const SubmitCart(20000));
                   setState(() {
                     isFavorite =
                         !isFavorite; // Thay đổi trạng thái khi click vào Icons.favorite

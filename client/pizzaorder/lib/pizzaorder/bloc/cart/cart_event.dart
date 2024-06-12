@@ -39,8 +39,7 @@ class RemoveProduct extends CartEvent {
 }
 
 class SubmitCart extends CartEvent {
-  final String userId;
   final double total;
 
-  const SubmitCart(this.userId, this.total);
+  const SubmitCart(this.total);
 }

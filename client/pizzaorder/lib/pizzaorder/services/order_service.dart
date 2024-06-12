@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'dart:convert';
 import '../models/order_item_in_cart.dart';
 import '../models/order.dart';
@@ -13,16 +14,17 @@ class OrderService {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjUzOTUxOWZkMWI4NjU4N2Y2ZjI5YmIiLCJ1c2VybmFtZSI6InRlc3QxMjMxMjMiLCJpYXQiOjE3MTc5NzEzMzksImV4cCI6MTcxNzk3NDkzOX0.HqBiiAgAX4hicJkxBuA2s3Q_epvaktWl4TCrM5Gk_90';
   OrderService();
 
-  Future<OrderModel> addOrder(String idUser, List<OrderItem> listOrder,
-      double price, DateTime dateAdded) async {
+  Future<OrderModel> addOrder(List<OrderItem> listOrder, double price,
+      DateTime dateAdded, String token) async {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     final response = await http.post(
       Uri.parse('$apiUrl/addOrder'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // 'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
-        'iduser': idUser,
+        'iduser': decodedToken['_id'] ?? '',
         'listorder': listOrder.map((item) => item.toJson()).toList(),
         'price': price,
         'dateadded': dateAdded.toIso8601String(),
