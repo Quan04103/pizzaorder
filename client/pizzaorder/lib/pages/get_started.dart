@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:async';
 
 import 'package:pizzaorder/pages/start_order.dart'; // Import thư viện để sử dụng Timer
@@ -13,15 +14,18 @@ class GetStarted extends StatefulWidget {
 class _GetStartedState extends State<GetStarted> {
   @override
   void initState() {
+    final router = GoRouter.of(context);
+
     super.initState();
     // Tạo một Timer để đếm ngược 5 giây và sau đó chuyển đến trang mới
     Timer(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const StartOrder(),
-        ),
-      );
+      router.go('/startorder');
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const StartOrder(),
+      //   ),
+      // );
     });
   }
 

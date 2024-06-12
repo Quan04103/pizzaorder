@@ -1,21 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pizzaorder/components/select_card.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class UserAvatar extends StatelessWidget {
-  final String name;
+class Account extends StatefulWidget {
+  final String token;
 
-  const UserAvatar({super.key, required this.name});
+  const Account({super.key, required this.token});
+
+  @override
+  State<Account> createState() => _AccountState();
+}
+
+class _AccountState extends State<Account> {
+  late String nameProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    nameProfile = jwtDecodedToken['nameProfile'] ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
-    String initial = getInitialFromLastWord(name);
+    String initial = getInitialFromLastWord(nameProfile);
     return Scaffold(
       backgroundColor: const Color.fromARGB(235, 255, 255, 255),
       body: Stack(
-        clipBehavior: Clip.none,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -30,11 +41,16 @@ class UserAvatar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10, left: 20),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -43,16 +59,12 @@ class UserAvatar extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Positioned(
-                            top: 120,
-                            left: 50,
-                            child: Text(
-                              name.toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                          Text(
+                            nameProfile.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                           Stack(
@@ -106,61 +118,62 @@ class UserAvatar extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * .7,
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, left: 20),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
+              Expanded(
+                child: Container(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // Remaining widgets
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, left: 20),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Tài khoản của tôi',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      SelectCard(content: 'Yêu thích'),
-                      SelectCard(content: 'Phương thức thanh toán'),
-                      SelectCard(content: 'Vị trí'),
-                      SelectCard(content: 'Lịch sử đặt hàng'),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Tổng Quát',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          'Tài khoản của tôi',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      SelectCard(
-                        content: 'Trợ giúp',
-                      ),
-                      SelectCard(content: 'Cài đặt'),
-                      SelectCard(content: 'Ngôn ngữ'),
-                      SelectCard(content: 'Chia sẻ phản hồi'),
-                      SelectCard(content: 'Về chúng tôi'),
-                    ],
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SelectCard(content: 'Yêu thích'),
+                        SelectCard(content: 'Phương thức thanh toán'),
+                        SelectCard(content: 'Vị trí'),
+                        SelectCard(content: 'Lịch sử đặt hàng'),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Tổng Quát',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SelectCard(
+                          content: 'Trợ giúp',
+                        ),
+                        SelectCard(content: 'Cài đặt'),
+                        SelectCard(content: 'Ngôn ngữ'),
+                        SelectCard(content: 'Chia sẻ phản hồi'),
+                        SelectCard(content: 'Về chúng tôi'),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -169,9 +182,9 @@ class UserAvatar extends StatelessWidget {
           Positioned(
             top: 240,
             left: 55,
+            height: MediaQuery.of(context).size.height * .05,
             width: MediaQuery.of(context).size.width * .7,
             child: Container(
-              height: 45,
               decoration: BoxDecoration(
                 color: Colors.yellow[300],
                 borderRadius: const BorderRadius.all(
@@ -250,16 +263,12 @@ class UserAvatar extends StatelessWidget {
       ),
     );
   }
-}
 
-// Phương thức lấy ký tự đầu tiên của từ cuối cùng
-String getInitialFromLastWord(String name) {
-  if (name.isEmpty) {
-    return '?';
+  String getInitialFromLastWord(String name) {
+    List<String> words = name.split(' ');
+    if (words.isNotEmpty) {
+      return words.last[0].toUpperCase();
+    }
+    return '';
   }
-
-  List<String> words = name.trim().split(' ');
-  String lastWord = words.last;
-
-  return lastWord.isNotEmpty ? lastWord[0].toUpperCase() : '?';
 }

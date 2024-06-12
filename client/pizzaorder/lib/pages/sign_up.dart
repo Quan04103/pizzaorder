@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import '../components/registerForm.dart';
+import 'package:pizzaorder/components/registerForm.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -40,6 +38,8 @@ class _SignUpState extends State<SignUp> {
                       child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .start, // Added to fix alignment
                           children: [
                             Text(
                               'DOMINI PIZZA',
