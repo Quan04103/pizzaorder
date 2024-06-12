@@ -1,6 +1,7 @@
 //import 'package:domini_pizza/Constants.dart';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/login_button.dart';
 import 'package:pizzaorder/pages/log_in.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
@@ -13,6 +14,16 @@ class AccessMethod extends StatefulWidget {
 }
 
 class _AccessMethodState extends State<AccessMethod> {
+  void _onPressLogin() {
+    final router = GoRouter.of(context);
+    router.go('/login');
+  }
+
+  void _onPressSignUp() {
+    final router = GoRouter.of(context);
+    router.go('/signup');
+  }
+
   //final Constants _constants = Constants();
   @override
   Widget build(BuildContext context) {
@@ -47,12 +58,7 @@ class _AccessMethodState extends State<AccessMethod> {
                   width: 50,
                   fontSize: 18,
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Login(),
-                      ),
-                    );
+                    _onPressLogin();
                   },
                 ),
               ),
@@ -71,12 +77,7 @@ class _AccessMethodState extends State<AccessMethod> {
                   width: 50,
                   fontSize: 18,
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUp(),
-                      ),
-                    );
+                    _onPressSignUp();
                   },
                 ),
               ),

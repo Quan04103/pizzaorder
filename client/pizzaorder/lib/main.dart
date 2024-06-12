@@ -21,7 +21,7 @@ void main() async {
   await dotenv.load();
   final AppRouter appRouter = AppRouter();
   runApp(
-    createBlocProviders(
+    createRepositoryAndBlocProviders(
       child: MyApp(router: appRouter.router),
     ),
   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/login_button_2.dart';
 import 'package:pizzaorder/components/textField.dart';
 import 'package:pizzaorder/pages/log_in.dart';
@@ -65,6 +66,11 @@ class _RegisterFormState extends State<RegisterForm> {
     }
   }
 
+  void _onPressLogin() {
+    final router = GoRouter.of(context);
+    router.go('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -78,12 +84,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 _isCompleted = true;
               });
               await Future.delayed(const Duration(seconds: 3));
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Login(),
-                ),
-              );
+              _onPressLogin();
             } else if (state is AuthRegisterFailure) {
               setState(() {
                 _errorMessage = state.message;
@@ -186,12 +187,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       padding: const EdgeInsets.only(right: 25),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Login(),
-                            ),
-                          );
+                          _onPressLogin();
                         },
                         child: const Text(
                           'Đã có tài khoản ?',

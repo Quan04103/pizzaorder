@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/login_button_2.dart';
 import 'package:pizzaorder/components/textField.dart';
 import 'package:pizzaorder/pages/account.dart';
@@ -23,6 +24,16 @@ class _LoginFormState extends State<LoginForm> {
   String? _errorMessage;
   late SharedPreferences pref;
   bool _isCompleted = false;
+
+  void _onPressSignUp() {
+    final router = GoRouter.of(context);
+    router.go('/signup');
+  }
+
+  void _onLogginButtonPressed(String token) {
+    final router = GoRouter.of(context);
+    router.go('/account', extra: token);
+  }
 
   void _validateFields() {
     setState(() {
@@ -63,7 +74,7 @@ class _LoginFormState extends State<LoginForm> {
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
-      child: BlocListener<AuthBloc, AuthState>(
+      child: BlocListener<AuthBloc, AuthState> (
         listener: (context, state) async {
           if (state is AuthLoginSuccess) {
             final token = pref.getString('token');
@@ -71,12 +82,7 @@ class _LoginFormState extends State<LoginForm> {
               _isCompleted = true;
             });
             await Future.delayed(const Duration(seconds: 3));
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Account(token: token ?? ''),
-              ),
-            );
+            _onLogginButtonPressed(token ?? '');
           } else if (state is AuthLoginFailure) {
             setState(() {
               _errorMessage = state.message;
@@ -127,10 +133,7 @@ class _LoginFormState extends State<LoginForm> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUp()));
+                        _onPressSignUp();
                       },
                       child: const Text(
                         'Tạo tài khoản mới ?',

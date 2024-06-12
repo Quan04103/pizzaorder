@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 
 class StartOrder extends StatefulWidget {
@@ -9,6 +10,11 @@ class StartOrder extends StatefulWidget {
 }
 
 class _StartOrderState extends State<StartOrder> {
+  void _onPressAccessMethod() {
+    final router = GoRouter.of(context);
+    router.go('/accessmethod');
+  }
+
   //final Constants _constants = Constants();
   @override
   Widget build(BuildContext context) {
@@ -33,12 +39,7 @@ class _StartOrderState extends State<StartOrder> {
               padding: const EdgeInsets.only(bottom: 40.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AccessMethod(),
-                    ),
-                  );
+                  _onPressAccessMethod();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 255, 0, 0),
