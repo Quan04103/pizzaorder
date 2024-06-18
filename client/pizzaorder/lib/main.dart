@@ -8,6 +8,7 @@ import 'package:pizzaorder/components/pizza_card_gird.dart';
 import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/giohang.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './pages/all_product_page.dart';
 import 'pizzaorder/bloc/pizza/pizza_bloc.dart';
 import 'pizzaorder/services/product_service.dart';
@@ -17,7 +18,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app_router.dart';
 import 'multiple_bloc_provider.dart';
 
+late SharedPreferences sharedPreferences;
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  sharedPreferences = await SharedPreferences.getInstance();
   await dotenv.load();
   final AppRouter appRouter = AppRouter();
   runApp(
