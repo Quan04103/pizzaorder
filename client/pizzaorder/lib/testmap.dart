@@ -5,6 +5,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:location/location.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -22,6 +23,8 @@ class FullMapTestState extends State<FullMapTest> {
   @override
   void initState() {
     super.initState();
+    determinePosition();
+    updateCircleAnnotation();
     getEnd('Huflit quận 10').then((_) {
       if (endPlace.isNotEmpty) {
         selectPlace(endPlace[0]);
@@ -32,6 +35,8 @@ class FullMapTestState extends State<FullMapTest> {
   MapboxMap? mapboxMap;
   CircleAnnotationManager? _circleAnnotationManagerStart;
   CircleAnnotationManager? _circleAnnotationManagerEnd;
+
+  PointAnnotationManager? _pointAnnotationManager;
 
   String start = "";
   String end = "";
@@ -58,6 +63,43 @@ class FullMapTestState extends State<FullMapTest> {
   final TextEditingController _searchEnd = TextEditingController();
 
   PolylinePoints polylinePoints = PolylinePoints();
+
+  final Location location = Location();
+
+  Future<void> determinePosition() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    // Kiểm tra xem dịch vụ vị trí có được bật không.
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      // Nếu không, yêu cầu bật dịch vụ vị trí.
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    // Kiểm tra quyền truy cập vị trí.
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      // Nếu quyền bị từ chối, yêu cầu quyền.
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    // Lấy vị trí hiện tại.
+    LocationData locationData = await location.getLocation();
+
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      print(
+          "Vị trí hiện tại: Lat: ${currentLocation.latitude}, Long: ${currentLocation.longitude}");
+    });
+    print(
+        "Vị trí hiện tại: Lat: ${locationData.latitude}, Long: ${locationData.longitude}");
+  }
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
@@ -127,7 +169,6 @@ class FullMapTestState extends State<FullMapTest> {
                         startDetails[0]['geometry']['location']['lng'],
                         startDetails[0]['geometry']['location']['lat'])),
                 zoom: 12.0));
-
             mapboxMap?.flyTo(
                 CameraOptions(
                     anchor: ScreenCoordinate(x: 0, y: 0),
@@ -151,7 +192,7 @@ class FullMapTestState extends State<FullMapTest> {
                     startDetails[0]['geometry']['location']['lng'],
                     startDetails[0]['geometry']['location']['lat'],
                   )),
-                  circleColor: Colors.blue.value,
+                  circleColor: Colors.purple.value,
                   circleRadius: 12.0,
                 ),
               );
@@ -197,6 +238,32 @@ class FullMapTestState extends State<FullMapTest> {
                 endDetails[0]['geometry']['location']['lat'])),
         zoom: 12.0));
 
+    // mapboxMap?.flyTo(
+    //     CameraOptions(
+    //         anchor: ScreenCoordinate(x: 0, y: 0),
+    //         zoom: 15,
+    //         bearing: 0,
+    //         pitch: 0),
+    //     MapAnimationOptions(duration: 2000, startDelay: 0));
+    // mapboxMap?.annotations.createCircleAnnotationManager().then((value) async {
+    //   setState(() {
+    //     _circleAnnotationManagerEnd = value;
+    //     lngEnd = endDetails[0]['geometry']['location']['lng'];
+    //     latEnd = endDetails[0]['geometry']['location']['lat'];
+    //   });
+
+    //   value.create(
+    //     CircleAnnotationOptions(
+    //       geometry: Point(
+    //           coordinates: Position(
+    //         endDetails[0]['geometry']['location']['lng'],
+    //         endDetails[0]['geometry']['location']['lat'],
+    //       )),
+    //       circleColor: Colors.purple.value,
+    //       circleRadius: 12.0,
+    //     ),
+    //   );
+    // });
     mapboxMap?.flyTo(
         CameraOptions(
             anchor: ScreenCoordinate(x: 0, y: 0),
@@ -204,26 +271,81 @@ class FullMapTestState extends State<FullMapTest> {
             bearing: 0,
             pitch: 0),
         MapAnimationOptions(duration: 2000, startDelay: 0));
-    mapboxMap?.annotations.createCircleAnnotationManager().then((value) async {
+    mapboxMap?.annotations.createPointAnnotationManager().then((value) async {
       setState(() {
-        _circleAnnotationManagerEnd = value;
+        _pointAnnotationManager = value;
         lngEnd = endDetails[0]['geometry']['location']['lng'];
         latEnd = endDetails[0]['geometry']['location']['lat'];
       });
-
+      Uint8List imageBytes =
+          await loadImageFromAssets('assets/icons/deliveryman.png');
       value.create(
-        CircleAnnotationOptions(
+        PointAnnotationOptions(
           geometry: Point(
               coordinates: Position(
             endDetails[0]['geometry']['location']['lng'],
             endDetails[0]['geometry']['location']['lat'],
           )),
-          circleColor: Colors.red.value,
-          circleRadius: 12.0,
+          image: imageBytes,
+          iconSize: 1.5,
         ),
       );
     });
     _searchEnd.text = coordinate['description'];
+  }
+
+  //Hàm giúp load ảnh từ assets thành Uint8List để sử dụng trong Mapbox
+  Future<Uint8List> loadImageFromAssets(String path) async {
+    final ByteData data = await rootBundle.load(path);
+    final Uint8List bytes = data.buffer.asUint8List();
+    return bytes;
+  }
+
+  Future<void> updateCircleAnnotation() async {
+    LocationData? lastLocation;
+
+    // Tải imageBytes một lần
+    Uint8List imageBytes =
+        await loadImageFromAssets('assets/icons/deliveryman.png');
+
+    location.onLocationChanged.listen(
+      (LocationData currentLocation) async {
+        // Kiểm tra sự khác biệt vị trí đáng kể (ví dụ: 0.001 độ)
+        if (lastLocation != null &&
+            (lastLocation!.latitude! - currentLocation.latitude!).abs() <
+                0.001 &&
+            (lastLocation!.longitude! - currentLocation.longitude!).abs() <
+                0.001) {
+          // Nếu vị trí không thay đổi đáng kể, không cần cập nhật
+          return;
+        }
+
+        // Cập nhật lastLocation với vị trí hiện tại
+        lastLocation = currentLocation;
+
+        _pointAnnotationManager ??=
+            await mapboxMap?.annotations.createPointAnnotationManager();
+
+        // Xóa tất cả PointAnnotation hiện có trước khi tạo mới
+        if (_pointAnnotationManager != null) {
+          await _pointAnnotationManager!.deleteAll();
+        }
+
+        // Tạo PointAnnotation mới với imageBytes đã tải
+        _pointAnnotationManager?.create(
+          PointAnnotationOptions(
+            geometry: Point(
+                coordinates: Position(
+                    currentLocation.longitude!, currentLocation.latitude!)),
+            image: imageBytes,
+            iconSize: 1.5,
+          ),
+        );
+
+        print(
+            "Vị trí hiện tại: Lat: ${currentLocation.latitude}, Long: ${currentLocation.longitude}");
+      },
+    );
   }
 
   Widget _buildListEnd() {
@@ -267,6 +389,10 @@ class FullMapTestState extends State<FullMapTest> {
   }
 
   void _fetchData() async {
+    // location.onLocationChanged.listen((LocationData currentLocation) async {
+
+    // });
+
     if (latStart != null &&
         lngStart != null &&
         latEnd != null &&
@@ -327,7 +453,7 @@ class FullMapTestState extends State<FullMapTest> {
      "line-join":"round",
      "line-cap":"round",
      "line-color":"rgb(51, 51, 255)",
-     "line-width":9.0
+     "line-width":5.0
      }
      }""";
 
@@ -395,7 +521,7 @@ class FullMapTestState extends State<FullMapTest> {
                                 children: [
                                   const Icon(
                                     Icons.circle_outlined,
-                                    color: Colors.blue,
+                                    color: Colors.purple,
                                     size: 20,
                                   ),
                                   Expanded(
@@ -418,7 +544,7 @@ class FullMapTestState extends State<FullMapTest> {
                                         }
                                         isShowStart = true;
                                         if (currentStartLength != startLength) {
-                                          // removeLayer();
+                                          removeLayer();
                                           setState(() {
                                             isHidden = true;
                                           });
@@ -448,7 +574,7 @@ class FullMapTestState extends State<FullMapTest> {
                                 children: [
                                   const Icon(
                                     Icons.location_on_outlined,
-                                    color: Colors.blue,
+                                    color: Colors.purple,
                                   ),
                                   Expanded(
                                       child: Padding(
@@ -470,7 +596,7 @@ class FullMapTestState extends State<FullMapTest> {
                                           setState(() {
                                             isHidden = true;
                                           });
-                                          // removeLayer();
+                                          removeLayer();
                                         }
                                         endLength = currentEndLength;
                                       },
@@ -493,7 +619,7 @@ class FullMapTestState extends State<FullMapTest> {
                       decoration: const BoxDecoration(),
                       child: IconButton(
                         iconSize: 40,
-                        color: Colors.blue[900],
+                        color: Colors.purple[900],
                         icon: const Icon(Icons.directions),
                         onPressed: () {
                           _fetchData();

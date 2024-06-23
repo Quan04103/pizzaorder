@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pizzaorder/map.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
 import 'package:pizzaorder/pages/get_started.dart';
