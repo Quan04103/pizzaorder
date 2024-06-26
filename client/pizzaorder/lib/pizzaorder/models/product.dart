@@ -18,6 +18,31 @@ class ProductModel {
     this.more,
     this.link,
   });
+    Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'categoryId': categoryId,
+      'name': name,
+      'description': description,
+      'price': price,
+      'image': image,
+      'more': more,
+      'link': link,
+    };
+  }
+    ProductModel getById(String? id) => ProductModel(
+      id: id.toString(),
+      categoryId: categoryId,
+      name: name,
+      description: description,
+      price: price,
+      image: image,
+      more: more,
+      link: link,
+      );
+  ProductModel getByPosition(String? position) {
+    return getById(position);
+  }
 
   factory ProductModel.fromJson(Map<String, dynamic> map) {
     return ProductModel(
