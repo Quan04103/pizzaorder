@@ -24,6 +24,11 @@ class _AccessMethodState extends State<AccessMethod> {
     router.go('/signup');
   }
 
+  void _onPressSkipLogin() {
+    final router = GoRouter.of(context);
+    router.go('/home');
+  }
+
   //final Constants _constants = Constants();
   @override
   Widget build(BuildContext context) {
@@ -93,6 +98,7 @@ class _AccessMethodState extends State<AccessMethod> {
                   //     context,
                   //     MaterialPageRoute(
                   //         builder: (context) => const HomePage()));
+                  _onPressSkipLogin();
                 },
                 child: RichText(
                   text: const TextSpan(
