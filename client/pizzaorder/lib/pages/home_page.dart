@@ -133,6 +133,9 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
+    if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
+      pizzaBloc.add(LoadProduct.loadNewest);
+    }
     //pizzaBloc.add(LoadProduct.loadNewest);
   }
 

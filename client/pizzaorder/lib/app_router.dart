@@ -22,7 +22,7 @@ class AppRouter {
     router = GoRouter(
       routes: [
         GoRoute(
-          path: '/home',
+          path: '/',
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
@@ -53,7 +53,7 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
-          path: '/',
+          path: '/map',
           builder: (context, state) => const FullMapTest(),
         ),
         GoRoute(
