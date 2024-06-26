@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
+import 'package:pizzaorder/pages/edit_user.dart';
 import 'package:pizzaorder/pages/get_started.dart';
 import 'package:pizzaorder/pages/log_in.dart';
+import 'package:pizzaorder/pages/log_out.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 import 'package:pizzaorder/pages/start_order.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
@@ -51,11 +53,19 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
+          path: '/logout',
+          builder: (context, state) => const LogOut(),
+        ),
+        GoRoute(
           path: '/account',
           builder: (context, state) {
             final token = state.extra as String;
             return Account(token: token);
           },
+        ),
+        GoRoute(
+          path: '/editUser',
+          builder: (context, state) => const EditUserProfilePage(),
         ),
         // GoRoute(
         //   path: '/',

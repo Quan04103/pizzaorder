@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/select_card.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Account extends StatefulWidget {
   final String token;
@@ -14,7 +16,6 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   late String nameProfile;
-
   @override
   void initState() {
     super.initState();
@@ -30,6 +31,11 @@ class _AccountState extends State<Account> {
   void _onPressBack(BuildContext context) {
     final router = GoRouter.of(context);
     router.go('/home');
+  }
+
+  void _onPressedEdit(String token) {
+    final router = GoRouter.of(context);
+    router.go('/edituser', extra: token);
   }
 
   @override
@@ -102,21 +108,29 @@ class _AccountState extends State<Account> {
                                   ),
                                 ),
                               ),
-                              const Positioned(
+                              Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: CircleAvatar(
-                                  radius:
-                                      15.0, // Tăng kích thước để có viền cho icon
-                                  backgroundColor: Color.fromARGB(
-                                      255, 255, 255, 255), // Màu viền của icon
-                                  child: CircleAvatar(
-                                    radius: 24.0,
-                                    backgroundColor: Colors.white,
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 20.0,
-                                      color: Color.fromARGB(255, 37, 83, 188),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    final token = prefs.getString('token');
+                                    _onPressedEdit(token ?? '');
+                                  },
+                                  child: const CircleAvatar(
+                                    radius:
+                                        15.0, // Tăng kích thước để có viền cho icon
+                                    backgroundColor: Color.fromARGB(255, 255,
+                                        255, 255), // Màu viền của icon
+                                    child: CircleAvatar(
+                                      radius: 24.0,
+                                      backgroundColor: Colors.white,
+                                      child: Icon(
+                                        Icons.edit,
+                                        size: 20.0,
+                                        color: Color.fromARGB(255, 37, 83, 188),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -281,6 +295,9 @@ class _AccountState extends State<Account> {
   }
 
   String getInitialFromLastWord(String name) {
+    if (name.trim().isEmpty) {
+      return '';
+    }
     List<String> words = name.split(' ');
     if (words.isNotEmpty) {
       return words.last[0].toUpperCase();

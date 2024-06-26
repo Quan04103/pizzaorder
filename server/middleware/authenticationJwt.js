@@ -11,11 +11,13 @@ function authenticateJWT(req, res, next) {
                 return res.sendStatus(403);
             }
             req.user = user;
+            req.userId = user._id;
             next();
         });
     } else {
         res.sendStatus(401);
     }
 }
+
 
 module.exports = authenticateJWT;

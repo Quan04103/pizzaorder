@@ -1,6 +1,7 @@
 const UserModel = require('../model/user.model')
 const jwt = require('jsonwebtoken');
-
+// const nodemailer = require('nodemailer');
+// const crypto = require('crypto');
 
 class UserService {
     static async registerUser(username, password, nameProfile, number, address, email) {
@@ -20,6 +21,18 @@ class UserService {
     }
     static async generateToken(tokenData, secretKey, jwt_expire) {
         return jwt.sign(tokenData, secretKey, { expiresIn: jwt_expire });
+    }
+    static async updateUser(userId, userData) {
+        try {
+            const updatedUser = await UserModel.findByIdAndUpdate(
+                userId,
+                { $set: userData },
+                { new: true } // Trả về thông tin người dùng đã được cập nhật
+            );
+        } catch (error) {
+            console.error('Error in updateUser service:', error);
+            throw error;
+        }
     }
 }
 
