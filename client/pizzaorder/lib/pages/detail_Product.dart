@@ -73,6 +73,10 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       _isFavorite = !_isFavorite;
     });
   }
+  void _onPressBack(BuildContext context) {
+  final router = GoRouter.of(context);
+  router.go('/home');
+}
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +110,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       leading: _buildCircleIconButton(
         icon: Icons.arrow_back,
         onPressed: () {
-          GoRouter.of(context).go('/');
+          GoRouter.of(context).go('/home');
         },
       ),
       actions: [

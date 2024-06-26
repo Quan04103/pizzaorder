@@ -11,15 +11,24 @@ import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
 import '../pizzaorder/bloc/pizza/pizza_state.dart';
 import '../pizzaorder/bloc/pizza/pizza_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../components/BottomNavigationBar.dart'; // Đảm bảo import đúng đường dẫn
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+   int _selectedIndex1 = 0;
+
+  void _onItemTapped1(int index) {
+    setState(() {
+      _selectedIndex1 = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -104,13 +113,18 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex1: _selectedIndex1,
+          onItemTapped1: _onItemTapped1,
+        ),
       ),
     );
   }
 }
 
 class ProductsCarousel extends StatefulWidget {
-  const ProductsCarousel({super.key});
+  const ProductsCarousel({Key? key}) : super(key: key);
+
   @override
   _ProductsCarouselState createState() => _ProductsCarouselState();
 }
