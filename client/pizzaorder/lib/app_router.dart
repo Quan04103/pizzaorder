@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
+import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/get_started.dart';
 import 'package:pizzaorder/pages/log_in.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
@@ -65,6 +66,10 @@ class AppRouter {
         //   path: '/',
         //   builder: (context, state) => const StartOrder(),
         // ),
+        GoRoute(
+          path: '/favoritepage',
+          builder: (context, state) => FavoritePage(),
+        ),
       ],
     );
   }
