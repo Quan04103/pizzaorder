@@ -291,7 +291,13 @@ class PizzaCard extends StatefulWidget {
 
 class _PizzaCardState extends State<PizzaCard> {
   late bool isFavorite;
-
+  late OrderItem orderItem = OrderItem(
+    idproduct: widget.product.id ?? '',
+    quantity: 1,
+    name: widget.product.name ?? '',
+    price: widget.product.price ?? 0,
+    image: widget.product.image ?? '',
+  );
   @override
   void initState() {
     super.initState();
