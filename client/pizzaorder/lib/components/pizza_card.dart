@@ -462,10 +462,8 @@ class _PizzaCardState extends State<PizzaCard> {
                     child: IconButton(
                         icon: const Icon(Icons.add, color: Colors.white),
                         onPressed: () {
-                          // context
-                          //     .read<CartBloc>()
-                          //     .add(AddProducts(orderItem));
-                          // // Add your onPressed code here!
+                          context.read<CartBloc>().add(AddProducts(orderItem));
+                          // Add your onPressed code here!
                         }),
                   ),
                 ),

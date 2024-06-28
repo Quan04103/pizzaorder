@@ -32,6 +32,10 @@ class AppRouter {
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
+          path: '/bagcart',
+          builder: (context, state) => const GioHang(),
+        ),
+        GoRoute(
           path: '/detail',
           builder: (context, state) {
             final product = state.extra as ProductModel;

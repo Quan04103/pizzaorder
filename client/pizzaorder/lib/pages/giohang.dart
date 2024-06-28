@@ -25,16 +25,16 @@ void _onPressBack(BuildContext context) {
 
 class _GioHangState extends State<GioHang> {
   String _selectedOption = ''; // Khai báo biến _selectedOption ở đây
- int _shippingFee = 0; // Biến để lưu trữ giá trị phí vận chuyển
- 
+  int _shippingFee = 0; // Biến để lưu trữ giá trị phí vận chuyển
+
   late CartBloc cartBloc;
-  
+
   get totalAllPrice => null;
   @override
   void initState() {
     super.initState();
     cartBloc = BlocProvider.of<CartBloc>(context);
-    cartBloc.add(LoadList());
+    cartBloc.add(const LoadList());
   }
 
   @override
@@ -249,7 +249,7 @@ class _GioHangState extends State<GioHang> {
               onSelected: (newOption) {
                 setState(() {
                   _selectedOption = newOption;
-                   _shippingFee = 39000; 
+                  _shippingFee = 39000;
                 });
               },
             ),
@@ -261,7 +261,7 @@ class _GioHangState extends State<GioHang> {
               onSelected: (newOption) {
                 setState(() {
                   _selectedOption = newOption;
-                    _shippingFee = 34000; 
+                  _shippingFee = 34000;
                 });
               },
             ),
@@ -273,7 +273,7 @@ class _GioHangState extends State<GioHang> {
               onSelected: (newOption) {
                 setState(() {
                   _selectedOption = newOption;
-                   _shippingFee = 30000;
+                  _shippingFee = 30000;
                 });
               },
             ),
@@ -295,92 +295,96 @@ class _GioHangState extends State<GioHang> {
   }
 
   Widget _buildOrder() {
-  return BlocBuilder<CartBloc, CartState>(
-    bloc: cartBloc,
-    builder: (context, state) {
-      cartBloc.calculateTotalPrice(state.cartItems);
+    return BlocBuilder<CartBloc, CartState>(
+      bloc: cartBloc,
+      builder: (context, state) {
+        cartBloc.calculateTotalPrice(state.cartItems);
 
-      return Container(
-        margin: const EdgeInsets.only(top: 15),
-        decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Đơn hàng',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      GoRouter.of(context).go('/');
-                    },
-                    child: const Text(
-                      'Thêm món',
+        return Container(
+          margin: const EdgeInsets.only(top: 15),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'Đơn hàng',
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
-                        fontSize: 13,
-                        color: Colors.blue,
+                        fontSize: 16,
+                        color: Color(0xFF000000),
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        GoRouter.of(context).go('/');
+                      },
+                      child: const Text(
+                        'Thêm món',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                if (state.cartItems.isEmpty)
+                  const Center(
+                    child: Text(
+                      'Không có sản phẩm nào trong giỏ hàng',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromARGB(255, 231, 16, 16),
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              if (state.cartItems.isEmpty)
-                const Center(
-                  child: Text(
-                    'Không có sản phẩm nào trong giỏ hàng',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w400,
-                      color: Color.fromARGB(255, 231, 16, 16),
-                    ),
+                if (state.cartItems.isNotEmpty)
+                  // Use ListView.builder to display the list of products
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: constraints.maxHeight,
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics:
+                              const NeverScrollableScrollPhysics(), // Để tránh cuộn bên trong ListView
+                          itemCount: state.cartItems.length,
+                          itemBuilder: (context, index) {
+                            if (state.cartItems[index].quantity <= 0) {
+                              return const SizedBox.shrink();
+                            }
+                            return Column(
+                              children: [
+                                if (index > 0) const SizedBox(height: 1),
+                                ProductItemBagCart(
+                                    cartItems: state.cartItems[index]),
+                              ],
+                            );
+                          },
+                        ),
+                      );
+                    },
                   ),
-                ),
-              if (state.cartItems.isNotEmpty)
-                // Use ListView.builder to display the list of products
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    return ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: constraints.maxHeight,
-                      ),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(), // Để tránh cuộn bên trong ListView
-                        itemCount: state.cartItems.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              if (index > 0) const SizedBox(height: 1),
-                              ProductItemBagCart(cartItems: state.cartItems[index]),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   Widget _buildPaymentMethod() {
     return Container(
@@ -468,63 +472,63 @@ class _GioHangState extends State<GioHang> {
   }
 
 
-Widget _buildInvoiceInfo(totalAllPrice) {
-  return BlocBuilder<CartBloc, CartState>(
-    bloc: cartBloc,
-    builder: (context, state) {
-      double totalAllPrice = BlocProvider.of<CartBloc>(context)
-          .calculateTotalPrice(state.cartItems);
-
-      return Container(
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Thông tin hóa đơn',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+  Widget _buildInvoiceInfo(totalAllPrice) {
+    return BlocBuilder<CartBloc, CartState>(
+      bloc: cartBloc,
+      builder: (context, state) {
+        double totalAllPrice = BlocProvider.of<CartBloc>(context)
+            .calculateTotalPrice(state.cartItems);
+        return Container(
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Thông tin hóa đơn',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            _buildInvoiceRow('Tạm tính', '${totalAllPrice.toStringAsFixed(0)} đ'),
-            _buildInvoiceRow('Phí vận chuyển', '30.000 đ'), // Có thể thay đổi thành biến nếu cần
-            _buildInvoiceRow('Giảm giá', '0 đ'), // Có thể thay đổi thành biến nếu cần
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Tổng tiền',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+              const SizedBox(height: 10),
+              _buildInvoiceRow(
+                  'Tạm tính', '${totalAllPrice.toStringAsFixed(0)} đ'),
+              _buildInvoiceRow('Phí vận chuyển',
+                  '30.000 đ'), // Có thể thay đổi thành biến nếu cần
+              _buildInvoiceRow(
+                  'Giảm giá', '0 đ'), // Có thể thay đổi thành biến nếu cần
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Tổng tiền',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                Text(
-                  '${totalAllPrice.toStringAsFixed(0)} đ',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  Text(
+                    '${totalAllPrice.toStringAsFixed(0)} đ',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
-
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Widget _buildInvoiceRow(String title, String amount) {
     return Padding(
