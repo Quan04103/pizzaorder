@@ -21,6 +21,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void _onPressFavoritesPage() {
+    final router = GoRouter.of(context);
+    router.go('/favoritepage');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,11 +48,14 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       DropdownHome(),
-                      Icon(
-                        Icons.favorite_border,
-                        color: Colors.black,
-                        size: 35,
-                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     _onPressFavoritesPage();
+                      //   },
+                      //   icon: Icon(Icons.favorite_border),
+                      //   color: Colors.black,
+                      //   iconSize: 35,
+                      // ),
                     ],
                   ),
                   const SizedBox(
@@ -57,7 +65,10 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  slide(),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      child: slide()),
                   const Padding(
                     padding: EdgeInsets.only(right: 270),
                     child: Text(
@@ -123,7 +134,10 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
-    pizzaBloc.add(LoadProduct.loadNewest);
+    if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
+      pizzaBloc.add(LoadProduct.loadNewest);
+    }
+    //pizzaBloc.add(LoadProduct.loadNewest);
   }
 
   void _onProductPressed(ProductModel product) {

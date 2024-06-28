@@ -51,20 +51,18 @@ Widget banner(int color) {
             ],
           ),
         ),
-        // Phần hình ảnh
+        //Phần hình ảnh
         Padding(
           padding: const EdgeInsets.fromLTRB(100, 0, 0, 0),
-          child: Positioned(
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.contain,
-                  image: AssetImage('assets/pizza.jpg'),
-                  //'images/image_banner1.png'
-                ),
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage('assets/pizza.jpg'),
+                //'images/image_banner1.png'
               ),
             ),
           ),

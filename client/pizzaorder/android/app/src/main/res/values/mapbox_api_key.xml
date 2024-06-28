@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Navigation map</string>
+    <string name="mapbox_access_token" translatable="false">pk.eyJ1IjoiYm9tNDEwMjAwMyIsImEiOiJjbHhnaXh2Y24xNDR4MnFvZG82bWl5ajNhIn0.gavpz_-Ba-kKkXEVZiHlRQ</string>
+    <string name="mapbox_api_key" translatable="false">pk.eyJ1IjoiYm9tNDEwMjAwMyIsImEiOiJjbHhnaXh2Y24xNDR4MnFvZG82bWl5ajNhIn0.gavpz_-Ba-kKkXEVZiHlRQ</string>
+</resources>
