@@ -20,6 +20,9 @@ class _PizzaCardState extends State<PizzaCard> {
   late OrderItem orderItem = OrderItem(
     idproduct: widget.product.id ?? '',
     quantity: 1,
+    name: widget.product.name ?? '',
+    price: widget.product.price ?? 0,
+    image: widget.product.image ?? '',
   );
 
   @override
@@ -155,11 +158,11 @@ class _PizzaCardState extends State<PizzaCard> {
                   ),
                 ),
                 child: IconButton(
-                    icon: const Icon(Icons.add, color: Colors.white),
-                    onPressed: () {
-                      context.read<CartBloc>().add(AddProducts(orderItem));
-                      // Add your onPressed code here!
-                    }),
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    context.read<CartBloc>().add(AddProducts(orderItem));
+                  },
+                ),
               ),
             ),
           ],

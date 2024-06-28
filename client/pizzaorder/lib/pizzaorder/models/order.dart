@@ -6,12 +6,16 @@ class OrderModel {
   final List<OrderItem> orderItems;
   final double price;
   final DateTime dateAdded;
+  //tong gia
+  final double totalPrice;
 
   OrderModel({
     required this.userId,
     required this.orderItems,
     required this.price,
     required this.dateAdded,
+    //
+     required this.totalPrice,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,9 @@ class OrderModel {
       dateAdded: json['dateAdded'] != null
           ? DateTime.parse(json['dateAdded'] as String)
           : DateTime.now(),
+          //
+            totalPrice: json['totalPrice'] as double? ?? 0,
+         
     );
   }
 }

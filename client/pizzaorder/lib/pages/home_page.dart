@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
@@ -97,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 right: 10,
                 child: ShoppingCartButton(
                   onPressed: () {
-                    // Xử lý khi nhấn vào nút giỏ hàng
+                    GoRouter.of(context).go('/bagcart');
                   },
                 ),
               ),

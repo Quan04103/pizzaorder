@@ -14,12 +14,12 @@ MultiRepositoryProvider createRepositoryAndBlocProviders(
         create: (context) => UserService(),
       ),
     ],
-    child: MultiBlocProvider(
+     child: MultiBlocProvider(
       providers: [
         BlocProvider<PizzaBloc>(
           create: (context) => PizzaBloc(),
         ),
-        BlocProvider(
+        BlocProvider<CartBloc>(
           create: (context) => CartBloc(),
         ),
         BlocProvider<AuthBloc>(

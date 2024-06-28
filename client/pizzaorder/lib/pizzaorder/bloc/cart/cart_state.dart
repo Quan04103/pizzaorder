@@ -1,51 +1,49 @@
 import 'package:equatable/equatable.dart';
 import 'package:pizzaorder/pizzaorder/models/order.dart';
 import 'package:pizzaorder/pizzaorder/models/order_item_in_cart.dart';
-import 'package:pizzaorder/pizzaorder/models/product.dart';
+//import 'package:pizzaorder/pizzaorder/models/product.dart';
 
 class CartState extends Equatable {
+  final List<OrderItem> cartItems;
   final bool isUpdated;
   final bool isError;
   final bool isSubmitted;
   final OrderModel? order;
-  List<OrderItem>? cartItems;
+
 
   @override
-  List<Object> get props =>
-      [isUpdated, isError, isSubmitted, order ?? [], cartItems ?? []];
 
-  @override
-  String toString() {
-    return 'CartState: isUpdated: $isUpdated, isSubmitted: $isSubmitted, order: $order, products: $cartItems';
-  }
 
-  CartState({
+  const CartState({
+    required this.cartItems,
     required this.isUpdated,
     required this.isError,
     required this.isSubmitted,
     this.order,
-    this.cartItems,
+    
   });
 
   factory CartState.initial() {
-    return CartState(
+    return const CartState(
+      cartItems: [],
       isUpdated: false,
       isError: false,
       isSubmitted: false,
     );
   }
 
-  factory CartState.updated(List<OrderItem> cartItem) {
+  factory CartState.updated(List<OrderItem> cartItems) {
     return CartState(
+      cartItems: cartItems,
       isUpdated: true,
       isError: false,
       isSubmitted: false,
-      cartItems: cartItem,
     );
   }
 
-  factory CartState.error(String string) {
-    return CartState(
+  factory CartState.error(String error) {
+    return const CartState(
+      cartItems: [],
       isUpdated: false,
       isError: true,
       isSubmitted: false,
@@ -54,10 +52,19 @@ class CartState extends Equatable {
 
   factory CartState.submitted(OrderModel order, List<OrderItem> cartItems) {
     return CartState(
-        isUpdated: false,
-        isError: false,
-        isSubmitted: true,
-        order: order,
-        cartItems: cartItems);
+      cartItems: cartItems,
+      isUpdated: false,
+      isError: false,
+      isSubmitted: true,
+      order: order,
+    );
+  }
+
+  @override
+  List<Object?> get props => [cartItems, isUpdated, isError, isSubmitted, order];
+
+  @override
+  String toString() {
+    return 'CartState: isUpdated: $isUpdated, isSubmitted: $isSubmitted, order: $order, products: $cartItems';
   }
 }
