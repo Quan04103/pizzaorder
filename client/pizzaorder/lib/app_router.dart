@@ -4,6 +4,7 @@ import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/get_started.dart';
+import 'package:pizzaorder/pages/giohang.dart';
 import 'package:pizzaorder/pages/log_in.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 import 'package:pizzaorder/pages/start_order.dart';
@@ -24,6 +25,10 @@ class AppRouter {
         GoRoute(
           path: '/',
           builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: '/bagcart',
+          builder: (context, state) => const GioHang(),
         ),
         GoRoute(
           path: '/detail',

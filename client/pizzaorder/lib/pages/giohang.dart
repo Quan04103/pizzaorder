@@ -25,7 +25,7 @@ class _GioHangState extends State<GioHang> {
   void initState() {
     super.initState();
     cartBloc = BlocProvider.of<CartBloc>(context);
-    cartBloc.add(LoadList());
+    cartBloc.add(const LoadList());
   }
 
   @override
