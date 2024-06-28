@@ -6,6 +6,7 @@ import '../components/pizza_card.dart';
 import '../components/shopping_cart_btn.dart';
 import '../components/dropdown_home.dart';
 import '../components/slide.dart';
+import '../components/pizza_suggest.dart';
 import '../components/search.dart';
 import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
 import '../pizzaorder/bloc/pizza/pizza_state.dart';
@@ -19,6 +20,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+final ScrollController _scrollController = ScrollController();
+
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
@@ -29,84 +32,125 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.red,
         ),
         backgroundColor: Colors.green[50],
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      DropdownHome(),
-                      Icon(
-                        Icons.favorite_border,
-                        color: Colors.black,
-                        size: 35,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Search(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  slide(),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 270),
-                    child: Text(
-                      'Categories',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  const SizedBox(
-                    height: 100,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: CategoriesCarousel(),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 300),
-                    child: Text(
-                      'Newest',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  const SizedBox(
-                    height: 280,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: ProductsCarousel(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                bottom: 130,
-                right: 10,
-                child: ShoppingCartButton(
-                  onPressed: () {
-                    // Xử lý khi nhấn vào nút giỏ hàng
-                  },
+        body: Stack(
+          children: [
+            ListView(
+              controller: _scrollController,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DropdownHome(),
+                    Icon(
+                      Icons.favorite_border,
+                      color: Colors.black,
+                      size: 35,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Search(),
+                const SizedBox(
+                  height: 10,
+                ),
+                slide(),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Loại sản phẩm',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const SizedBox(
+                  height: 100,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: CategoriesCarousel(),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Sản phẩm mới nhất',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const SizedBox(
+                  height: 280,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 10.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ProductsCarousel(),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Dành cho bạn',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                SizedBox(
+                  height: 2000,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: PizzaSuggest(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      10, 0, 10, 150), // Loại bỏ padding
+                  child: Align(
+                    alignment: Alignment.center, // Căn giữa màn hình
+                    child: SizedBox(
+                      width: 30, // Chiều rộng 50
+                      height: 30, // Chiều cao 50
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white, // Màu nền
+                        onPressed: () {
+                          _scrollController.animateTo(
+                            0.0,
+                            curve: Curves.easeOut,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                        },
+                        child: const Icon(Icons.arrow_upward),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+              bottom: 130,
+              right: 10,
+              child: ShoppingCartButton(
+                onPressed: () {
+                  // Xử lý khi nhấn vào nút giỏ hàng
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  // @override
+  // void dispose() {
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 }
 
 class ProductsCarousel extends StatefulWidget {
