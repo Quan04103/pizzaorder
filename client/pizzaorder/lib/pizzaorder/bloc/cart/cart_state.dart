@@ -10,17 +10,13 @@ class CartState extends Equatable {
   final bool isSubmitted;
   final OrderModel? order;
 
-
   @override
-
-
   const CartState({
     required this.cartItems,
     required this.isUpdated,
     required this.isError,
     required this.isSubmitted,
     this.order,
-    
   });
 
   factory CartState.initial() {
@@ -61,7 +57,8 @@ class CartState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [cartItems, isUpdated, isError, isSubmitted, order];
+  List<Object?> get props =>
+      [cartItems, isUpdated, isError, isSubmitted, order];
 
   @override
   String toString() {

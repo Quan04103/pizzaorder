@@ -27,6 +27,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         // print('Adding products: ${event.products}');
         emit(CartState.updated(cartItems));
         print('New state loadlist: updated');
+        print(state.toString());
         print(state.cartItems);
       } catch (e) {
         emit(CartState.error(e.toString()));

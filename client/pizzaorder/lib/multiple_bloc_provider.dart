@@ -4,6 +4,7 @@ import 'package:pizzaorder/pizzaorder/bloc/auth/auth_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/pizza/pizza_bloc.dart';
+import 'package:pizzaorder/pizzaorder/services/order_service.dart';
 import 'package:pizzaorder/pizzaorder/services/user_service.dart';
 
 MultiRepositoryProvider createRepositoryAndBlocProviders(
@@ -14,8 +15,11 @@ MultiRepositoryProvider createRepositoryAndBlocProviders(
       RepositoryProvider<UserService>(
         create: (context) => UserService(),
       ),
+      RepositoryProvider<OrderService>(
+        create: (context) => OrderService(),
+      ),
     ],
-     child: MultiBlocProvider(
+    child: MultiBlocProvider(
       providers: [
         BlocProvider<PizzaBloc>(
           create: (context) => PizzaBloc(),
