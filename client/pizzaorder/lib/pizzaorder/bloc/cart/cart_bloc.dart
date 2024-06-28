@@ -25,7 +25,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<LoadList>((event, emit) async {
       try {
         // print('Adding products: ${event.products}');
-        emit(CartState.updated(state.cartItems));
+        emit(CartState.updated(cartItems));
         print('New state loadlist: updated');
         print(state.cartItems);
       } catch (e) {
@@ -86,14 +86,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
                 item.idproduct == event.product.idproduct &&
                 item.quantity <= 1);
           }
-          emit(CartState(
-            cartItems: List.from(state.cartItems),
-            isUpdated: state.cartItems.isNotEmpty,
-            isError: false,
-            isSubmitted: false,
-            order: null,
-          ));
-          print('New state: updated');
+          emit(CartState.updated(state.cartItems));
+          print('New state decrease: updated');
           print(state.cartItems);
         } else {
           throw Exception("Product not found in cart");
@@ -106,10 +100,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<RemoveProduct>((event, emit) async {
       try {
-        var product = cartItems
+        var product = state.cartItems
             .firstWhere((item) => item.idproduct == event.product.idproduct);
-        cartItems.remove(product);
-        emit(CartState.updated(cartItems));
+        state.cartItems.remove(product);
+        emit(CartState.updated(
+            List.from(state.cartItems))); // Cập nhật state với danh sách mới
         print('New state: updated');
         print(state.cartItems);
       } catch (e) {
