@@ -3,10 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
+import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/get_started.dart';
+import 'package:pizzaorder/pages/giohang.dart';
 import 'package:pizzaorder/pages/log_in.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 import 'package:pizzaorder/pages/start_order.dart';
+import 'package:pizzaorder/pages/voucher_page.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import 'package:pizzaorder/testmap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +27,10 @@ class AppRouter {
         GoRoute(
           path: '/',
           builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: '/bagcart',
+          builder: (context, state) => const GioHang(),
         ),
         GoRoute(
           path: '/detail',
@@ -56,6 +63,19 @@ class AppRouter {
           path: '/map',
           builder: (context, state) => const FullMapTest(),
         ),
+        GoRoute(
+          path: '/discounts',
+          builder: (context, state) => const VoucherPage(),
+        ),
+        GoRoute(
+          path: '/giohang',
+          builder: (context, state) => const GioHang(),
+        ),
+        GoRoute(
+          path: '/all',
+          builder: (context, state) => const AllProductPage(),
+        ),
+
         GoRoute(
           path: '/account',
           builder: (context, state) {

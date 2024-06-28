@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../components/BottomNavigationBar.dart'; // Adjust the import path if necessary
 
 class VoucherPage extends StatefulWidget {
   const VoucherPage({super.key});
@@ -7,8 +9,20 @@ class VoucherPage extends StatefulWidget {
   _VoucherPageState createState() => _VoucherPageState();
 }
 
+void _onPressBack(BuildContext context) {
+  final router = GoRouter.of(context);
+  router.go('/home');
+}
+
 class _VoucherPageState extends State<VoucherPage> {
   int _selectedIndex = 0;
+  int _selectedIndex1 = 1;
+
+  void _onItemTapped1(int index) {
+    setState(() {
+      _selectedIndex1 = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +32,7 @@ class _VoucherPageState extends State<VoucherPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Handle back action
+            _onPressBack(context); // Handle back action
           },
         ),
         title: const Text(
@@ -89,6 +103,10 @@ class _VoucherPageState extends State<VoucherPage> {
           ],
         ),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex1: _selectedIndex1,
+        onItemTapped1: _onItemTapped1,
+      ),
     );
   }
 
@@ -119,8 +137,7 @@ class _VoucherPageState extends State<VoucherPage> {
                       Row(
                         children: [
                           Container(
-                            width:
-                                120, // Adjust the size to fit 1/3 of the area
+                            width: 120,
                             height: 120,
                             decoration: BoxDecoration(
                               color: const Color(0xFF61AF89),
