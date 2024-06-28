@@ -23,6 +23,11 @@ class HomePage extends StatefulWidget {
 final ScrollController _scrollController = ScrollController();
 
 class _HomePageState extends State<HomePage> {
+  void _onPressFavoritesPage() {
+    final router = GoRouter.of(context);
+    router.go('/favoritepage');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -136,10 +141,10 @@ class _HomePageState extends State<HomePage> {
               right: 10,
               child: ShoppingCartButton(
                 onPressed: () {
-                  // Xử lý khi nhấn vào nút giỏ hàng
+                  GoRouter.of(context).go('/bagcart');
                 },
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -166,7 +171,10 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
-    pizzaBloc.add(LoadProduct.loadNewest);
+    if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
+      pizzaBloc.add(LoadProduct.loadNewest);
+    }
+    //pizzaBloc.add(LoadProduct.loadNewest);
   }
 
   void _onProductPressed(ProductModel product) {
