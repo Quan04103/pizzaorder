@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
@@ -21,12 +22,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
    int _selectedIndex1 = 0;
 
   void _onItemTapped1(int index) {
     setState(() {
       _selectedIndex1 = index;
     });
+
   }
 
   @override
@@ -51,11 +54,14 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       DropdownHome(),
-                      Icon(
-                        Icons.favorite_border,
-                        color: Colors.black,
-                        size: 35,
-                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     _onPressFavoritesPage();
+                      //   },
+                      //   icon: Icon(Icons.favorite_border),
+                      //   color: Colors.black,
+                      //   iconSize: 35,
+                      // ),
                     ],
                   ),
                   const SizedBox(
@@ -65,7 +71,10 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  slide(),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      child: slide()),
                   const Padding(
                     padding: EdgeInsets.only(right: 270),
                     child: Text(
@@ -106,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                 right: 10,
                 child: ShoppingCartButton(
                   onPressed: () {
-                    // Xử lý khi nhấn vào nút giỏ hàng
+                    GoRouter.of(context).go('/bagcart');
                   },
                 ),
               ),
@@ -136,7 +145,10 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
-    pizzaBloc.add(LoadProduct.loadNewest);
+    if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
+      pizzaBloc.add(LoadProduct.loadNewest);
+    }
+    //pizzaBloc.add(LoadProduct.loadNewest);
   }
 
   void _onProductPressed(ProductModel product) {

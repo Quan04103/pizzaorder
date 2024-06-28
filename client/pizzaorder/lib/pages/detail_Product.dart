@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_event.dart';
+import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_state.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import 'package:intl/intl.dart';
 
 class PizzaDetails extends StatefulWidget {
   final ProductModel product;
+
   const PizzaDetails({super.key, required this.product});
 
   @override
@@ -17,10 +22,11 @@ class _PizzaDetailsState extends State<PizzaDetails> {
   String? _selectedSupplement2;
   num _totalPrice = 0.0;
   num _unitPrice = 0.0;
-
+  late bool isFavorite;
   @override
   void initState() {
     super.initState();
+    isFavorite = context.read<FavoriteBloc>().isFavorite(widget.product);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         _unitPrice = widget.product.price ?? 0;
@@ -29,7 +35,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     });
   }
 
-  bool _isFavorite = false; // Biến trạng thái để theo dõi trạng thái trái tim
+  //bool _isFavorite = false; // Biến trạng thái để theo dõi trạng thái trái tim
 
   final Map<String, double> extrasPrices = {
     'Hot sauce': 1.00,
@@ -68,10 +74,27 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     }
   }
 
-  void _toggleFavorite() {
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
+  void _onPressIconFavorite() {
+    if (isFavorite) {
+      BlocProvider.of<FavoriteBloc>(context)
+          .add(RemoveFavorite(widget.product));
+    } else {
+      BlocProvider.of<FavoriteBloc>(context).add(AddFavorite(widget.product));
+    }
+  }
+
+  // void _toggleFavorite() {
+  //   setState(() {
+  //     _isFavorite = !_isFavorite;
+  //   });
+  // }
+  void _toggleFavorite(BuildContext context, bool isFavorite) {
+    if (isFavorite) {
+      BlocProvider.of<FavoriteBloc>(context)
+          .add(RemoveFavorite(widget.product));
+    } else {
+      BlocProvider.of<FavoriteBloc>(context).add(AddFavorite(widget.product));
+    }
   }
   void _onPressBack(BuildContext context) {
   final router = GoRouter.of(context);
@@ -114,10 +137,39 @@ class _PizzaDetailsState extends State<PizzaDetails> {
         },
       ),
       actions: [
-        _buildCircleIconButton(
-          icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
-          iconColor: _isFavorite ? Colors.red : Colors.orange,
-          onPressed: _toggleFavorite,
+        BlocBuilder<FavoriteBloc, FavoriteState>(
+          builder: (context, state) {
+            if (state is FavoritesUpdated) {
+              isFavorite = state.favorites.contains(widget.product);
+            }
+            // Truy cập trực tiếp thuộc tính `isFavorite` từ `state`
+            // final isFavorite = BlocProvider.of<FavoriteBloc>(context)
+            //     .isFavorite(widget
+            //         .product); // Giả sử `isFavorite` là một thuộc tính của `FavoriteState`
+            return Container(
+              margin: const EdgeInsets.all(8.0),
+              width: 38,
+              height: 38,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : null,
+                ),
+                onPressed: () {
+                  _onPressIconFavorite();
+                  setState(() {
+                    isFavorite =
+                        !isFavorite; // Đảo ngược trạng thái của trái tim
+                    // Thêm logic xử lý nếu cần
+                  });
+                },
+              ),
+            );
+          },
         ),
       ],
       flexibleSpace: FlexibleSpaceBar(

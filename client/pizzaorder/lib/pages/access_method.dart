@@ -29,6 +29,11 @@ void _onPressBack(BuildContext context) {
   router.go('/home');
 }
 
+  void _onPressSkipLogin() {
+    final router = GoRouter.of(context);
+    router.go('/home');
+  }
+
   //final Constants _constants = Constants();
   @override
   Widget build(BuildContext context) {
@@ -98,7 +103,9 @@ void _onPressBack(BuildContext context) {
                   //     context,
                   //     MaterialPageRoute(
                   //         builder: (context) => const HomePage()));
+
                    _onPressBack(context);
+
                 },
                 child: RichText(
                   text: const TextSpan(

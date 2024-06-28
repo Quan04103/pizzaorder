@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
+
 import 'package:pizzaorder/pages/all_product_page.dart';
+
+import 'package:pizzaorder/pages/favorites_page.dart';
+
 import 'package:pizzaorder/pages/get_started.dart';
 import 'package:pizzaorder/pages/giohang.dart';
 import 'package:pizzaorder/pages/log_in.dart';
@@ -10,6 +14,7 @@ import 'package:pizzaorder/pages/sign_up.dart';
 import 'package:pizzaorder/pages/start_order.dart';
 import 'package:pizzaorder/pages/voucher_page.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
+import 'package:pizzaorder/testmap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/home_page.dart';
 import 'pages/detail_Product.dart';
@@ -23,7 +28,7 @@ class AppRouter {
     router = GoRouter(
       routes: [
         GoRoute(
-          path: '/home',
+          path: '/',
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
@@ -42,7 +47,7 @@ class AppRouter {
           builder: (context, state) => const AccessMethod(),
         ),
         GoRoute(
-          path: '/',
+          path: '/getstarted',
           builder: (context, state) => const GetStarted(),
         ),
         GoRoute(
@@ -54,6 +59,7 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
+
           path: '/discounts',
           builder: (context, state) => const VoucherPage(),
         ),
@@ -67,6 +73,12 @@ class AppRouter {
         ),
 
         GoRoute(
+
+          path: '/map',
+          builder: (context, state) => const FullMapTest(),
+        ),
+        GoRoute(
+
           path: '/account',
           builder: (context, state) {
             final token = state.extra as String;
@@ -81,6 +93,10 @@ class AppRouter {
         //   path: '/',
         //   builder: (context, state) => const StartOrder(),
         // ),
+        GoRoute(
+          path: '/favoritepage',
+          builder: (context, state) => FavoritePage(),
+        ),
       ],
     );
   }

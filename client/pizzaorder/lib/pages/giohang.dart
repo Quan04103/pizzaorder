@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/option_item_bagcart.dart';
 import 'package:pizzaorder/components/product_item_bagcart.dart';
+import 'package:pizzaorder/multiple_bloc_provider.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_event.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
 
 class GioHang extends StatefulWidget {
   const GioHang({super.key});
   @override
   _GioHangState createState() => _GioHangState();
 }
+
 
 void _onPressBack(BuildContext context) {
   final router = GoRouter.of(context);
@@ -16,43 +25,60 @@ void _onPressBack(BuildContext context) {
 
 class _GioHangState extends State<GioHang> {
   String _selectedOption = ''; // Khai báo biến _selectedOption ở đây
+ int _shippingFee = 0; // Biến để lưu trữ giá trị phí vận chuyển
+ 
+  late CartBloc cartBloc;
+  
+  get totalAllPrice => null;
+  @override
+  void initState() {
+    super.initState();
+    cartBloc = BlocProvider.of<CartBloc>(context);
+    cartBloc.add(LoadList());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.green[50],
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeader(),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 30, left: 15, right: 15),
-                    child: Column(
-                      children: [
-                        _buildDeliveryAddress(),
-                        _buildDeliveryOptions(),
-                        _buildOrder(),
-                        _buildPaymentMethod(),
-                        _buildPromotionField(),
-                        _buildInvoiceInfo(),
-                      ],
+
+    return createRepositoryAndBlocProviders(
+      child: MaterialApp(
+        home: Scaffold(
+          backgroundColor: Colors.green[50],
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 30, left: 15, right: 15),
+                      child: Column(
+                        children: [
+                          _buildDeliveryAddress(),
+                          _buildDeliveryOptions(),
+                          _buildOrder(),
+                          _buildPaymentMethod(),
+                          _buildPromotionField(),
+                          _buildInvoiceInfo(totalAllPrice),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 100),
-                ],
+                    const SizedBox(height: 100),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _buildOrderSummary(),
-            ),
-          ],
+
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: _buildOrderSummary(),
+              ),
+            ],
+          ),
+
         ),
       ),
     );
@@ -60,26 +86,35 @@ class _GioHangState extends State<GioHang> {
 
   Widget _buildHeader() {
     return Container(
-      color: Colors.green[50],
-      child: Column(
-        children: [
-          Container(
-            color: Colors.red,
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () {
-                    _onPressBack(context); // Handle back action
-                  },
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Giỏ hàng',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ],
+
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: const BoxDecoration(color: Color(0xFFE6361D)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 13),
+              width: 24,
+              height: 24,
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_outlined,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                // Đặt hành động khi button được nhấn ở đây
+                GoRouter.of(context).go('/');
+              },
+            ),
+            const Text(
+              'Giỏ hàng',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: Color(0xFFFFFFFF),
+              ),
             ),
           ),
           // Phần còn lại của nội dung ở đây
@@ -165,78 +200,6 @@ class _GioHangState extends State<GioHang> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Tùy chọn giao',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
-                color: Color(0xFF000000),
-              ),
-            ),
-            const SizedBox(height: 10),
-            DeliveryOptionItem(
-              title: 'Ưu tiên',
-              time: '< 15 phút',
-              price: '39.000 đ',
-              description: 'Đơn hàng ưu tiên, rút ngắn thời gian giao hàng.',
-              selectedOption: _selectedOption,
-              onSelected: (newOption) {
-                setState(() {
-                  _selectedOption = newOption;
-                });
-              },
-            ),
-            DeliveryOptionItem(
-              title: 'Nhanh',
-              time: '15 phút',
-              price: '34.000 đ',
-              selectedOption: _selectedOption,
-              onSelected: (newOption) {
-                setState(() {
-                  _selectedOption = newOption;
-                });
-              },
-            ),
-            DeliveryOptionItem(
-              title: 'Tiết kiệm',
-              time: '30 phút',
-              price: '30.000 đ',
-              selectedOption: _selectedOption,
-              onSelected: (newOption) {
-                setState(() {
-                  _selectedOption = newOption;
-                });
-              },
-            ),
-            DeliveryOptionItem(
-              title: 'Đặt giao sau',
-              time: '',
-              price: '',
-              selectedOption: _selectedOption,
-              onSelected: (newOption) {
-                setState(() {
-                  _selectedOption = newOption;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOrder() {
-    return Container(
-      margin: const EdgeInsets.only(top: 15),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 19, right: 19),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
             Row(
               children: [
                 const Text(
@@ -268,9 +231,61 @@ class _GioHangState extends State<GioHang> {
               quanty: 1, // Sử dụng giá trị cố định cho quantity
               onIncrease: () {
                 // Hành động khi bấm nút tăng
+            const Text(
+              'Tùy chọn giao',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+                color: Color(0xFF000000),
+              ),
+            ),
+            const SizedBox(height: 10),
+            DeliveryOptionItem(
+              title: 'Ưu tiên',
+              time: '< 15 phút',
+              price: '39.000 đ',
+              description: 'Đơn hàng ưu tiên, rút ngắn thời gian giao hàng.',
+              selectedOption: _selectedOption,
+              onSelected: (newOption) {
+                setState(() {
+                  _selectedOption = newOption;
+                   _shippingFee = 39000; 
+                });
               },
-              onDecrease: () {
-                // Hành động khi bấm nút giảm
+            ),
+            DeliveryOptionItem(
+              title: 'Nhanh',
+              time: '15 phút',
+              price: '34.000 đ',
+              selectedOption: _selectedOption,
+              onSelected: (newOption) {
+                setState(() {
+                  _selectedOption = newOption;
+                    _shippingFee = 34000; 
+                });
+              },
+            ),
+            DeliveryOptionItem(
+              title: 'Tiết kiệm',
+              time: '30 phút',
+              price: '30.000 đ',
+              selectedOption: _selectedOption,
+              onSelected: (newOption) {
+                setState(() {
+                  _selectedOption = newOption;
+                   _shippingFee = 30000;
+                });
+              },
+            ),
+            DeliveryOptionItem(
+              title: 'Đặt giao sau',
+              time: '',
+              price: '',
+              selectedOption: _selectedOption,
+              onSelected: (newOption) {
+                setState(() {
+                  _selectedOption = newOption;
+                });
               },
             ),
           ],
@@ -278,6 +293,94 @@ class _GioHangState extends State<GioHang> {
       ),
     );
   }
+
+  Widget _buildOrder() {
+  return BlocBuilder<CartBloc, CartState>(
+    bloc: cartBloc,
+    builder: (context, state) {
+      cartBloc.calculateTotalPrice(state.cartItems);
+
+      return Container(
+        margin: const EdgeInsets.only(top: 15),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Đơn hàng',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      GoRouter.of(context).go('/');
+                    },
+                    child: const Text(
+                      'Thêm món',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              if (state.cartItems.isEmpty)
+                const Center(
+                  child: Text(
+                    'Không có sản phẩm nào trong giỏ hàng',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400,
+                      color: Color.fromARGB(255, 231, 16, 16),
+                    ),
+                  ),
+                ),
+              if (state.cartItems.isNotEmpty)
+                // Use ListView.builder to display the list of products
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: constraints.maxHeight,
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(), // Để tránh cuộn bên trong ListView
+                        itemCount: state.cartItems.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              if (index > 0) const SizedBox(height: 1),
+                              ProductItemBagCart(cartItems: state.cartItems[index]),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 
   Widget _buildPaymentMethod() {
     return Container(
@@ -364,53 +467,64 @@ class _GioHangState extends State<GioHang> {
     );
   }
 
-  Widget _buildInvoiceInfo() {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Thông tin hóa đơn',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+
+Widget _buildInvoiceInfo(totalAllPrice) {
+  return BlocBuilder<CartBloc, CartState>(
+    bloc: cartBloc,
+    builder: (context, state) {
+      double totalAllPrice = BlocProvider.of<CartBloc>(context)
+          .calculateTotalPrice(state.cartItems);
+
+      return Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Thông tin hóa đơn',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          _buildInvoiceRow('Tạm tính', '327.000 đ'),
-          _buildInvoiceRow('Phí vận chuyển', '30.000 đ'),
-          _buildInvoiceRow('Giảm giá', '0 đ'),
-          const Divider(),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Tổng tiền',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+            const SizedBox(height: 10),
+            _buildInvoiceRow('Tạm tính', '${totalAllPrice.toStringAsFixed(0)} đ'),
+            _buildInvoiceRow('Phí vận chuyển', '30.000 đ'), // Có thể thay đổi thành biến nếu cần
+            _buildInvoiceRow('Giảm giá', '0 đ'), // Có thể thay đổi thành biến nếu cần
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Tổng tiền',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              Text(
-                '357.000 đ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                Text(
+                  '${totalAllPrice.toStringAsFixed(0)} đ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+
 
   Widget _buildInvoiceRow(String title, String amount) {
     return Padding(
