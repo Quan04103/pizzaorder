@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'dart:async';
 
 import 'package:pizzaorder/pages/start_order.dart'; // Import thư viện để sử dụng Timer
+import 'package:pizzaorder/pages/home_page.dart'; // Import trang chuyển đến
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});

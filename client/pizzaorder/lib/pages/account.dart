@@ -24,7 +24,7 @@ class _AccountState extends State<Account> {
 
   void _onPressLogOut() {
     final router = GoRouter.of(context);
-    router.go('/homepage');
+    router.go('/home');
   }
 
   void _onPressBack(BuildContext context) {

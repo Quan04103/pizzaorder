@@ -23,6 +23,11 @@ class _AccessMethodState extends State<AccessMethod> {
     final router = GoRouter.of(context);
     router.go('/signup');
   }
+  
+void _onPressBack(BuildContext context) {
+  final router = GoRouter.of(context);
+  router.go('/home');
+}
 
   void _onPressSkipLogin() {
     final router = GoRouter.of(context);
@@ -98,7 +103,7 @@ class _AccessMethodState extends State<AccessMethod> {
                   //     context,
                   //     MaterialPageRoute(
                   //         builder: (context) => const HomePage()));
-                  _onPressSkipLogin();
+                   _onPressBack(context);
                 },
                 child: RichText(
                   text: const TextSpan(

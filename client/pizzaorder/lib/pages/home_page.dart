@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/components/BottomNavigationBar.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import '../components/category_carousel.dart';
 import '../components/pizza_card.dart';
@@ -24,6 +25,14 @@ class _HomePageState extends State<HomePage> {
   void _onPressFavoritesPage() {
     final router = GoRouter.of(context);
     router.go('/favoritepage');
+  }
+
+   int _selectedIndex1 = 0;
+
+  void _onItemTapped1(int index) {
+    setState(() {
+      _selectedIndex1 = index;
+    });
   }
 
   @override
@@ -115,6 +124,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+        ),bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex1: _selectedIndex1,
+          onItemTapped1: _onItemTapped1,
         ),
       ),
     );
