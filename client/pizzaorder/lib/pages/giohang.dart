@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/option_item_bagcart.dart';
 import 'package:pizzaorder/components/product_item_bagcart.dart';
@@ -12,6 +15,12 @@ class GioHang extends StatefulWidget {
   const GioHang({super.key});
   @override
   _GioHangState createState() => _GioHangState();
+}
+
+
+void _onPressBack(BuildContext context) {
+  final router = GoRouter.of(context);
+  router.go('/home');
 }
 
 class _GioHangState extends State<GioHang> {
@@ -30,6 +39,7 @@ class _GioHangState extends State<GioHang> {
 
   @override
   Widget build(BuildContext context) {
+
     return createRepositoryAndBlocProviders(
       child: MaterialApp(
         home: Scaffold(
@@ -59,6 +69,7 @@ class _GioHangState extends State<GioHang> {
                   ],
                 ),
               ),
+
               Positioned(
                 left: 0,
                 right: 0,
@@ -67,6 +78,7 @@ class _GioHangState extends State<GioHang> {
               ),
             ],
           ),
+
         ),
       ),
     );
@@ -74,6 +86,7 @@ class _GioHangState extends State<GioHang> {
 
   Widget _buildHeader() {
     return Container(
+
       margin: const EdgeInsets.only(bottom: 10),
       decoration: const BoxDecoration(color: Color(0xFFE6361D)),
       child: Padding(
@@ -103,8 +116,9 @@ class _GioHangState extends State<GioHang> {
                 color: Color(0xFFFFFFFF),
               ),
             ),
-          ],
-        ),
+          ),
+          // Phần còn lại của nội dung ở đây
+        ],
       ),
     );
   }
@@ -186,6 +200,37 @@ class _GioHangState extends State<GioHang> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                const Text(
+                  'Đơn hàng',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                    color: Color(0xFF000000),
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Thêm món',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 13,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ProductItem(
+              name: 'Tên sản phẩm', imgs: 'assets/images/ghati_2.png',
+              price: '100.000đ',
+              quanty: 1, // Sử dụng giá trị cố định cho quantity
+              onIncrease: () {
+                // Hành động khi bấm nút tăng
             const Text(
               'Tùy chọn giao',
               style: TextStyle(
@@ -426,13 +471,13 @@ class _GioHangState extends State<GioHang> {
     );
   }
 
+
   Widget _buildInvoiceInfo(totalAllPrice) {
     return BlocBuilder<CartBloc, CartState>(
       bloc: cartBloc,
       builder: (context, state) {
         double totalAllPrice = BlocProvider.of<CartBloc>(context)
             .calculateTotalPrice(state.cartItems);
-
         return Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
