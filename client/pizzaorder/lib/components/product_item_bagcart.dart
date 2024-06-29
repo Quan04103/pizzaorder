@@ -19,7 +19,6 @@ class ProductItemBagCart extends StatefulWidget {
 class _ProductItemBagCartState extends State<ProductItemBagCart> {
   late CartBloc cartBloc;
 
-  get totalAllPrice => null;
   @override
   void initState() {
     super.initState();

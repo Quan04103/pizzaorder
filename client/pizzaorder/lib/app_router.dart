@@ -25,7 +25,7 @@ class AppRouter {
     router = GoRouter(
       routes: [
         GoRoute(
-          path: '/',
+          path: '/home',
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
@@ -48,7 +48,7 @@ class AppRouter {
           builder: (context, state) => const AccessMethod(),
         ),
         GoRoute(
-          path: '/getstarted',
+          path: '/',
           builder: (context, state) => const GetStarted(),
         ),
         GoRoute(

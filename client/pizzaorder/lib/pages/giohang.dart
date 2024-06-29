@@ -20,7 +20,6 @@ class _GioHangState extends State<GioHang> {
 
   late CartBloc cartBloc;
 
-  get totalAllPrice => null;
   @override
   void initState() {
     super.initState();
@@ -28,6 +27,8 @@ class _GioHangState extends State<GioHang> {
     cartBloc = BlocProvider.of<CartBloc>(context);
     cartBloc.add(const LoadList());
   }
+
+  Future<void> increaseProductQuantity() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,7 @@ class _GioHangState extends State<GioHang> {
                         _buildOrder(),
                         _buildPaymentMethod(),
                         _buildPromotionField(),
-                        _buildInvoiceInfo(totalAllPrice),
+                        _buildInvoiceInfo(),
                       ],
                     ),
                   ),
@@ -91,7 +92,7 @@ class _GioHangState extends State<GioHang> {
               ),
               onPressed: () {
                 // Đặt hành động khi button được nhấn ở đây
-                GoRouter.of(context).go('/');
+                GoRouter.of(context).go('/home');
               },
             ),
             const Text(
@@ -252,8 +253,6 @@ class _GioHangState extends State<GioHang> {
     return BlocBuilder<CartBloc, CartState>(
       bloc: cartBloc,
       builder: (context, state) {
-        cartBloc.calculateTotalPrice(state.cartItems);
-
         return Container(
           margin: const EdgeInsets.only(top: 15),
           decoration: BoxDecoration(
@@ -422,13 +421,10 @@ class _GioHangState extends State<GioHang> {
     );
   }
 
-  Widget _buildInvoiceInfo(totalAllPrice) {
+  Widget _buildInvoiceInfo() {
     return BlocBuilder<CartBloc, CartState>(
       bloc: cartBloc,
       builder: (context, state) {
-        double totalAllPrice = BlocProvider.of<CartBloc>(context)
-            .calculateTotalPrice(state.cartItems);
-
         return Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
@@ -448,7 +444,7 @@ class _GioHangState extends State<GioHang> {
               ),
               const SizedBox(height: 10),
               _buildInvoiceRow(
-                  'Tạm tính', '${totalAllPrice.toStringAsFixed(0)} đ'),
+                  'Tạm tính', '${state.total?.toStringAsFixed(0) ?? '0'} đ'),
               _buildInvoiceRow('Phí vận chuyển',
                   '30.000 đ'), // Có thể thay đổi thành biến nếu cần
               _buildInvoiceRow(
@@ -466,7 +462,7 @@ class _GioHangState extends State<GioHang> {
                     ),
                   ),
                   Text(
-                    '${totalAllPrice.toStringAsFixed(0)} đ',
+                    '${state.total?.toStringAsFixed(0) ?? '0'} đ',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -505,64 +501,74 @@ class _GioHangState extends State<GioHang> {
   }
 
   Widget _buildOrderSummary() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<CartBloc, CartState>(
+      bloc: cartBloc, // Provide your CartBloc instance here
+      builder: (context, state) {
+        return Container(
+          margin: const EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEFEFEF),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Tổng cộng',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '357.000 đ',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: const Center(
-                    child: Text(
-                      'Đặt đơn',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Tổng cộng',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
+                    Text(
+                      '${state.total?.toStringAsFixed(0) ?? '0'} đ', // Dynamically display the total from the state
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            )
-          ],
-        ),
-      ),
+                const SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      cartBloc.add(SubmitCart(state.total!));
+                      setState(() {});
+                      // Add your order submission logic here
+                      // For example: cartBloc.add(SubmitOrder());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: const Center(
+                        child: Text(
+                          'Đặt đơn',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

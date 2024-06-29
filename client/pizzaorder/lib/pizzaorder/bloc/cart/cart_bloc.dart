@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   List<OrderItem> cartItems = [];
   final OrderService orderService = OrderService();
+  double total = 0;
   //tính tổng tiền
   double calculateTotalPrice(List<OrderItem> cartItems) {
     double totalAllPrice = 0;
@@ -24,8 +25,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartState.initial()) {
     on<LoadList>((event, emit) async {
       try {
+        add(UpdateTotalPrice()); // Thêm sự kiện UpdateTotalPrice
         // print('Adding products: ${event.products}');
-        emit(CartState.updated(cartItems));
+        emit(CartState.updated(cartItems, total));
         print('New state loadlist: updated');
         print(state.toString());
         print(state.cartItems);
@@ -34,6 +36,26 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         print('New state: error - ${e.toString()}');
       }
     });
+
+    on<UpdateTotalPrice>((event, emit) async {
+      print(
+          'UpdateTotalPrice event started'); // Thêm dòng này để biết sự kiện bắt đầu
+      try {
+        print(
+            'Calculating total price'); // Thêm dòng này trước khi tính toán tổng giá
+        total = calculateTotalPrice(cartItems);
+        print(
+            'Total price calculated: $total'); // In ra tổng giá sau khi tính toán
+        emit(CartState.updated(cartItems,
+            total)); // Giả sử bạn có trạng thái này để cập nhật tổng giá tiền
+        print(
+            'CartState updated with total price'); // Thêm dòng này sau khi trạng thái được cập nhật
+      } catch (e) {
+        print('Error occurred: $e'); // In ra lỗi nếu có
+        emit(CartState.error(e.toString()));
+      }
+    });
+
     on<AddProducts>((event, emit) async {
       try {
         final existingProductIndex = cartItems
@@ -43,8 +65,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           cartItems.add(event.products);
           print('New product added to cart');
         }
-
-        emit(CartState.updated(cartItems));
+        add(UpdateTotalPrice()); // Thêm sự kiện UpdateTotalPrice
+        emit(CartState.updated(cartItems, total));
         print('New state: updated');
       } catch (e) {
         emit(CartState.error(e.toString()));
@@ -66,8 +88,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           cartItems.add(event.product);
           print('New product added to cart');
         }
+        add(UpdateTotalPrice()); // Thêm sự kiện UpdateTotalPrice
 
-        emit(CartState.updated(cartItems));
+        emit(CartState.updated(cartItems, total));
         print('New state: updated increase quantity');
       } catch (e) {
         emit(CartState.error(e.toString()));
@@ -87,7 +110,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
                 item.idproduct == event.product.idproduct &&
                 item.quantity <= 1);
           }
-          emit(CartState.updated(state.cartItems));
+          add(UpdateTotalPrice()); // Thêm sự kiện UpdateTotalPrice
+          emit(CartState.updated(state.cartItems, total));
           print('New state decrease: updated');
           print(state.cartItems);
         } else {
@@ -104,8 +128,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         var product = state.cartItems
             .firstWhere((item) => item.idproduct == event.product.idproduct);
         state.cartItems.remove(product);
-        emit(CartState.updated(
-            List.from(state.cartItems))); // Cập nhật state với danh sách mới
+        add(UpdateTotalPrice()); // Thêm sự kiện UpdateTotalPrice
+        emit(CartState.updated(List.from(state.cartItems),
+            total)); // Cập nhật state với danh sách mới
         print('New state: updated');
         print(state.cartItems);
       } catch (e) {
@@ -117,6 +142,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String token = prefs.getString('token') ?? '';
+        print('Token: $token'); // Debug log to check for token
         var order = await orderService.addOrder(
             cartItems, event.total, DateTime.now(), token);
         cartItems.clear();

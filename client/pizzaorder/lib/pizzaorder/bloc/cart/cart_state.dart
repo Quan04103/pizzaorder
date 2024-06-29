@@ -9,6 +9,7 @@ class CartState extends Equatable {
   final bool isError;
   final bool isSubmitted;
   final OrderModel? order;
+  final double? total;
 
   @override
   const CartState({
@@ -17,6 +18,7 @@ class CartState extends Equatable {
     required this.isError,
     required this.isSubmitted,
     this.order,
+    this.total,
   });
 
   factory CartState.initial() {
@@ -28,9 +30,10 @@ class CartState extends Equatable {
     );
   }
 
-  factory CartState.updated(List<OrderItem> cartItems) {
+  factory CartState.updated(List<OrderItem> cartItems, double total) {
     return CartState(
       cartItems: cartItems,
+      total: total,
       isUpdated: true,
       isError: false,
       isSubmitted: false,
@@ -58,10 +61,10 @@ class CartState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [cartItems, isUpdated, isError, isSubmitted, order];
+      [cartItems, isUpdated, isError, isSubmitted, order, total];
 
   @override
   String toString() {
-    return 'CartState: isUpdated: $isUpdated, isSubmitted: $isSubmitted, order: $order, products: $cartItems';
+    return 'CartState: isUpdated: $isUpdated, isSubmitted: $isSubmitted, order: $order, products: $cartItems, total: $total';
   }
 }
