@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/BottomNavigationBar.dart';
@@ -8,6 +7,7 @@ import '../components/pizza_card.dart';
 import '../components/shopping_cart_btn.dart';
 import '../components/dropdown_home.dart';
 import '../components/slide.dart';
+import '../components/pizza_suggest.dart';
 import '../components/search.dart';
 import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
 import '../pizzaorder/bloc/pizza/pizza_state.dart';
@@ -20,6 +20,8 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
+
+final ScrollController _scrollController = ScrollController();
 
 class _HomePageState extends State<HomePage> {
   void _onPressFavoritesPage() {
@@ -131,6 +133,12 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // @override
+  // void dispose() {
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 }
 
 class ProductsCarousel extends StatefulWidget {

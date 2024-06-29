@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pizzaorder/pages/search_page.dart';
 
 class Search extends StatelessWidget {
   Search({super.key});
@@ -8,13 +9,23 @@ class Search extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Center(
-        child: CupertinoSearchTextField(
-          backgroundColor: Colors.white,
-          controller: _textEditingController,
-          borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  const SearchPage()), // Đảm bảo bạn đã tạo trang SearchPage
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: AbsorbPointer(
+          child: CupertinoSearchTextField(
+            backgroundColor: Colors.white,
+            controller: _textEditingController,
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
     );
