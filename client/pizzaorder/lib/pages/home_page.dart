@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/components/BottomNavigationBar.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import '../components/category_carousel.dart';
 import '../components/pizza_card.dart';
@@ -23,6 +24,19 @@ class HomePage extends StatefulWidget {
 final ScrollController _scrollController = ScrollController();
 
 class _HomePageState extends State<HomePage> {
+  void _onPressFavoritesPage() {
+    final router = GoRouter.of(context);
+    router.go('/favoritepage');
+  }
+
+   int _selectedIndex1 = 0;
+
+  void _onItemTapped1(int index) {
+    setState(() {
+      _selectedIndex1 = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,115 +46,89 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.red,
         ),
         backgroundColor: Colors.green[50],
-        body: Stack(
-          children: [
-            ListView(
-              controller: _scrollController,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    DropdownHome(),
-                    Icon(
-                      Icons.favorite_border,
-                      color: Colors.black,
-                      size: 35,
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DropdownHome(),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     _onPressFavoritesPage();
+                      //   },
+                      //   icon: Icon(Icons.favorite_border),
+                      //   color: Colors.black,
+                      //   iconSize: 35,
+                      // ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Search(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      child: slide()),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 270),
+                    child: Text(
+                      'Categories',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Search(),
-                const SizedBox(
-                  height: 10,
-                ),
-                slide(),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Text(
-                    'Loại sản phẩm',
-                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                ),
-                const SizedBox(height: 5),
-                const SizedBox(
-                  height: 100,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: CategoriesCarousel(),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Text(
-                    'Sản phẩm mới nhất',
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const SizedBox(
-                  height: 280,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
+                  const SizedBox(height: 5),
+                  const SizedBox(
+                    height: 100,
                     child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ProductsCarousel(),
+                      alignment: Alignment.topCenter,
+                      child: CategoriesCarousel(),
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Text(
-                    'Dành cho bạn',
-                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 300),
+                    child: Text(
+                      'Newest',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                SizedBox(
-                  height: 2000,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: PizzaSuggest(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      10, 0, 10, 150), // Loại bỏ padding
-                  child: Align(
-                    alignment: Alignment.center, // Căn giữa màn hình
-                    child: SizedBox(
-                      width: 30, // Chiều rộng 50
-                      height: 30, // Chiều cao 50
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white, // Màu nền
-                        onPressed: () {
-                          _scrollController.animateTo(
-                            0.0,
-                            curve: Curves.easeOut,
-                            duration: const Duration(milliseconds: 300),
-                          );
-                        },
-                        child: const Icon(Icons.arrow_upward),
+                  const SizedBox(height: 5),
+                  const SizedBox(
+                    height: 280,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ProductsCarousel(),
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-            Positioned(
-              bottom: 130,
-              right: 10,
-              child: ShoppingCartButton(
-                onPressed: () {
-                  // Xử lý khi nhấn vào nút giỏ hàng
-                },
+                ],
               ),
-            ),
-          ],
+              Positioned(
+                bottom: 130,
+                right: 10,
+                child: ShoppingCartButton(
+                  onPressed: () {
+                    GoRouter.of(context).go('/bagcart');
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex1: _selectedIndex1,
+          onItemTapped1: _onItemTapped1,
         ),
       ),
     );
@@ -166,7 +154,10 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
-    pizzaBloc.add(LoadProduct.loadNewest);
+    if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
+      pizzaBloc.add(LoadProduct.loadNewest);
+    }
+    //pizzaBloc.add(LoadProduct.loadNewest);
   }
 
   void _onProductPressed(ProductModel product) {
