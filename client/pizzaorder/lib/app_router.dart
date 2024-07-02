@@ -48,7 +48,7 @@ class AppRouter {
           builder: (context, state) => const AccessMethod(),
         ),
         GoRoute(
-          path: '/',
+          path: '/d',
           builder: (context, state) => const GetStarted(),
         ),
         GoRoute(
@@ -60,7 +60,7 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
-          path: '/map',
+          path: '/',
           builder: (context, state) => const FullMapTest(),
         ),
         GoRoute(
