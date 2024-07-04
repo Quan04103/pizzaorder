@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     router.go('/favoritepage');
   }
 
-   int _selectedIndex1 = 0;
+  int _selectedIndex1 = 0;
 
   void _onItemTapped1(int index) {
     setState(() {
@@ -46,87 +46,120 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.red,
         ),
         backgroundColor: Colors.green[50],
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
+        body: Stack(
+          children: [
+            ListView(
+              controller: _scrollController,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DropdownHome(),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     _onPressFavoritesPage();
+                    //   },
+                    //   icon: Icon(Icons.favorite_border),
+                    //   color: Colors.black,
+                    //   iconSize: 35,
+                    // ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Search(),
+                const SizedBox(
+                  height: 10,
+                ),
+                slide(),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Loại sản phẩm',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      DropdownHome(),
-                      // IconButton(
-                      //   onPressed: () {
-                      //     _onPressFavoritesPage();
-                      //   },
-                      //   icon: Icon(Icons.favorite_border),
-                      //   color: Colors.black,
-                      //   iconSize: 35,
-                      // ),
-                    ],
+                ),
+                const SizedBox(height: 5),
+                const SizedBox(
+                  height: 100,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: CategoriesCarousel(),
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Sản phẩm mới nhất',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                  Search(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      child: slide()),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 270),
-                    child: Text(
-                      'Categories',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  const SizedBox(
-                    height: 100,
+                ),
+                const SizedBox(height: 5),
+                const SizedBox(
+                  height: 280,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 10.0),
                     child: Align(
-                      alignment: Alignment.topCenter,
-                      child: CategoriesCarousel(),
+                      alignment: Alignment.bottomCenter,
+                      child: ProductsCarousel(),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 300),
-                    child: Text(
-                      'Newest',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Dành cho bạn',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
-                  const SizedBox(height: 5),
-                  const SizedBox(
-                    height: 280,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: ProductsCarousel(),
+                ),
+                const SizedBox(height: 5),
+                SizedBox(
+                  height: 2000,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: PizzaSuggest(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      10, 0, 10, 60), // Loại bỏ padding
+                  child: Align(
+                    alignment: Alignment.center, // Căn giữa màn hình
+                    child: SizedBox(
+                      width: 30, // Chiều rộng 50
+                      height: 30, // Chiều cao 50
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white, // Màu nền
+                        onPressed: () {
+                          _scrollController.animateTo(
+                            0.0,
+                            curve: Curves.easeOut,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                        },
+                        child: const Icon(Icons.arrow_upward),
                       ),
                     ),
                   ),
-                ],
-              ),
-              Positioned(
-                bottom: 130,
-                right: 10,
-                child: ShoppingCartButton(
-                  onPressed: () {
-                    GoRouter.of(context).go('/bagcart');
-                  },
                 ),
+              ],
+            ),
+            Positioned(
+              bottom: 130,
+              right: 10,
+              child: ShoppingCartButton(
+                onPressed: () {
+                  GoRouter.of(context).go('/bagcart');
+                },
               ),
-            ],
-          ),
-        ),bottomNavigationBar: CustomBottomNavigationBar(
+            ),
+          ],
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(
           selectedIndex1: _selectedIndex1,
           onItemTapped1: _onItemTapped1,
         ),
