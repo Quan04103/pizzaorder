@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pizzaorder/pizzaorder/bloc/auth/auth_event.dart';
 import 'package:pizzaorder/pizzaorder/bloc/auth/auth_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user.dart';
 import '../bloc/Result.dart';
@@ -113,6 +115,42 @@ class UserService {
       }
     } catch (e) {
       return Failure('Failed to get user info: $e');
+    }
+  }
+
+  Future<Result<UserModel>> updateAddress(
+      String token, String newAddress) async {
+    try {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      final response = await http.put(
+        Uri.parse('$apiUrl/updateAddress'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(<String, String>{
+          'iduser': decodedToken['_id'] ?? '',
+          'newAddress': newAddress,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        String newToken = jsonDecode(response.body)['token'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', newToken);
+
+        print('Token updated: $newToken');
+        Map<String, dynamic> result = jsonDecode(response.body);
+        UserModel user = UserModel.fromJson(
+            result); // Assuming UserModel has a fromMap constructor
+        return Success(user);
+      } else {
+        print(
+            'Failed to update address. Status code: ${response.statusCode}, Body: ${response.body}');
+        return Failure('Failed to update address: ${response.body}');
+      }
+    } catch (e) {
+      return Failure('Failed to update address: Exception=$e');
     }
   }
 

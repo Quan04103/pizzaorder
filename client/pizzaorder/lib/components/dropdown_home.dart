@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class DropdownHome extends StatefulWidget {
   const DropdownHome({super.key});
@@ -9,7 +14,53 @@ class DropdownHome extends StatefulWidget {
 }
 
 class _DropdownHomeState extends State<DropdownHome> {
-  String selectedOption = '256 Phan Huy Ích';
+  String idAddress = '';
+  String address = '';
+  List<dynamic> startDetails = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getStart(idAddress);
+  }
+
+  Future<void> getStart(String input) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token') ?? '';
+      print('token: $token');
+      if (token.isNotEmpty) {
+        Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
+        print(jwtDecodedToken);
+        setState(() {
+          idAddress = jwtDecodedToken['address'] ?? '';
+          print(idAddress);
+        });
+      }
+      final url = Uri.parse(
+          'https://rsapi.goong.io/Place/Detail?place_id=$idAddress&api_key=IcniA2Z5Cpx1HXx0rMUj0L0kRro6hQ1uOkP1cuvV');
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        // Assuming 'result' is a Map and contains 'formatted_address'
+        var result = jsonResponse['result'];
+        setState(() {
+          address = result[
+              'formatted_address']; // Directly access 'formatted_address'
+          print(address);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        print("Error: ${response.body}");
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+
   void _onPressFavoritesPage() {
     final router = GoRouter.of(context);
     router.go('/favoritepage');
@@ -50,8 +101,8 @@ class _DropdownHomeState extends State<DropdownHome> {
                       color: Colors.red[800],
                     ),
                   ),
-                  const Text('113 Phan Huy Ích',
-                      style: TextStyle(
+                  Text(address,
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
                       )),
@@ -64,7 +115,7 @@ class _DropdownHomeState extends State<DropdownHome> {
           onPressed: () {
             _onPressFavoritesPage();
           },
-          icon: Icon(Icons.favorite_border_outlined),
+          icon: const Icon(Icons.favorite_border_outlined),
           color: Colors.black,
           iconSize: 35,
         ),

@@ -33,7 +33,11 @@ const userSchema = new Schema({
     },
 }, { collection: 'user' });
 
-userSchema.pre('save', async function () {
+userSchema.pre('save', async function (next) {
+    // Kiểm tra xem trường 'password' có được sửa đổi không
+    if (!this.isModified('password')) {
+        return next();
+    }
     try {
         var user = this;
         const salt = await (bcrypt.genSalt(10));
