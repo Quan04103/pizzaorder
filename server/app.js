@@ -5,6 +5,7 @@ const userRouter = require('./routers/user.router')
 const orderRouter = require('./routers/order.router');
 const searchRouter = require('./routers/search.router');
 const paymentRouter = require('./routers/payment.router');
+const categoryRouter = require('./routers/category.router');
 const mongoose = require('mongoose');
 const app = express();
 
@@ -14,5 +15,6 @@ app.use('/', productRouter);
 app.use('/', orderRouter);
 app.use('/', searchRouter);
 app.use('/', paymentRouter);
+app.use('/', categoryRouter);
 
 module.exports = app;

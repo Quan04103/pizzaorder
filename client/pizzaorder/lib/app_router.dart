@@ -25,7 +25,7 @@ class AppRouter {
     router = GoRouter(
       routes: [
         GoRoute(
-          path: '/home',
+          path: '/',
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
@@ -60,7 +60,7 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
-          path: '/',
+          path: '/map',
           builder: (context, state) => const FullMapTest(),
         ),
         GoRoute(
@@ -73,7 +73,9 @@ class AppRouter {
         ),
         GoRoute(
           path: '/all',
-          builder: (context, state) => const AllProductPage(),
+          builder: (context, state) => const AllProductPage(
+            categoryId: '6646fc283146973b72ad5eb2',
+          ),
         ),
 
         GoRoute(
