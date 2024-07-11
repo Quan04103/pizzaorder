@@ -73,7 +73,9 @@ class AppRouter {
         ),
         GoRoute(
           path: '/all',
-          builder: (context, state) => const AllProductPage(),
+          builder: (context, state) => const AllProductPage(
+            categoryId: '6646fc283146973b72ad5eb2',
+          ),
         ),
 
         GoRoute(

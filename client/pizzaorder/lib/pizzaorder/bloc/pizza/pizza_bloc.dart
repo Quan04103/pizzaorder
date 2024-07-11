@@ -15,7 +15,7 @@ class PizzaBloc extends Bloc<LoadProduct, PizzaState> {
         switch (event) {
           case LoadProduct.load:
             products = await productService
-                .getProductByCategoryId('6646fc283146973b72ad5eb2');
+                .getProductByCategoryId('664700193146973b72ad5ebd');
             break;
           case LoadProduct.loadNewest:
             products = await productService.getNewestProduct();

@@ -5,6 +5,7 @@ import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_event.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_state.dart';
 import '../components/pizza_card.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/pizzaorder/models/product.dart';
 
 class FavoritePage extends StatelessWidget {
   @override
@@ -36,12 +37,16 @@ class FavoritePage extends StatelessWidget {
             final favorites = state is FavoritesLoaded
                 ? state.favorites
                 : (state as FavoritesUpdated).favorites;
-            return ListView.builder(
+            return GridView.builder(
               itemCount: favorites.length,
               itemBuilder: (context, index) {
                 final pizza = favorites[index];
                 return PizzaCard(product: pizza);
               },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1.35,
+              ),
             );
           } else {
             return Center(child: Text('Không có sản phẩm yêu thích'));
