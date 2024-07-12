@@ -26,7 +26,6 @@ class HomePage extends StatefulWidget {
 final ScrollController _scrollController = ScrollController();
 
 class _HomePageState extends State<HomePage> {
-
   void _onPressFavoritesPage() {
     final router = GoRouter.of(context);
     router.go('/favoritepage');
@@ -190,10 +189,10 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
   void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
+
     if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
-      pizzaBloc.add(LoadProduct.loadNewest);
+      pizzaBloc.add(LoadProduct(loadNewest: true, categoryId: ''));
     }
-    //pizzaBloc.add(LoadProduct.loadNewest);
   }
 
   void _onProductPressed(ProductModel product) {

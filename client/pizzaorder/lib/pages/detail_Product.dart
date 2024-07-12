@@ -7,6 +7,11 @@ import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_state.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import 'package:intl/intl.dart';
 
+import '../pizzaorder/bloc/cart/cart_bloc.dart';
+import '../pizzaorder/bloc/cart/cart_event.dart';
+import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
+import '../pizzaorder/models/order_item_in_cart.dart';
+
 class PizzaDetails extends StatefulWidget {
   final ProductModel product;
 
@@ -17,6 +22,13 @@ class PizzaDetails extends StatefulWidget {
 }
 
 class _PizzaDetailsState extends State<PizzaDetails> {
+  late OrderItem orderItem = OrderItem(
+    idproduct: widget.product.id ?? '',
+    quantity: 1,
+    name: widget.product.name ?? '',
+    price: widget.product.price ?? 0,
+    image: widget.product.image ?? '',
+  );
   int _quantity = 1;
   String? _selectedSupplement1;
   String? _selectedSupplement2;
@@ -96,10 +108,11 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       BlocProvider.of<FavoriteBloc>(context).add(AddFavorite(widget.product));
     }
   }
+
   void _onPressBack(BuildContext context) {
-  final router = GoRouter.of(context);
-  router.go('/home');
-}
+    final router = GoRouter.of(context);
+    router.go('/home');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -291,19 +304,43 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             const SizedBox(height: 8),
             Column(
               children: [
-                _buildSupplementRadio('Coca-Cola', 'assets/images/ghati_2.png',
-                    _selectedSupplement2),
-                _buildSupplementRadio(
-                    'Pepsi', 'assets/images/ghati_2.png', _selectedSupplement2),
-                _buildSupplementRadio('Sprite', 'assets/images/ghati_2.png',
-                    _selectedSupplement2),
-                _buildSupplementRadio(
-                    'Fanta', 'assets/images/ghati_2.png', _selectedSupplement2),
+                for (var product
+                    in context.watch<PizzaBloc>().state.products ?? [])
+                  if (product.categoryId == '664700193146973b72ad5ebd')
+                    RadioListTile<String>(
+                      secondary: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Image.network(
+                          product.image ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      title: Text(
+                        product.name ?? '',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                      value: product.name ?? '',
+                      groupValue: _selectedSupplement2,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedSupplement2 = newValue;
+
+                          // Tìm giá của sản phẩm từ product đã chọn
+                          num supplementPrice = product.price ?? 0.0;
+                          _unitPrice = widget.product.price ?? 0;
+                          _unitPrice += supplementPrice;
+                          _updateTotalPrice();
+                        });
+                      },
+                      activeColor: Colors.red,
+                      controlAffinity: ListTileControlAffinity.trailing,
+                    ),
+                const SizedBox(height: 16),
+                _buildExtrasSection(),
+                const SizedBox(height: 16),
               ],
             ),
-            const SizedBox(height: 16),
-            _buildExtrasSection(),
-            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -459,32 +496,6 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     );
   }
 
-  Widget _buildSupplementRadio(
-      String value, String imagePath, String? groupValue) {
-    return RadioListTile<String>(
-      secondary: SizedBox(
-        width: 40,
-        height: 40,
-        child: Image.asset(
-          imagePath,
-          fit: BoxFit.cover,
-        ),
-      ),
-      title: Text(
-        value,
-        style: const TextStyle(color: Colors.red),
-      ),
-      value: value,
-      groupValue: groupValue,
-      onChanged: (value) {
-        setState(() {
-          _selectedSupplement2 = value;
-        });
-      },
-      activeColor: Colors.red,
-      controlAffinity: ListTileControlAffinity.trailing,
-    );
-  }
 
   Widget _buildExtrasSection() {
     return Column(
@@ -559,6 +570,9 @@ class _PizzaDetailsState extends State<PizzaDetails> {
           ),
           ElevatedButton.icon(
             onPressed: () {
+              context.read<CartBloc>().add(AddProducts(orderItem));
+              // Add your onPressed code here!
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Thêm vào giỏ hàng thành công'),

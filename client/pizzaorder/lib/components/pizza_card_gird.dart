@@ -15,11 +15,11 @@ class PizzaCardGird extends StatefulWidget {
 class _PizzaCardGirdState extends State<PizzaCardGird> {
   late PizzaBloc pizzaBloc;
 
-  @override
+ @override
   void initState() {
     super.initState();
     pizzaBloc = PizzaBloc();
-    pizzaBloc.add(LoadProduct.load);
+    pizzaBloc.add(LoadProduct(loadNewest: true, categoryId: ''));
   }
 
   @override
