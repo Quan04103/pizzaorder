@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizzaorder/components/BottomNavigationBar.dart';
-import 'package:pizzaorder/components/product_item_bagcart.dart';
-import 'package:pizzaorder/pages/emptycart.dart';
-import 'package:pizzaorder/pages/giohang.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
-import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import '../components/category_carousel.dart';
 import '../components/pizza_card.dart';
@@ -18,28 +13,32 @@ import '../components/search.dart';
 import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
 import '../pizzaorder/bloc/pizza/pizza_state.dart';
 import '../pizzaorder/bloc/pizza/pizza_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage>  createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
+final ScrollController _scrollController = ScrollController();
+
 class _HomePageState extends State<HomePage> {
-  final ScrollController _scrollController = ScrollController();
-  int _cartItemCount = 0;
-  bool _isCartAnimating = false;
-  int _selectedIndex1 = 0;
-
-  late CartBloc cartBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialization moved to a method that is called within build method
+  void _onPressFavoritesPage() {
+    final router = GoRouter.of(context);
+    router.go('/favoritepage');
   }
-  void _onPressed () {
+
+  int _selectedIndex1 = 0;
+  late CartBloc cartBloc;
+  void _onItemTapped1(int index) {
+    setState(() {
+      _selectedIndex1 = index;
+    });
+  }
+
+  void _onPressed() {
     final router = GoRouter.of(context);
     if (cartBloc.cartItems.isEmpty) {
       router.go('/emptycart');
@@ -47,74 +46,43 @@ class _HomePageState extends State<HomePage> {
       router.go('/bagcart');
     }
   }
-  void triggerCartAnimation() {
-    setState(() {
-      _cartItemCount++;
-      _isCartAnimating = true;
-    });
-
-    // Reset animation flag after a short delay
-    Future.delayed(Duration(milliseconds: 500), () {
-      setState(() {
-        _isCartAnimating = false;
-      });
-    });
-  }
-
-  void _onPressFavoritesPage() {
-    final router = GoRouter.of(context);
-    router.go('/favoritepage');
-  }
-
-  void _onItemTapped1(int index) {
-    setState(() {
-      _selectedIndex1 = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     cartBloc = BlocProvider.of<CartBloc>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 25,
-        backgroundColor: Colors.red,
-      ),
-      backgroundColor: Colors.green[50],
-      body: SingleChildScrollView(
-        child: Stack(
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 25,
+          backgroundColor: Colors.red,
+        ),
+        backgroundColor: Colors.green[50],
+        body: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            ListView(
+              controller: _scrollController,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(
+                  height: 20,
+                ),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     DropdownHome(),
-                    // IconButton(
-                    //   onPressed: () {
-                    //     _onPressFavoritesPage();
-                    //   },
-                    //   icon: Icon(Icons.favorite_border),
-                    //   color: Colors.black,
-                    //   iconSize: 35,
-                    // ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Search(),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 200,
-                  child: slide(),
+                const SizedBox(
+                  height: 10,
                 ),
+                Search(),
+                const SizedBox(
+                  height: 10,
+                ),
+                slide(),
                 const Padding(
-                  padding: EdgeInsets.only(right: 270),
+                  padding: EdgeInsets.only(left: 15),
                   child: Text(
-                    'Categories',
+                    'Loại sản phẩm',
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                 ),
@@ -127,9 +95,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(right: 300),
+                  padding: EdgeInsets.only(left: 15),
                   child: Text(
-                    'Newest',
+                    'Sản phẩm mới nhất',
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                 ),
@@ -141,6 +109,43 @@ class _HomePageState extends State<HomePage> {
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: ProductsCarousel(),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    'Dành cho bạn',
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                SizedBox(
+                  height: 2000,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: PizzaSuggest(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      10, 0, 10, 60), // Loại bỏ padding
+                  child: Align(
+                    alignment: Alignment.center, // Căn giữa màn hình
+                    child: SizedBox(
+                      width: 30, // Chiều rộng 50
+                      height: 30, // Chiều cao 50
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white, // Màu nền
+                        onPressed: () {
+                          _scrollController.animateTo(
+                            0.0,
+                            curve: Curves.easeOut,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                        },
+                        child: const Icon(Icons.arrow_upward),
+                      ),
                     ),
                   ),
                 ),
@@ -157,26 +162,19 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex1: _selectedIndex1,
-        onItemTapped1: _onItemTapped1,
+        bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex1: _selectedIndex1,
+          onItemTapped1: _onItemTapped1,
+        ),
       ),
     );
   }
 
-  Widget _buildOrder() {
-    return BlocBuilder<CartBloc, CartState>(
-      bloc: cartBloc,
-      builder: (context, state) {
-        if (state.cartItems.isEmpty) {
-          return const EmptyCart();
-        } else {      
-          return GioHang(); 
-        }
-      },
-    );
-  }
+  // @override
+  // void dispose() {
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 }
 
 class ProductsCarousel extends StatefulWidget {

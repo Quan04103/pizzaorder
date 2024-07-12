@@ -13,7 +13,7 @@ import '../components/search.dart';
 
 class AllProductPage extends StatefulWidget {
   final String categoryId;
-  const AllProductPage({Key? key, required this.categoryId}) : super(key: key);
+  const AllProductPage({super.key, required this.categoryId});
 
   @override
   State<AllProductPage> createState() => _AllProductPageState();
@@ -21,23 +21,25 @@ class AllProductPage extends StatefulWidget {
 
 class _AllProductPageState extends State<AllProductPage> {
   int _selectedIndex = 2;
-  late CartBloc cartBloc;
+  // late CartBloc cartBloc;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
- void _onPressed () {
-    final router = GoRouter.of(context);
-    if (cartBloc.cartItems.isEmpty) {
-      router.go('/emptycart');
-    } else {
-      router.go('/bagcart');
-    }
-  }
+
+  // void _onPressed() {
+  //   final router = GoRouter.of(context);
+  //   if (cartBloc.cartItems.isEmpty) {
+  //     router.go('/emptycart');
+  //   } else {
+  //     router.go('/bagcart');
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
-    cartBloc = BlocProvider.of<CartBloc>(context);
+    // cartBloc = BlocProvider.of<CartBloc>(context);
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
@@ -78,15 +80,15 @@ class _AllProductPageState extends State<AllProductPage> {
                     categoryId: widget.categoryId,
                   ),
                 ),
-                Positioned(
-                  bottom: 130,
-                  right: 10,
-                  child: ShoppingCartButton(
-                    onPressed: () {
-                  _onPressed();
-                    },
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 130,
+                //   right: 10,
+                //   child: ShoppingCartButton(
+                //     onPressed: () {
+                //       _onPressed();
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ),
