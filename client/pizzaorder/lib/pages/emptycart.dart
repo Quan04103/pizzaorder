@@ -59,8 +59,11 @@ class _EmptyCartState extends State<EmptyCart> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AllProductPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AllProductPage(
+                            categoryId: '6646fc283146973b72ad5eb2')));
               },
               child: const Text(
                 'ĐẶT MÓN NGAY',
