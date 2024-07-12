@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/BottomNavigationBar.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pages/product_category_page.dart';
 import '../components/pizza_card_gird.dart';
 import '../components/category_carousel.dart';
@@ -10,23 +13,33 @@ import '../components/search.dart';
 
 class AllProductPage extends StatefulWidget {
   final String categoryId;
-  const AllProductPage({Key? key, required this.categoryId}) : super(key: key);
+  const AllProductPage({super.key, required this.categoryId});
 
   @override
-  _AllProductPageState createState() => _AllProductPageState();
+  State<AllProductPage> createState() => _AllProductPageState();
 }
 
 class _AllProductPageState extends State<AllProductPage> {
   int _selectedIndex = 2;
-
+  // late CartBloc cartBloc;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  // void _onPressed() {
+  //   final router = GoRouter.of(context);
+  //   if (cartBloc.cartItems.isEmpty) {
+  //     router.go('/emptycart');
+  //   } else {
+  //     router.go('/bagcart');
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    // cartBloc = BlocProvider.of<CartBloc>(context);
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
@@ -67,15 +80,15 @@ class _AllProductPageState extends State<AllProductPage> {
                     categoryId: widget.categoryId,
                   ),
                 ),
-                Positioned(
-                  bottom: 130,
-                  right: 10,
-                  child: ShoppingCartButton(
-                    onPressed: () {
-                      // Handle shopping cart button press
-                    },
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 130,
+                //   right: 10,
+                //   child: ShoppingCartButton(
+                //     onPressed: () {
+                //       _onPressed();
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ),

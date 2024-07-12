@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 
 class EmptyCart extends StatefulWidget {
@@ -58,8 +59,11 @@ class _EmptyCartState extends State<EmptyCart> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SignUp()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AllProductPage(
+                            categoryId: '6646fc283146973b72ad5eb2')));
               },
               child: const Text(
                 'ĐẶT MÓN NGAY',

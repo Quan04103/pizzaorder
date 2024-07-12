@@ -22,7 +22,7 @@ class PizzaDetails extends StatefulWidget {
 }
 
 class _PizzaDetailsState extends State<PizzaDetails> {
-  late OrderItem orderItem = OrderItem(
+   late OrderItem orderItem = OrderItem(
     idproduct: widget.product.id ?? '',
     quantity: 1,
     name: widget.product.name ?? '',
@@ -496,7 +496,37 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     );
   }
 
-
+Widget _buildSupplementRadio(
+    String value,
+    String imageUrl,
+    String? groupValue,
+    String categoryId,
+    PizzaBloc pizzaBloc,
+  ) {
+    return RadioListTile<String>(
+      secondary: SizedBox(
+        width: 40,
+        height: 40,
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+        ),
+      ),
+      title: Text(
+        value,
+        style: const TextStyle(color: Colors.red),
+      ),
+      value: value,
+      groupValue: groupValue,
+      onChanged: (newValue) {
+        setState(() {
+          _selectedSupplement2 = newValue;
+        });
+      },
+      activeColor: Colors.red,
+      controlAffinity: ListTileControlAffinity.trailing,
+    );
+  }
   Widget _buildExtrasSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -568,7 +598,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 0, 0, 0)),
           ),
-          ElevatedButton.icon(
+           ElevatedButton.icon(
             onPressed: () {
               context.read<CartBloc>().add(AddProducts(orderItem));
               // Add your onPressed code here!

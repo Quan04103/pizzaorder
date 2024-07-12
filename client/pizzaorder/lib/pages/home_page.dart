@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pizzaorder/components/BottomNavigationBar.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../components/category_carousel.dart';
 import '../components/pizza_card.dart';
 import '../components/shopping_cart_btn.dart';
@@ -32,15 +31,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   int _selectedIndex1 = 0;
-
+  late CartBloc cartBloc;
   void _onItemTapped1(int index) {
     setState(() {
       _selectedIndex1 = index;
     });
   }
 
+  void _onPressed() {
+    final router = GoRouter.of(context);
+    if (cartBloc.cartItems.isEmpty) {
+      router.go('/emptycart');
+    } else {
+      router.go('/bagcart');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    cartBloc = BlocProvider.of<CartBloc>(context);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -60,14 +69,6 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     DropdownHome(),
-                    // IconButton(
-                    //   onPressed: () {
-                    //     _onPressFavoritesPage();
-                    //   },
-                    //   icon: Icon(Icons.favorite_border),
-                    //   color: Colors.black,
-                    //   iconSize: 35,
-                    // ),
                   ],
                 ),
                 const SizedBox(
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> {
               right: 10,
               child: ShoppingCartButton(
                 onPressed: () {
-                  GoRouter.of(context).go('/bagcart');
+                  _onPressed();
                 },
               ),
             ),
@@ -191,6 +192,7 @@ class _ProductsCarouselState extends State<ProductsCarousel> {
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
 
     if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
+      // Nếu chưa tải, gửi sự kiện để tải sản phẩm mới nhất
       pizzaBloc.add(LoadProduct(loadNewest: true, categoryId: ''));
     }
   }
