@@ -21,6 +21,25 @@ class UserService {
     static async generateToken(tokenData, secretKey, jwt_expire) {
         return jwt.sign(tokenData, secretKey, { expiresIn: jwt_expire });
     }
+
+static async updateUserAddress(iduser, newAddress) {
+    try {
+        const updatedUser = await UserModel.findOneAndUpdate(
+            { _id: iduser },
+            { $set: { address: newAddress } },
+            { new: true, runValidators: true, omitUndefined: true }
+        );
+
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+}
+
 }
 
 module.exports = UserService;

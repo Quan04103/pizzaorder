@@ -108,10 +108,11 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       BlocProvider.of<FavoriteBloc>(context).add(AddFavorite(widget.product));
     }
   }
+
   void _onPressBack(BuildContext context) {
-  final router = GoRouter.of(context);
-  router.go('/home');
-}
+    final router = GoRouter.of(context);
+    router.go('/home');
+  }
 
   @override
   Widget build(BuildContext context) {

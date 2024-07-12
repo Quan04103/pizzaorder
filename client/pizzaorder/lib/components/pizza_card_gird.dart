@@ -15,7 +15,7 @@ class PizzaCardGird extends StatefulWidget {
 class _PizzaCardGirdState extends State<PizzaCardGird> {
   late PizzaBloc pizzaBloc;
 
-  @override
+ @override
   void initState() {
     super.initState();
     pizzaBloc = PizzaBloc();

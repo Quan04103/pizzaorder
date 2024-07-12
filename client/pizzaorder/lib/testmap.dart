@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
+import 'package:pizzaorder/pizzaorder/services/user_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -32,6 +34,7 @@ class FullMapTestState extends State<FullMapTest> {
     });
   }
 
+  final UserService userService = UserService();
   MapboxMap? mapboxMap;
   CircleAnnotationManager? _circleAnnotationManagerStart;
   CircleAnnotationManager? _circleAnnotationManagerEnd;
@@ -144,7 +147,7 @@ class FullMapTestState extends State<FullMapTest> {
               ),
               SizedBox(
                 width: 330,
-                height: 30,
+                height: 35,
                 child: Text(
                   coordinate['description'],
                   softWrap: true,
@@ -162,7 +165,16 @@ class FullMapTestState extends State<FullMapTest> {
             var response = await http.get(url);
             final jsonResponse = jsonDecode(response.body);
             startDetails = jsonResponse['results'] as List<dynamic>;
-
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String token = prefs.getString('token') ?? '';
+            print('Token: $token'); // Debug log to check for token
+            try {
+              var response = await userService.updateAddress(
+                  token, startDetails[0]['place_id']);
+              print('Response: $response');
+            } catch (e) {
+              print('Error updating address: $e');
+            }
             mapboxMap?.setCamera(CameraOptions(
                 center: Point(
                     coordinates: Position(
@@ -231,7 +243,6 @@ class FullMapTestState extends State<FullMapTest> {
     var response = await http.get(url);
     final jsonResponse = jsonDecode(response.body);
     endDetails = jsonResponse['results'] as List<dynamic>;
-
     mapboxMap?.setCamera(CameraOptions(
         center: Point(
             coordinates: Position(endDetails[0]['geometry']['location']['lng'],
@@ -630,8 +641,8 @@ class FullMapTestState extends State<FullMapTest> {
         isShowStart
             ? Container(
                 height: 120,
-                margin: const EdgeInsets.fromLTRB(10, 75, 10, 0),
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                margin: const EdgeInsets.fromLTRB(10, 100, 10, 0),
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
                 decoration: const BoxDecoration(color: Colors.white),
                 child: _buildListStart(),
               )

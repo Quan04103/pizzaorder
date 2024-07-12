@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/BottomNavigationBar.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
+import 'package:pizzaorder/pages/product_category_page.dart';
 import '../components/pizza_card_gird.dart';
 import '../components/category_carousel.dart';
 import '../components/shopping_cart_btn.dart';
@@ -11,7 +12,8 @@ import '../components/search.dart';
 // Assuming you place CustomBottomNavigationBar in a separate file
 
 class AllProductPage extends StatefulWidget {
-  const AllProductPage({super.key});
+  final String categoryId;
+  const AllProductPage({Key? key, required this.categoryId}) : super(key: key);
 
   @override
   State<AllProductPage> createState() => _AllProductPageState();
@@ -50,11 +52,6 @@ class _AllProductPageState extends State<AllProductPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               DropdownHome(),
-              Icon(
-                Icons.favorite_border,
-                color: Colors.black,
-                size: 35,
-              ),
             ],
           ),
           const SizedBox(height: 15),
@@ -76,7 +73,10 @@ class _AllProductPageState extends State<AllProductPage> {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  child: const PizzaCardGird(),
+                  //child: const PizzaCardGird(),
+                  child: ProductPage(
+                    categoryId: widget.categoryId,
+                  ),
                 ),
                 Positioned(
                   bottom: 130,
