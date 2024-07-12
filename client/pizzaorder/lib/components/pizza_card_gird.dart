@@ -19,7 +19,7 @@ class _PizzaCardGirdState extends State<PizzaCardGird> {
   void initState() {
     super.initState();
     pizzaBloc = PizzaBloc();
-    pizzaBloc.add(LoadProduct.load);
+    pizzaBloc.add(LoadProduct(loadNewest: true, categoryId: ''));
   }
 
   @override

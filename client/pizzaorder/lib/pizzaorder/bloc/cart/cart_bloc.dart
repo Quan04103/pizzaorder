@@ -8,10 +8,15 @@ import 'cart_state.dart';
 import '../../models/order.dart';
 import '../../models/order_item_in_cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_event.dart';
+import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_state.dart';
+import 'package:pizzaorder/pizzaorder/models/coupon.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   List<OrderItem> cartItems = [];
   final OrderService orderService = OrderService();
+  final CouponBloc couponBloc;
   double total = 0;
   //tính tổng tiền
   double calculateTotalPrice(List<OrderItem> cartItems) {
@@ -22,7 +27,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     return totalAllPrice;
   }
 
-  CartBloc() : super(CartState.initial()) {
+  CartBloc(this.couponBloc) : super(CartState.initial()) {
     on<LoadList>((event, emit) async {
       try {
         add(UpdateTotalPrice()); // Thêm sự kiện UpdateTotalPrice
@@ -140,6 +145,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<SubmitCart>((event, emit) async {
       try {
+         
         SharedPreferences prefs = await SharedPreferences.getInstance();
         String token = prefs.getString('token') ?? '';
         print('Token: $token'); // Debug log to check for token

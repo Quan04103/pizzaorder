@@ -7,6 +7,11 @@ import 'package:pizzaorder/multiple_bloc_provider.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_event.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
+import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_event.dart';
+import 'package:pizzaorder/pizzaorder/models/coupon.dart';
+import 'package:pizzaorder/pizzaorder/services/coupon_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GioHang extends StatefulWidget {
   const GioHang({super.key});
@@ -17,17 +22,24 @@ class GioHang extends StatefulWidget {
 class _GioHangState extends State<GioHang> {
   String _selectedOption = ''; // Khai báo biến _selectedOption ở đây
   int _shippingFee = 0; // Biến để lưu trữ giá trị phí vận chuyển
-
+  String _selectedPaymentMethod = 'Thanh toán khi nhận hàng';
+  SharedPreferences? pref;
   late CartBloc cartBloc;
-
+  late CouponBloc couponBloc;
   @override
   void initState() {
     super.initState();
     print('Init state GioHang');
     cartBloc = BlocProvider.of<CartBloc>(context);
     cartBloc.add(const LoadList());
+    couponBloc = BlocProvider.of<CouponBloc>(context);
+    _buildInvoiceRow('title', 'amount');
+    initSharedPref();
+    // couponBloc.add(const  LoadCoupon());
   }
-
+void initSharedPref() async {
+    pref = await SharedPreferences.getInstance();
+  }
   Future<void> increaseProductQuantity() async {}
 
   @override
@@ -52,7 +64,7 @@ class _GioHangState extends State<GioHang> {
                         _buildOrder(),
                         _buildPaymentMethod(),
                         _buildPromotionField(),
-                        _buildInvoiceInfo(),
+                        _buildInvoiceInfo(context),
                       ],
                     ),
                   ),
@@ -232,17 +244,6 @@ class _GioHangState extends State<GioHang> {
                 });
               },
             ),
-            DeliveryOptionItem(
-              title: 'Đặt giao sau',
-              time: '',
-              price: '',
-              selectedOption: _selectedOption,
-              onSelected: (newOption) {
-                setState(() {
-                  _selectedOption = newOption;
-                });
-              },
-            ),
           ],
         ),
       ),
@@ -296,7 +297,7 @@ class _GioHangState extends State<GioHang> {
                     child: Text(
                       'Không có sản phẩm nào trong giỏ hàng',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: Color.fromARGB(255, 231, 16, 16),
                       ),
@@ -338,64 +339,86 @@ class _GioHangState extends State<GioHang> {
 
   Widget _buildPaymentMethod() {
     return Container(
-      margin: const EdgeInsets.only(top: 40),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Padding(
-          padding: EdgeInsets.only(
-            top: 15,
-            bottom: 10,
-            left: 15,
-            right: 15,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Phương thức thanh toán',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 15,
+          bottom: 10,
+          left: 15,
+          right: 15,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Phương thức thanh toán',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                  const SizedBox(
+                      height: 4), // Thêm khoảng cách giữa hai dòng chữ
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      _selectedPaymentMethod,
+                      style: const TextStyle(
+                        fontSize: 12,
                         color: Color(0xFF000000),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Thanh toán khi nhận hàng',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF000000),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Spacer(),
-              Icon(
+            ),
+            PopupMenuButton<String>(
+              icon: const Icon(
                 Icons.arrow_drop_down,
                 size: 30,
               ),
-            ],
-          )),
+              onSelected: (String value) {
+                setState(() {
+                  _selectedPaymentMethod = value;
+                });
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem<String>(
+                    value: 'Thanh toán khi nhận hàng',
+                    child: Text('Thanh toán khi nhận hàng'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Thanh toán qua ví',
+                    child: Text('Thanh toán qua ví'),
+                  ),
+                ];
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildPromotionField() {
     return Container(
-      margin: const EdgeInsets.only(top: 15),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Padding(
-        padding: EdgeInsets.only(
+      child: Padding(
+        padding: const EdgeInsets.only(
           top: 15,
           bottom: 10,
           left: 15,
@@ -403,9 +426,9 @@ class _GioHangState extends State<GioHang> {
         ),
         child: Row(
           children: [
-            Icon(Icons.local_offer, color: Colors.black),
-            SizedBox(width: 10),
-            Expanded(
+            const Icon(Icons.local_offer, color: Colors.black),
+            const SizedBox(width: 10),
+            const Expanded(
               child: Text(
                 'Áp dụng ưu đãi để được giảm giá',
                 style: TextStyle(
@@ -414,17 +437,30 @@ class _GioHangState extends State<GioHang> {
                 ),
               ),
             ),
-            Icon(Icons.arrow_drop_down, size: 30, color: Colors.black),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_forward_ios,
+              ),
+              onPressed: () {
+                // Đặt hành động khi button được nhấn ở đây
+                GoRouter.of(context).go('/discounts');
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInvoiceInfo() {
+  Widget _buildInvoiceInfo(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       bloc: cartBloc,
       builder: (context, state) {
+        int discount = 0;
+        final couponState = context.watch<CouponBloc>().state;
+        final data1 = pref?.getString('data1');
+                final data2 = pref?.getInt('data2');
+
         return Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
@@ -444,11 +480,24 @@ class _GioHangState extends State<GioHang> {
               ),
               const SizedBox(height: 10),
               _buildInvoiceRow(
-                  'Tạm tính', '${state.total?.toStringAsFixed(0) ?? '0'} đ'),
-              _buildInvoiceRow('Phí vận chuyển',
-                  '30.000 đ'), // Có thể thay đổi thành biến nếu cần
+                'Tạm tính',
+                '${state.total?.toStringAsFixed(0) ?? '0'} đ',
+              ),
               _buildInvoiceRow(
-                  'Giảm giá', '0 đ'), // Có thể thay đổi thành biến nếu cần
+                'Phí vận chuyển',
+                '$_shippingFee đ',
+              ),
+              if (couponState.coupons != null &&
+                  couponState.coupons!.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [                 
+                      _buildInvoiceRow(                   
+                        'Giảm giá ${data1 ?? ''}',
+                        '${data2 ?? 0 } đ',
+                      ),
+                  ],
+                ),
               const Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -458,11 +507,11 @@ class _GioHangState extends State<GioHang> {
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 20,
                     ),
                   ),
                   Text(
-                    '${state.total?.toStringAsFixed(0) ?? '0'} đ',
+                    '${state.total != null ? (state.total! + _shippingFee - discount).toStringAsFixed(0) : '0'} đ',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -504,6 +553,15 @@ class _GioHangState extends State<GioHang> {
     return BlocBuilder<CartBloc, CartState>(
       bloc: cartBloc, // Provide your CartBloc instance here
       builder: (context, state) {
+        double subtotal = state.total ?? 0;
+        final couponState = context.watch<CouponBloc>().state;
+        double discount = 0;
+        if (couponState.isLoaded && couponState.coupons != null) {
+          for (CouponModel coupon in couponState.coupons!) {
+            discount += coupon.value ?? 0;
+          }
+        }
+        double totalSales = subtotal + _shippingFee - discount;
         return Container(
           margin: const EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
@@ -527,7 +585,7 @@ class _GioHangState extends State<GioHang> {
                       ),
                     ),
                     Text(
-                      '${state.total?.toStringAsFixed(0) ?? '0'} đ', // Dynamically display the total from the state
+                      '${totalSales.toStringAsFixed(0)} đ', // Dynamically display the total from the state
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
@@ -543,11 +601,26 @@ class _GioHangState extends State<GioHang> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      cartBloc.add(SubmitCart(state.total!));
-                      setState(() {});
-                      // Add your order submission logic here
-                      // For example: cartBloc.add(SubmitOrder());
+                    onPressed: () async {
+                      if (_selectedOption.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Vui lòng chọn tùy chọn giao hàng.'),
+                          ),
+                        );
+                      } else {
+                        
+                        cartBloc.add(SubmitCart(totalSales));
+                        final couponService = CouponService();
+                      //  final couponId = await couponService.getCouponById(couponState.coupons![0].id!.toString());
+                      //  context.read<CouponBloc>().add(UpdateUsageCount(couponId as String));
+                        couponBloc.add(ClearCoupon());
+                        
+                        setState(() {
+                          _selectedOption = '';
+                          _shippingFee = 0;
+                        });
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 15),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -24,7 +27,7 @@ void _onPressBack(BuildContext context) {
 
 void _discounts(BuildContext context) {
   final router = GoRouter.of(context);
-  router.go('/discounts');
+  router.go('/myvoucher');
 }
 
 void _all(BuildContext context) {
@@ -32,20 +35,24 @@ void _all(BuildContext context) {
   router.go('/all');
 }
 
-void _cart(BuildContext context) {
-  final router = GoRouter.of(context);
-  router.go('/giohang');
-}
+
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   SharedPreferences? pref;
-
+  late CartBloc cartBloc;
   @override
   void initState() {
     super.initState();
     initSharedPref();
   }
-
+void _cart() {
+  final router = GoRouter.of(context);
+    if (cartBloc.cartItems.isEmpty) {
+      router.go('/emptycart');
+    } else {
+      router.go('/bagcart');
+    }
+}
   void initSharedPref() async {
     pref = await SharedPreferences.getInstance();
   }
@@ -56,6 +63,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   Widget build(BuildContext context) {
+        cartBloc = BlocProvider.of<CartBloc>(context);
+
     return BottomAppBar(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Stack(
@@ -170,7 +179,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               _discounts(context);
               break;
             case 3: // Đơn hàng
-              _cart(context);
+              _cart();
               break;
             case 4: // Tài khoản
               final token = pref?.getString('token');

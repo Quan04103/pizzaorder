@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/BottomNavigationBar.dart';
+import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import '../components/pizza_card_gird.dart';
 import '../components/category_carousel.dart';
 import '../components/shopping_cart_btn.dart';
@@ -8,23 +11,31 @@ import '../components/search.dart';
 // Assuming you place CustomBottomNavigationBar in a separate file
 
 class AllProductPage extends StatefulWidget {
-  const AllProductPage({Key? key}) : super(key: key);
+  const AllProductPage({super.key});
 
   @override
-  _AllProductPageState createState() => _AllProductPageState();
+  State<AllProductPage> createState() => _AllProductPageState();
 }
 
 class _AllProductPageState extends State<AllProductPage> {
   int _selectedIndex = 2;
-
+  late CartBloc cartBloc;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
+ void _onPressed () {
+    final router = GoRouter.of(context);
+    if (cartBloc.cartItems.isEmpty) {
+      router.go('/emptycart');
+    } else {
+      router.go('/bagcart');
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    cartBloc = BlocProvider.of<CartBloc>(context);
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
@@ -72,7 +83,7 @@ class _AllProductPageState extends State<AllProductPage> {
                   right: 10,
                   child: ShoppingCartButton(
                     onPressed: () {
-                      // Handle shopping cart button press
+                  _onPressed();
                     },
                   ),
                 ),

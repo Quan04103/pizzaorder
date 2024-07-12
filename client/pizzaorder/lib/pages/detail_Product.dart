@@ -7,6 +7,11 @@ import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_state.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import 'package:intl/intl.dart';
 
+import '../pizzaorder/bloc/cart/cart_bloc.dart';
+import '../pizzaorder/bloc/cart/cart_event.dart';
+import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
+import '../pizzaorder/models/order_item_in_cart.dart';
+
 class PizzaDetails extends StatefulWidget {
   final ProductModel product;
 
@@ -17,6 +22,13 @@ class PizzaDetails extends StatefulWidget {
 }
 
 class _PizzaDetailsState extends State<PizzaDetails> {
+   late OrderItem orderItem = OrderItem(
+    idproduct: widget.product.id ?? '',
+    quantity: 1,
+    name: widget.product.name ?? '',
+    price: widget.product.price ?? 0,
+    image: widget.product.image ?? '',
+  );
   int _quantity = 1;
   String? _selectedSupplement1;
   String? _selectedSupplement2;
@@ -291,19 +303,43 @@ class _PizzaDetailsState extends State<PizzaDetails> {
             const SizedBox(height: 8),
             Column(
               children: [
-                _buildSupplementRadio('Coca-Cola', 'assets/images/ghati_2.png',
-                    _selectedSupplement2),
-                _buildSupplementRadio(
-                    'Pepsi', 'assets/images/ghati_2.png', _selectedSupplement2),
-                _buildSupplementRadio('Sprite', 'assets/images/ghati_2.png',
-                    _selectedSupplement2),
-                _buildSupplementRadio(
-                    'Fanta', 'assets/images/ghati_2.png', _selectedSupplement2),
+                for (var product
+                    in context.watch<PizzaBloc>().state.products ?? [])
+                  if (product.categoryId == '664700193146973b72ad5ebd')
+                    RadioListTile<String>(
+                      secondary: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Image.network(
+                          product.image ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      title: Text(
+                        product.name ?? '',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                      value: product.name ?? '',
+                      groupValue: _selectedSupplement2,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedSupplement2 = newValue;
+
+                          // Tìm giá của sản phẩm từ product đã chọn
+                          num supplementPrice = product.price ?? 0.0;
+                          _unitPrice = widget.product.price ?? 0;
+                          _unitPrice += supplementPrice;
+                          _updateTotalPrice();
+                        });
+                      },
+                      activeColor: Colors.red,
+                      controlAffinity: ListTileControlAffinity.trailing,
+                    ),
+                const SizedBox(height: 16),
+                _buildExtrasSection(),
+                const SizedBox(height: 16),
               ],
             ),
-            const SizedBox(height: 16),
-            _buildExtrasSection(),
-            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -459,14 +495,19 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     );
   }
 
-  Widget _buildSupplementRadio(
-      String value, String imagePath, String? groupValue) {
+Widget _buildSupplementRadio(
+    String value,
+    String imageUrl,
+    String? groupValue,
+    String categoryId,
+    PizzaBloc pizzaBloc,
+  ) {
     return RadioListTile<String>(
       secondary: SizedBox(
         width: 40,
         height: 40,
-        child: Image.asset(
-          imagePath,
+        child: Image.network(
+          imageUrl,
           fit: BoxFit.cover,
         ),
       ),
@@ -476,16 +517,15 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       ),
       value: value,
       groupValue: groupValue,
-      onChanged: (value) {
+      onChanged: (newValue) {
         setState(() {
-          _selectedSupplement2 = value;
+          _selectedSupplement2 = newValue;
         });
       },
       activeColor: Colors.red,
       controlAffinity: ListTileControlAffinity.trailing,
     );
   }
-
   Widget _buildExtrasSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -557,8 +597,11 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 0, 0, 0)),
           ),
-          ElevatedButton.icon(
+           ElevatedButton.icon(
             onPressed: () {
+              context.read<CartBloc>().add(AddProducts(orderItem));
+              // Add your onPressed code here!
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Thêm vào giỏ hàng thành công'),

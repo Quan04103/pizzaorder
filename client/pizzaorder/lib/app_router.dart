@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
+import 'package:pizzaorder/pages/complete_payment.dart';
+import 'package:pizzaorder/pages/emptycart.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/get_started.dart';
 import 'package:pizzaorder/pages/giohang.dart';
 import 'package:pizzaorder/pages/log_in.dart';
+import 'package:pizzaorder/pages/myVoucher.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 import 'package:pizzaorder/pages/start_order.dart';
 import 'package:pizzaorder/pages/voucher_page.dart';
@@ -25,7 +28,7 @@ class AppRouter {
     router = GoRouter(
       routes: [
         GoRoute(
-          path: '/home',
+          path: '/',
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(
@@ -48,7 +51,7 @@ class AppRouter {
           builder: (context, state) => const AccessMethod(),
         ),
         GoRoute(
-          path: '/d',
+          path: '/hh',
           builder: (context, state) => const GetStarted(),
         ),
         GoRoute(
@@ -60,16 +63,24 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
-          path: '/',
+          path: '/completed-success',
+          builder: (context, state) => const CompletePayment(),
+        ),
+        GoRoute(
+          path: '/map',
           builder: (context, state) => const FullMapTest(),
         ),
         GoRoute(
           path: '/discounts',
           builder: (context, state) => const VoucherPage(),
         ),
+         GoRoute(
+          path: '/myvoucher',
+          builder: (context, state) => const MyVoucher(),
+        ),
         GoRoute(
-          path: '/giohang',
-          builder: (context, state) => const GioHang(),
+          path: '/emptycart',
+          builder: (context, state) => const EmptyCart(),
         ),
         GoRoute(
           path: '/all',

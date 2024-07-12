@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/auth/auth_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
+import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/pizza/pizza_bloc.dart';
 import 'package:pizzaorder/pizzaorder/services/order_service.dart';
@@ -9,6 +10,7 @@ import 'package:pizzaorder/pizzaorder/services/user_service.dart';
 
 MultiRepositoryProvider createRepositoryAndBlocProviders(
     {required Widget child}) {
+      final couponBloc = CouponBloc();
   return MultiRepositoryProvider(
     providers: [
       // Thêm các RepositoryProvider khác ở đây
@@ -25,7 +27,10 @@ MultiRepositoryProvider createRepositoryAndBlocProviders(
           create: (context) => PizzaBloc(),
         ),
         BlocProvider<CartBloc>(
-          create: (context) => CartBloc(),
+          create: (context) => CartBloc(couponBloc),
+        ),
+         BlocProvider<CouponBloc>(
+          create: (context) => CouponBloc(),
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
