@@ -8,21 +8,15 @@ import '../../services/product_service.dart';
 class PizzaBloc extends Bloc<LoadProduct, PizzaState> {
   final ProductService productService = ProductService();
 
-  PizzaBloc() : super(PizzaState.initial()) {
+   PizzaBloc() : super(PizzaState.initial()) {
     on<LoadProduct>((event, emit) async {
       try {
         List<ProductModel> products;
-        switch (event) {
-          case LoadProduct.load:
-            products = await productService
-                .getProductByCategoryId('664700193146973b72ad5ebd');
-            break;
-          case LoadProduct.loadNewest:
-            products = await productService.getNewestProduct();
-            break;
-          default:
-            products = [];
-            break;
+        if (event.loadNewest) {
+          products = await productService.getNewestProduct();
+        } else {
+          products =
+              await productService.getProductByCategoryId(event.categoryId);
         }
         emit(PizzaState.loadded(products));
         print('New state: loaded');

@@ -186,14 +186,14 @@ class ProductsCarousel extends StatefulWidget {
 class _ProductsCarouselState extends State<ProductsCarousel> {
   late PizzaBloc pizzaBloc;
 
-  @override
-  void initState() {
+@override
+ void initState() {
     super.initState();
     pizzaBloc = BlocProvider.of<PizzaBloc>(context);
+
     if (pizzaBloc.state.products == null || !pizzaBloc.state.isLoaded) {
-      pizzaBloc.add(LoadProduct.loadNewest);
+      pizzaBloc.add(LoadProduct(loadNewest: true, categoryId: ''));
     }
-    //pizzaBloc.add(LoadProduct.loadNewest);
   }
 
   void _onProductPressed(ProductModel product) {
