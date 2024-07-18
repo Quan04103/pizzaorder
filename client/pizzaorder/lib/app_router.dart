@@ -10,6 +10,7 @@ import 'package:pizzaorder/pages/get_started.dart';
 import 'package:pizzaorder/pages/giohang.dart';
 import 'package:pizzaorder/pages/log_in.dart';
 import 'package:pizzaorder/pages/myVoucher.dart';
+import 'package:pizzaorder/pages/payment_page_.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 import 'package:pizzaorder/pages/start_order.dart';
 import 'package:pizzaorder/pages/voucher_page.dart';
@@ -63,9 +64,13 @@ class AppRouter {
           builder: (context, state) => const SignUp(),
         ),
         GoRoute(
-          path: '/completed-success',
+          path: '/paymentCompelete',
           builder: (context, state) => const CompletePayment(),
         ),
+        // GoRoute(
+        //   path: '/payment',
+        //   builder: (context, state) => const PaymentPage(totalSales: null,),
+        // ),
         GoRoute(
           path: '/map',
           builder: (context, state) => const FullMapTest(),
@@ -74,7 +79,7 @@ class AppRouter {
           path: '/discounts',
           builder: (context, state) => const VoucherPage(),
         ),
-         GoRoute(
+        GoRoute(
           path: '/myvoucher',
           builder: (context, state) => const MyVoucher(),
         ),

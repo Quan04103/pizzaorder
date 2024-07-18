@@ -11,7 +11,7 @@ const config = {
 
 async function createPayment(app_user, amount) {
     const embed_data = {
-        redirecturl: 'https://phongthuytaman.com',
+        // redirecturl: 'https://phongthuytaman.com',
     };
 
     const items = [];
@@ -25,9 +25,9 @@ async function createPayment(app_user, amount) {
         item: JSON.stringify(items),
         embed_data: JSON.stringify(embed_data),
         amount: amount,
-        callback_url: 'https://3290-2001-ee0-4f0a-b830-79d4-c04a-2252-ea5.ngrok-free.app/callback',
-        description: `Lazada - Payment for the order #${transID}`,
-        bank_code: '',
+        callback_url: 'https://3c5c-171-248-98-69.ngrok-free.app/callback',
+        description: `Domini - Đơn hàng #${transID}`,
+        bank_code: 'zalopayapp',
     };
 
     const data =
@@ -55,9 +55,17 @@ async function createPayment(app_user, amount) {
     }
 }
 
+async function updateOrderStatus(app_trans_id, status) {
+    // Logic để cập nhật trạng thái đơn hàng trong cơ sở dữ liệu
+    console.log(`Updating order status: ${app_trans_id} to ${status}`);
+    // Ví dụ:
+    await OrderModel.updateOne({ app_trans_id }, { status });
+}
+
 function handleCallback(dataStr, reqMac) {
     let result = {};
     let mac = CryptoJS.HmacSHA256(dataStr, config.key2).toString();
+    
     console.log('mac2 =', mac);
     if (reqMac !== mac) {
         result.return_code = -1;
@@ -66,6 +74,7 @@ function handleCallback(dataStr, reqMac) {
         // thanh toán thành công
         // merchant cập nhật trạng thái cho đơn hàng ở đây
         let dataJson = JSON.parse(dataStr, config.key2);
+        updateOrderStatus(dataJson['app_trans_id'], 'success');
         result.return_code = 1;
         console.log(
             "update order's status = success where app_trans_id =",

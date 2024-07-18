@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/option_item_bagcart.dart';
 import 'package:pizzaorder/components/product_item_bagcart.dart';
 import 'package:pizzaorder/multiple_bloc_provider.dart';
+import 'package:pizzaorder/pages/payment_page_.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_event.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
@@ -37,9 +38,11 @@ class _GioHangState extends State<GioHang> {
     initSharedPref();
     // couponBloc.add(const  LoadCoupon());
   }
-void initSharedPref() async {
+
+  void initSharedPref() async {
     pref = await SharedPreferences.getInstance();
   }
+
   Future<void> increaseProductQuantity() async {}
 
   @override
@@ -459,7 +462,7 @@ void initSharedPref() async {
         int discount = 0;
         final couponState = context.watch<CouponBloc>().state;
         final data1 = pref?.getString('data1');
-                final data2 = pref?.getInt('data2');
+        final data2 = pref?.getInt('data2');
 
         return Container(
           padding: const EdgeInsets.all(15),
@@ -491,11 +494,11 @@ void initSharedPref() async {
                   couponState.coupons!.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [                 
-                      _buildInvoiceRow(                   
-                        'Giảm giá ${data1 ?? ''}',
-                        '${data2 ?? 0 } đ',
-                      ),
+                  children: [
+                    _buildInvoiceRow(
+                      'Giảm giá ${data1 ?? ''}',
+                      '${data2 ?? 0} đ',
+                    ),
                   ],
                 ),
               const Divider(),
@@ -609,17 +612,23 @@ void initSharedPref() async {
                           ),
                         );
                       } else {
-                        
                         cartBloc.add(SubmitCart(totalSales));
                         final couponService = CouponService();
-                      //  final couponId = await couponService.getCouponById(couponState.coupons![0].id!.toString());
-                      //  context.read<CouponBloc>().add(UpdateUsageCount(couponId as String));
+                        //  final couponId = await couponService.getCouponById(couponState.coupons![0].id!.toString());
+                        //  context.read<CouponBloc>().add(UpdateUsageCount(couponId as String));
                         couponBloc.add(ClearCoupon());
-                        
+
                         setState(() {
                           _selectedOption = '';
                           _shippingFee = 0;
                         });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PaymentPage(totalSales: totalSales),
+                          ),
+                        );
                       }
                     },
                     child: Container(
