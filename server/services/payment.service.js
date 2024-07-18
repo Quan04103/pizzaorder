@@ -25,7 +25,7 @@ async function createPayment(app_user, amount) {
         item: JSON.stringify(items),
         embed_data: JSON.stringify(embed_data),
         amount: amount,
-        callback_url: 'https://3c5c-171-248-98-69.ngrok-free.app/callback',
+        callback_url: 'https://118f-113-161-95-116.ngrok-free.app/callback',
         description: `Domini - Đơn hàng #${transID}`,
         bank_code: 'zalopayapp',
     };

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pizzaorder/components/option_item_bagcart.dart';
 import 'package:pizzaorder/components/product_item_bagcart.dart';
 import 'package:pizzaorder/multiple_bloc_provider.dart';
@@ -13,6 +17,7 @@ import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_event.dart';
 import 'package:pizzaorder/pizzaorder/models/coupon.dart';
 import 'package:pizzaorder/pizzaorder/services/coupon_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class GioHang extends StatefulWidget {
   const GioHang({super.key});
@@ -21,6 +26,17 @@ class GioHang extends StatefulWidget {
 }
 
 class _GioHangState extends State<GioHang> {
+  String idAddress = '';
+  String address = '';
+  List<dynamic> startDetails = [];
+  double? lngStart;
+  double? latStart;
+  final double lngEnd = 106.669145;
+  final double latEnd = 10.7726791;
+  String duration = "";
+  int durationValue = 0;
+  int distance = 0;
+
   String _selectedOption = ''; // Khai báo biến _selectedOption ở đây
   int _shippingFee = 0; // Biến để lưu trữ giá trị phí vận chuyển
   String _selectedPaymentMethod = 'Thanh toán khi nhận hàng';
@@ -30,6 +46,8 @@ class _GioHangState extends State<GioHang> {
   @override
   void initState() {
     super.initState();
+    getStart(idAddress);
+    _fetchData();
     print('Init state GioHang');
     cartBloc = BlocProvider.of<CartBloc>(context);
     cartBloc.add(const LoadList());
@@ -37,6 +55,76 @@ class _GioHangState extends State<GioHang> {
     _buildInvoiceRow('title', 'amount');
     initSharedPref();
     // couponBloc.add(const  LoadCoupon());
+  }
+
+  void onPressMap() {
+    final router = GoRouter.of(context);
+    router.go('/map');
+  }
+
+  Future<void> _fetchData() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (latStart != null && lngStart != null) {
+      final url = Uri.parse(
+          'https://rsapi.goong.io/Direction?origin=$latStart,$lngStart&destination=$latEnd,$lngEnd&vehicle=bike&api_key=IcniA2Z5Cpx1HXx0rMUj0L0kRro6hQ1uOkP1cuvV');
+
+      try {
+        var response = await http.get(url);
+        if (response.statusCode == 200) {
+          final jsonResponse = jsonDecode(response.body);
+          var route = jsonResponse['routes'][0]['overview_polyline']['points'];
+          setState(() {
+            duration = jsonResponse['routes'][0]['legs'][0]['duration']['text'];
+            durationValue =
+                jsonResponse['routes'][0]['legs'][0]['duration']['value'];
+            distance =
+                jsonResponse['routes'][0]['legs'][0]['distance']['value'];
+          });
+          print('duration: $duration');
+          // Bạn có thể xử lý 'route' ở đây nếu cần thiết
+        } else {
+          print('Failed to load data');
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+  }
+
+  Future<void> getStart(String input) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token') ?? '';
+      print('token: $token');
+      if (token.isNotEmpty) {
+        Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
+        print(jwtDecodedToken);
+        setState(() {
+          idAddress = jwtDecodedToken['address'] ?? '';
+          print(idAddress);
+        });
+      }
+      final url = Uri.parse(
+          'https://rsapi.goong.io/Place/Detail?place_id=$idAddress&api_key=IcniA2Z5Cpx1HXx0rMUj0L0kRro6hQ1uOkP1cuvV');
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        var result = jsonResponse['result'];
+        setState(() {
+          address = result['formatted_address'];
+          lngStart = result['geometry']['location']['lng'];
+          latStart = result['geometry']['location']['lat'];
+          print(address);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        print("Error: ${response.body}");
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   void initSharedPref() async {
@@ -125,66 +213,74 @@ class _GioHangState extends State<GioHang> {
   }
 
   Widget _buildDeliveryAddress() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.fromLTRB(18.9, 10, 33, 36),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Giao tới',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
-                color: Color(0xFF000000),
+    return InkWell(
+      onTap: () {
+        onPressMap();
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 15),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18.9, 10, 33, 36),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Giao tới',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  color: Color(0xFF000000),
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            Row(
-              children: [
-                SizedBox(
-                  width: 17.2,
-                  height: 21.9,
-                ),
-                SizedBox(width: 12.9),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.red,
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'F-7, Ohio Complex, Bopal ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Color(0xFF000000),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 17.2,
+                    height: 21.9,
+                  ),
+                  const SizedBox(width: 12.9),
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            address,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Color(0xFF000000),
+                            ),
+                            overflow: TextOverflow
+                                .ellipsis, // Hiển thị dấu ba chấm (...)
+                            maxLines: 1, // Giới hạn số dòng
+                          ),
+                          Text(
+                            'Giao trong $duration ',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      '30 Mins',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10,
-                        color: Color(0xFF000000),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -212,38 +308,40 @@ class _GioHangState extends State<GioHang> {
             const SizedBox(height: 10),
             DeliveryOptionItem(
               title: 'Ưu tiên',
-              time: '< 15 phút',
-              price: '39.000 đ',
+              time: '< $duration',
+              price: '${NumberFormat('#,##0').format(distance * 20)} đ',
               description: 'Đơn hàng ưu tiên, rút ngắn thời gian giao hàng.',
               selectedOption: _selectedOption,
               onSelected: (newOption) {
                 setState(() {
                   _selectedOption = newOption;
-                  _shippingFee = 39000;
+                  _shippingFee = distance * 20;
                 });
               },
             ),
             DeliveryOptionItem(
               title: 'Nhanh',
-              time: '15 phút',
-              price: '34.000 đ',
+              time:
+                  '${((durationValue / 60) < 10 ? (durationValue / 60).floor() - 5 : (durationValue / 60).floor() - 10)} phút',
+              price: '${NumberFormat('#,##0').format(distance * 25)} đ',
               selectedOption: _selectedOption,
               onSelected: (newOption) {
                 setState(() {
                   _selectedOption = newOption;
-                  _shippingFee = 34000;
+                  _shippingFee = distance * 25;
                 });
               },
             ),
             DeliveryOptionItem(
               title: 'Tiết kiệm',
-              time: '30 phút',
-              price: '30.000 đ',
+              time:
+                  '${((durationValue / 60) < 10 ? (durationValue / 60).floor() + 20 : (durationValue / 60).floor() + 40)} phút',
+              price: '${NumberFormat('#,##0').format(distance * 15)} đ',
               selectedOption: _selectedOption,
               onSelected: (newOption) {
                 setState(() {
                   _selectedOption = newOption;
-                  _shippingFee = 30000;
+                  _shippingFee = distance * 15;
                 });
               },
             ),

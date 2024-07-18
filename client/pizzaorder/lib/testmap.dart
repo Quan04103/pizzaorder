@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -68,6 +69,11 @@ class FullMapTestState extends State<FullMapTest> {
   PolylinePoints polylinePoints = PolylinePoints();
 
   final Location location = Location();
+
+  void onPressedCart() {
+    final router = GoRouter.of(context);
+    router.go('/bagcart');
+  }
 
   Future<void> determinePosition() async {
     bool serviceEnabled;
@@ -750,7 +756,7 @@ class FullMapTestState extends State<FullMapTest> {
                             padding: const EdgeInsets.only(top: 16.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                // Thêm hành động khi nút được nhấn
+                                onPressedCart();
                               },
                               style: ElevatedButton.styleFrom(
                                   alignment: Alignment.centerLeft,
@@ -764,15 +770,11 @@ class FullMapTestState extends State<FullMapTest> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Đặt hàng',
+                                      'Xác nhận vị trí',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     Row(
                                       children: [
-                                        Text(
-                                          '100.000đ',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 10.0),
                                           child: ImageIcon(

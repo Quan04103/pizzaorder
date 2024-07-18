@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pizzaorder/mapTracking.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
 import 'package:pizzaorder/pages/complete_payment.dart';
@@ -92,6 +93,11 @@ class AppRouter {
           builder: (context, state) => const AllProductPage(
             categoryId: '6646fc283146973b72ad5eb2',
           ),
+        ),
+
+        GoRoute(
+          path: '/maptracking',
+          builder: (context, state) => const MapTracking(),
         ),
 
         GoRoute(

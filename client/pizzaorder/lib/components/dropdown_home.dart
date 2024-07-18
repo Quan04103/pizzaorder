@@ -60,66 +60,83 @@ class _DropdownHomeState extends State<DropdownHome> {
     }
   }
 
-
   void _onPressFavoritesPage() {
     final router = GoRouter.of(context);
     router.go('/favoritepage');
   }
 
+  void onPressMapTracking() {
+    final router = GoRouter.of(context);
+    router.go('/maptracking');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(
-              0, 0, 0, 0), // Tạo khoảng cách đều hai bên
-          width: MediaQuery.of(context).size.width - 100,
-          //width: 200,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 4, 8, 0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Giao tới',
-                      style: TextStyle(
-                          color: Colors.orange[700],
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
-                    child: Icon(
-                      Icons.near_me,
-                      color: Colors.red[800],
-                    ),
+    return InkWell(
+      onTap: () {
+        onPressMapTracking();
+      },
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(
+                0, 0, 0, 0), // Tạo khoảng cách đều hai bên
+            width: MediaQuery.of(context).size.width - 100,
+            //width: 200,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 4, 8, 0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('Giao tới',
+                        style: TextStyle(
+                            color: Colors.orange[700],
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold)),
                   ),
-                  Text(address,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                      )),
-                ],
-              ),
-            ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+                      child: Icon(
+                        Icons.near_me,
+                        color: Colors.red[800],
+                      ),
+                    ),
+                    Expanded(
+                      // Hoặc Flexible
+                      child: Text(
+                        address,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        overflow:
+                            TextOverflow.ellipsis, // Hiển thị dấu ba chấm (...)
+                        maxLines: 1, // Giới hạn số dòng
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: () {
-            _onPressFavoritesPage();
-          },
-          icon: const Icon(Icons.favorite_border_outlined),
-          color: Colors.black,
-          iconSize: 35,
-        ),
-      ],
+          IconButton(
+            onPressed: () {
+              _onPressFavoritesPage();
+            },
+            icon: const Icon(Icons.favorite_border_outlined),
+            color: Colors.black,
+            iconSize: 35,
+          ),
+        ],
+      ),
     );
   }
 }
