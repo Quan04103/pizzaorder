@@ -109,11 +109,19 @@ class _DropdownHomeState extends State<DropdownHome> {
                         color: Colors.red[800],
                       ),
                     ),
-                    Text(address,
+                    Expanded(
+                      // Hoặc Flexible
+                      child: Text(
+                        address,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
-                        )),
+                        ),
+                        overflow:
+                            TextOverflow.ellipsis, // Hiển thị dấu ba chấm (...)
+                        maxLines: 1, // Giới hạn số dòng
+                      ),
+                    ),
                   ],
                 ),
               ],

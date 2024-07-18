@@ -58,7 +58,7 @@ class _SearchPageState extends State<SearchPage> {
                       }),
                   Expanded(
                     child: CupertinoSearchTextField(
-                      placeholder: "Bạn muốn ăn gì không ?",
+                      placeholder: "Bạn muốn ăn gì không?",
                       autofocus: true,
                       prefixInsets: const EdgeInsets.all(14),
                       suffixInsets: const EdgeInsets.all(14),

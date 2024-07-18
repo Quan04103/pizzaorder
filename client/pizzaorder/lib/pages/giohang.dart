@@ -8,6 +8,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pizzaorder/components/option_item_bagcart.dart';
 import 'package:pizzaorder/components/product_item_bagcart.dart';
 import 'package:pizzaorder/multiple_bloc_provider.dart';
+import 'package:pizzaorder/pages/payment_page_.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_event.dart';
 import 'package:pizzaorder/pizzaorder/bloc/cart/cart_state.dart';
@@ -243,41 +244,41 @@ class _GioHangState extends State<GioHang> {
                     height: 21.9,
                   ),
                   const SizedBox(width: 12.9),
-                  const Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: Colors.red,
-                      ),
-                    ],
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          address,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            color: Color(0xFF000000),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            address,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Color(0xFF000000),
+                            ),
+                            overflow: TextOverflow
+                                .ellipsis, // Hiển thị dấu ba chấm (...)
+                            maxLines: 1, // Giới hạn số dòng
                           ),
-                        ),
-                        Text(
-                          'Giao trong $duration ',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                            color: Color(0xFF000000),
+                          Text(
+                            'Giao trong $duration ',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              color: Color(0xFF000000),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
-              ),
+              )
             ],
           ),
         ),
@@ -719,6 +720,13 @@ class _GioHangState extends State<GioHang> {
                           _selectedOption = '';
                           _shippingFee = 0;
                         });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PaymentPage(totalSales: totalSales),
+                          ),
+                        );
                       }
                     },
                     child: Container(

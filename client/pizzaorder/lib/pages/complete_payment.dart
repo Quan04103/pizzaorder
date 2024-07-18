@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pizzaorder/components/login_button.dart';
+import 'package:pizzaorder/pages/home_page.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 
 class CompletePayment extends StatefulWidget {
@@ -66,7 +67,7 @@ class _CompletePaymentState extends State<CompletePayment> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SignUp(),
+                      builder: (context) => const HomePage(),
                       //builder: (context) => const TrackingOrder(),
                     ),
                   );
