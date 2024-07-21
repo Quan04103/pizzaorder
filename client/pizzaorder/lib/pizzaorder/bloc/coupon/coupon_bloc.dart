@@ -34,7 +34,7 @@ class CouponBloc extends Bloc<CouponEvent, CouponState> {
     emit(CouponState.error(e.toString()));
     print('New state: error - ${e.toString()}');
   }
-});
+  });
 on<ClearCoupon>((event, emit) async {
   try {
     emit(CouponState.loaded([])); // Emit một CouponState rỗng để xóa dữ liệu tạm thời

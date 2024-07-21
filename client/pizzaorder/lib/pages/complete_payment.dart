@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/components/login_button.dart';
 import 'package:pizzaorder/pages/home_page.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
@@ -13,6 +14,11 @@ class CompletePayment extends StatefulWidget {
 }
 
 class _CompletePaymentState extends State<CompletePayment> {
+  void onPressMapTracking() {
+    final router = GoRouter.of(context);
+    router.go('/maptracking');
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -64,13 +70,7 @@ class _CompletePaymentState extends State<CompletePayment> {
                 width: 50,
                 fontSize: 18,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                      //builder: (context) => const TrackingOrder(),
-                    ),
-                  );
+                  onPressMapTracking();
                 },
               ),
             ),
