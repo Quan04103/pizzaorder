@@ -64,7 +64,8 @@ class _MyVoucherState extends State<MyVoucher> {
                           },
                         );
                       } else {
-                        return const Center(child: Text('Không có dữ liệu voucher.'));
+                        return const Center(
+                            child: Text('Không có dữ liệu voucher.'));
                       }
                     },
                   ),
@@ -113,18 +114,21 @@ class _MyVoucherState extends State<MyVoucher> {
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                               ),
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          const Text(
-                            'Tất cả hình thức thanh toán',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            child: Text(
+                              'Tất cả hình thức thanh toán',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

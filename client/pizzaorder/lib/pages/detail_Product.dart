@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_event.dart';
-import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_state.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
 import 'package:intl/intl.dart';
-
+import '../components/color_extension.dart';
 import '../pizzaorder/bloc/cart/cart_bloc.dart';
 import '../pizzaorder/bloc/cart/cart_event.dart';
 import '../pizzaorder/bloc/pizza/pizza_bloc.dart';
 import '../pizzaorder/models/order_item_in_cart.dart';
+import 'giohang.dart';
 
 class PizzaDetails extends StatefulWidget {
   final ProductModel product;
@@ -22,19 +22,18 @@ class PizzaDetails extends StatefulWidget {
 }
 
 class _PizzaDetailsState extends State<PizzaDetails> {
-   late OrderItem orderItem = OrderItem(
+  late OrderItem orderItem = OrderItem(
     idproduct: widget.product.id ?? '',
     quantity: 1,
     name: widget.product.name ?? '',
     price: widget.product.price ?? 0,
     image: widget.product.image ?? '',
   );
-  int _quantity = 1;
-  String? _selectedSupplement1;
-  String? _selectedSupplement2;
-  num _totalPrice = 0.0;
-  num _unitPrice = 0.0;
+  late num _unitPrice = 0.0;
   late bool isFavorite;
+  String? _selectedSupplement2;
+
+  //bool _isFavorite = false; // Biến trạng thái để theo dõi trạng thái trái tim
   @override
   void initState() {
     super.initState();
@@ -42,48 +41,8 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         _unitPrice = widget.product.price ?? 0;
-        _updateTotalPrice();
       });
     });
-  }
-
-  //bool _isFavorite = false; // Biến trạng thái để theo dõi trạng thái trái tim
-
-  final Map<String, double> extrasPrices = {
-    'Hot sauce': 1.00,
-    'Fried Egg': 1.62,
-    'Mushrooms': 2.00,
-    'Caramelized Onions': 2.75,
-  };
-
-  final Map<String, bool> selectedExtras = {
-    'Hot sauce': false,
-    'Fried Egg': false,
-    'Mushrooms': false,
-    'Caramelized Onions': false,
-  };
-
-  void _updateTotalPrice() {
-    num newTotal = _unitPrice * _quantity;
-    setState(() {
-      _totalPrice = newTotal;
-    });
-  }
-
-  void _incrementQuantity() {
-    setState(() {
-      _quantity++;
-      _updateTotalPrice();
-    });
-  }
-
-  void _decrementQuantity() {
-    if (_quantity > 1) {
-      setState(() {
-        _quantity--;
-        _updateTotalPrice();
-      });
-    }
   }
 
   void _onPressIconFavorite() {
@@ -95,335 +54,446 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     }
   }
 
-  // void _toggleFavorite() {
-  //   setState(() {
-  //     _isFavorite = !_isFavorite;
-  //   });
-  // }
-  void _toggleFavorite(BuildContext context, bool isFavorite) {
-    if (isFavorite) {
-      BlocProvider.of<FavoriteBloc>(context)
-          .add(RemoveFavorite(widget.product));
-    } else {
-      BlocProvider.of<FavoriteBloc>(context).add(AddFavorite(widget.product));
-    }
-  }
-
-  void _onPressBack(BuildContext context) {
-    final router = GoRouter.of(context);
-    router.go('/home');
-  }
-
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xFFEEF8EB),
+      backgroundColor: TColor.white,
       body: Stack(
+        alignment: Alignment.topCenter,
         children: [
-          CustomScrollView(
-            slivers: [
-              _buildSliverAppBar(context),
-              _buildSliverPersistentHeader(),
-              _buildSliverToBoxAdapter(),
-            ],
+          Image.network(
+            widget.product.image ?? '',
+            width: media.width,
+            height: media.width,
+            fit: BoxFit.cover,
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _buildTotalPriceRow(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  SliverAppBar _buildSliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: 400.0,
-      floating: false,
-      pinned: true,
-      leading: _buildCircleIconButton(
-        icon: Icons.arrow_back,
-        onPressed: () {
-          GoRouter.of(context).go('/home');
-        },
-      ),
-      actions: [
-        BlocBuilder<FavoriteBloc, FavoriteState>(
-          builder: (context, state) {
-            if (state is FavoritesUpdated) {
-              isFavorite = state.favorites.contains(widget.product);
-            }
-            // Truy cập trực tiếp thuộc tính `isFavorite` từ `state`
-            // final isFavorite = BlocProvider.of<FavoriteBloc>(context)
-            //     .isFavorite(widget
-            //         .product); // Giả sử `isFavorite` là một thuộc tính của `FavoriteState`
-            return Container(
-              margin: const EdgeInsets.all(8.0),
-              width: 38,
-              height: 38,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: IconButton(
-                icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.red : null,
-                ),
-                onPressed: () {
-                  _onPressIconFavorite();
-                  setState(() {
-                    isFavorite =
-                        !isFavorite; // Đảo ngược trạng thái của trái tim
-                    // Thêm logic xử lý nếu cần
-                  });
-                },
-              ),
-            );
-          },
-        ),
-      ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: ClipPath(
-          clipper: MyClipper(),
-          child: Container(
+          Container(
+            width: media.width,
+            height: media.width,
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 233, 100, 100),
+              gradient: LinearGradient(
+                  colors: [Colors.black, Colors.transparent, Colors.black],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter),
             ),
-            child: Center(
-              child: SizedBox(
-                height: 250,
-                width: 250,
-                child: Stack(
-                  children: [
-                    Image.asset('assets/images/woodplate.png'),
-                    Center(
-                      child: Image.network(widget.product.image ?? ''),
-                    ),
-                  ],
-                ),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: media.width - 60,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: TColor.white,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 35,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Text(
+                                  widget.product.name ?? '',
+                                  style: TextStyle(
+                                      color: TColor.primaryText,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          '${NumberFormat('#,###', 'de_DE').format(_unitPrice)} VND',
+                                          style: TextStyle(
+                                              color: TColor.primaryText,
+                                              fontSize: 31,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Text(
+                                  "Chi tiết",
+                                  style: TextStyle(
+                                      color: TColor.primaryText,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Text(
+                                  widget.product.description ?? '',
+                                  style: TextStyle(
+                                      color: TColor.secondaryText,
+                                      fontSize: 12),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25),
+                                  child: Divider(
+                                    color:
+                                        TColor.secondaryText.withOpacity(0.4),
+                                    height: 1,
+                                  )),
+                              const SizedBox(
+                                height: 25,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Text(
+                                  "Tùy chỉnh đơn hàng của bạn",
+                                  style: TextStyle(
+                                      color: TColor.primaryText,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children:
+                                    widget.product.more?.map((ingredient) {
+                                          return _buildIngredientItem(
+                                              ingredient,
+                                              'assets/images/ghati_2.png');
+                                        }).toList() ??
+                                        [],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25),
+                                  child: Divider(
+                                    color:
+                                        TColor.secondaryText.withOpacity(0.4),
+                                    height: 1,
+                                  )),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 25),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Bổ sung',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Chọn 1',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Column(
+                                children: [
+                                  for (var product in context
+                                          .watch<PizzaBloc>()
+                                          .state
+                                          .products ??
+                                      [])
+                                    if (product.categoryId ==
+                                        '664700193146973b72ad5ebd')
+                                      RadioListTile<String>(
+                                        secondary: SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: Image.network(
+                                            product.image ?? '',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        title: Text(
+                                          product.name ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.red),
+                                        ),
+                                        value: product.name ?? '',
+                                        groupValue: _selectedSupplement2,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            _selectedSupplement2 = newValue;
+                                          });
+                                        },
+                                        activeColor: Colors.red,
+                                        controlAffinity:
+                                            ListTileControlAffinity.trailing,
+                                      ),
+                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 16),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 220,
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Container(
+                                      width: media.width * 0.25,
+                                      height: 160,
+                                      decoration: BoxDecoration(
+                                        color: TColor.primary,
+                                        borderRadius: const BorderRadius.only(
+                                            topRight: Radius.circular(35),
+                                            bottomRight: Radius.circular(35)),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Stack(
+                                        alignment: Alignment.centerRight,
+                                        children: [
+                                          Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 8,
+                                                  bottom: 8,
+                                                  left: 10,
+                                                  right: 20),
+                                              width: media.width - 80,
+                                              height: 120,
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  35),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  35),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.black12,
+                                                        blurRadius: 12,
+                                                        offset: Offset(0, 4))
+                                                  ]),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "Tổng tiền",
+                                                    style: TextStyle(
+                                                        color:
+                                                            TColor.primaryText,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Text(
+                                                    '${NumberFormat('#,###', 'de_DE').format(_unitPrice)} VND',
+                                                    style: TextStyle(
+                                                        color:
+                                                            TColor.primaryText,
+                                                        fontSize: 21,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                ],
+                                              )),
+                                          InkWell(
+                                            onTap: () {
+                                              context
+                                                  .read<CartBloc>()
+                                                  .add(AddProducts(orderItem));
+
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title:
+                                                        const Text('Thông báo'),
+                                                    content: const Text(
+                                                        'Thêm vào giỏ hàng thành công'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        child: const Text('OK'),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              width: 45,
+                                              height: 45,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          22.5),
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                        color: Colors.black12,
+                                                        blurRadius: 4,
+                                                        offset: Offset(0, 2))
+                                                  ]),
+                                              alignment: Alignment.center,
+                                              child: Image.asset(
+                                                  "assets/images/shopping_cart.png",
+                                                  width: 20,
+                                                  height: 20,
+                                                  color: TColor.primary),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ]),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: media.width - 20,
+                    alignment: Alignment.bottomRight,
+                    margin: const EdgeInsets.only(right: 4),
+                    child: InkWell(
+                        onTap: () {
+                          _onPressIconFavorite();
+                          setState(() {
+                            isFavorite = !isFavorite;
+                          });
+                        },
+                        child: Image.asset(
+                            isFavorite
+                                ? "assets/images/favorites_btn.png"
+                                : "assets/images/favorites_btn_2.png",
+                            width: 70,
+                            height: 70)),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCircleIconButton({
-    required IconData icon,
-    required VoidCallback onPressed,
-    Color iconColor = Colors.orange,
-  }) {
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: iconColor),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-  SliverPersistentHeader _buildSliverPersistentHeader() {
-    return SliverPersistentHeader(
-      delegate: _SliverAppBarDelegate(
-        minHeight: 180.0,
-        maxHeight: 200.0,
-        child: Container(
-          color: const Color(0xFFEEF8EB),
-          child: _buildTitleRow(),
-        ),
-      ),
-      pinned: true,
-    );
-  }
-
-  SliverToBoxAdapter _buildSliverToBoxAdapter() {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.product.description ?? '',
-              style: const TextStyle(color: Color.fromARGB(255, 255, 0, 0)),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Ingredients',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
               children: [
-                _buildIngredientItem('Mozzarella', 'assets/images/ghati_2.png'),
-                _buildIngredientItem('Tomato', 'assets/images/ghati_2.png'),
-                _buildIngredientItem('Onion', 'assets/images/ghati_2.png'),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Supplements',
-              style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
-            ),
-            const Text(
-              'Choose 1',
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildSupplementItem(
-                    'Fries', 'assets/images/ghati_2.png', _selectedSupplement1),
-                _buildSupplementItem('Potatoes', 'assets/images/ghati_2.png',
-                    _selectedSupplement1),
-                _buildSupplementItem('Chicken Nuggets',
-                    'assets/images/ghati_2.png', _selectedSupplement1),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Supplements',
-              style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
-            ),
-            const Text(
-              'Choose 1',
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 8),
-            Column(
-              children: [
-                for (var product
-                    in context.watch<PizzaBloc>().state.products ?? [])
-                  if (product.categoryId == '664700193146973b72ad5ebd')
-                    RadioListTile<String>(
-                      secondary: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Image.network(
-                          product.image ?? '',
-                          fit: BoxFit.cover,
+                const SizedBox(
+                  height: 35,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          GoRouter.of(context).go('/home');
+                        },
+                        icon: Image.asset(
+                          "assets/images/btn_back.png",
+                          width: 20,
+                          height: 20,
+                          color: TColor.white,
                         ),
                       ),
-                      title: Text(
-                        product.name ?? '',
-                        style: const TextStyle(color: Colors.red),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const GioHang()));
+                        },
+                        icon: Image.asset(
+                          "assets/images/shopping_cart.png",
+                          width: 25,
+                          height: 25,
+                          color: TColor.white,
+                        ),
                       ),
-                      value: product.name ?? '',
-                      groupValue: _selectedSupplement2,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedSupplement2 = newValue;
-
-                          // Tìm giá của sản phẩm từ product đã chọn
-                          num supplementPrice = product.price ?? 0.0;
-                          _unitPrice = widget.product.price ?? 0;
-                          _unitPrice += supplementPrice;
-                          _updateTotalPrice();
-                        });
-                      },
-                      activeColor: Colors.red,
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    ),
-                const SizedBox(height: 16),
-                _buildExtrasSection(),
-                const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              widget.product.name ?? '',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              softWrap: true,
-            ),
           ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Row(
-            children: [
-              _buildQuantityButton(
-                icon: Icons.remove,
-                onPressed: _decrementQuantity,
-                buttonColor: Colors.white,
-                iconColor: Colors.red,
-                borderColor: Colors.red,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  // borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
-                child: Text(
-                  '$_quantity',
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-              _buildQuantityButton(
-                icon: Icons.add,
-                onPressed: _incrementQuantity,
-                buttonColor: Colors.white,
-                iconColor: Colors.green,
-                borderColor: Colors.green,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuantityButton({
-    required IconData icon,
-    required VoidCallback onPressed,
-    required Color buttonColor,
-    required Color iconColor,
-    required Color borderColor,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        border: Border.all(color: borderColor, width: 1), // Thinner border
-        color: buttonColor,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: iconColor),
-        onPressed: onPressed,
-        padding: EdgeInsets.zero, // Removes extra padding
-        constraints: const BoxConstraints(),
+        ],
       ),
     );
   }
@@ -447,231 +517,5 @@ class _PizzaDetailsState extends State<PizzaDetails> {
         Text(ingredient),
       ],
     );
-  }
-
-  Widget _buildSupplementItem(
-      String supplement, String imagePath, String? selectedValue) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedSupplement1 = supplement;
-        });
-      },
-      child: Container(
-        width: 100,
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: _selectedSupplement1 == supplement
-                ? Colors.red
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              supplement,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-Widget _buildSupplementRadio(
-    String value,
-    String imageUrl,
-    String? groupValue,
-    String categoryId,
-    PizzaBloc pizzaBloc,
-  ) {
-    return RadioListTile<String>(
-      secondary: SizedBox(
-        width: 40,
-        height: 40,
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-        ),
-      ),
-      title: Text(
-        value,
-        style: const TextStyle(color: Colors.red),
-      ),
-      value: value,
-      groupValue: groupValue,
-      onChanged: (newValue) {
-        setState(() {
-          _selectedSupplement2 = newValue;
-        });
-      },
-      activeColor: Colors.red,
-      controlAffinity: ListTileControlAffinity.trailing,
-    );
-  }
-  Widget _buildExtrasSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Extras',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        for (var extra in selectedExtras.keys)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                extra,
-                style: const TextStyle(fontSize: 16),
-              ),
-              Row(
-                children: [
-                  Text(
-                    '\$${extrasPrices[extra]!.toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 16, color: Colors.red),
-                  ),
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      unselectedWidgetColor:
-                          Colors.red, // màu checkbox khi không được chọn
-                    ),
-                    child: Checkbox(
-                      value: selectedExtras[extra],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          selectedExtras[extra] = value ?? false;
-                          _updateTotalPrice();
-                        });
-                      },
-                      activeColor: Colors.red, // màu checkbox khi được chọn
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-      ],
-    );
-  }
-
-  Widget _buildTotalPriceRow() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEEF8EB),
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '${NumberFormat('#,###', 'de_DE').format(_totalPrice)} đ',
-            style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 0, 0, 0)),
-          ),
-           ElevatedButton.icon(
-            onPressed: () {
-              context.read<CartBloc>().add(AddProducts(orderItem));
-              // Add your onPressed code here!
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Thêm vào giỏ hàng thành công'),
-                ),
-              );
-            },
-            icon: const Icon(Icons.shopping_basket,
-                color: Color.fromARGB(255, 255, 255, 255)),
-            label: const Text('Thêm vào giỏ',
-                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 100);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 100);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
   }
 }

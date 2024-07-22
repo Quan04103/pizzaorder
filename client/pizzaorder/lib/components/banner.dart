@@ -20,7 +20,7 @@ Widget banner(int color) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Special Offer\nfor March',
+                'Món mới đề xuất\n dành cho bạn',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -29,7 +29,7 @@ Widget banner(int color) {
               ),
               const SizedBox(height: 10), // Sử dụng SizedBox để tạo khoảng cách
               const Text(
-                'We are here with the best\n pizzas in town.',
+                'Pizzar ngon nhất bạn có\n thể tìm tại Việt Nam.',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 8,
@@ -46,7 +46,7 @@ Widget banner(int color) {
                   minimumSize: const Size(60, 30),
                 ),
                 onPressed: () {},
-                child: const Text('Buy Now'),
+                child: const Text('199.000'),
               ),
             ],
           ),
