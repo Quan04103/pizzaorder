@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/favorite/favorite_event.dart';
 import 'package:pizzaorder/pizzaorder/models/product.dart';
@@ -152,7 +153,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                                   "Chi tiết",
                                   style: TextStyle(
                                       color: TColor.primaryText,
-                                      fontSize: 14,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w700),
                                 ),
                               ),
@@ -166,7 +167,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                                   widget.product.description ?? '',
                                   style: TextStyle(
                                       color: TColor.secondaryText,
-                                      fontSize: 12),
+                                      fontSize: 14),
                                 ),
                               ),
                               const SizedBox(
@@ -180,6 +181,55 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                                         TColor.secondaryText.withOpacity(0.4),
                                     height: 1,
                                   )),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25),
+                                    child: Text(
+                                      'Nguyên liệu',
+                                      style: GoogleFonts.ubuntu(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Row(
+                                  children: [
+                                    for (var i = 0; i < 6; i++)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 5),
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            color: secondaryColor,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10)),
+                                            border: Border.all(
+                                              width: 3,
+                                              color: const Color.fromARGB(
+                                                  255, 226, 226, 226),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Image.asset(Ingredients[i]),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
                               const SizedBox(
                                 height: 25,
                               ),
@@ -197,31 +247,7 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children:
-                                    widget.product.more?.map((ingredient) {
-                                          return _buildIngredientItem(
-                                              ingredient,
-                                              'assets/images/ghati_2.png');
-                                        }).toList() ??
-                                        [],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25),
-                                  child: Divider(
-                                    color:
-                                        TColor.secondaryText.withOpacity(0.4),
-                                    height: 1,
-                                  )),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                             
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 25),
                                 child: Column(
@@ -497,6 +523,15 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       ),
     );
   }
+
+  List Ingredients = [
+    'assets/icons/cheese.png',
+    'assets/icons/corn.png',
+    'assets/icons/potato.png',
+    'assets/icons/onion.png',
+    'assets/icons/tomato.png',
+    'assets/icons/chili-pepper.png'
+  ];
 
   Widget _buildIngredientItem(String ingredient, String imagePath) {
     return Column(
