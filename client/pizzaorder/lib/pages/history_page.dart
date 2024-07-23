@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -10,7 +11,8 @@ class HistoryPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Handle back action
+            final router = GoRouter.of(context);
+            router.go('/home');
           },
         ),
         title: const Text(
