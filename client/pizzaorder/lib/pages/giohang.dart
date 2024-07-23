@@ -600,26 +600,26 @@ class _GioHangState extends State<GioHang> {
                   ],
                 ),
               const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Tổng tiền',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  Text(
-                    '${state.total != null ? (state.total! + _shippingFee - discount).toStringAsFixed(0) : '0'} đ',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     const Text(
+              //       'Tổng tiền',
+              //       style: TextStyle(
+              //         color: Colors.red,
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 20,
+              //       ),
+              //     ),
+              //     Text(
+              //       '${state.total != null ? (state.total! + _shippingFee - discount).toStringAsFixed(0) : '0'} đ',
+              //       style: const TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 16,
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         );

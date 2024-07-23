@@ -5,6 +5,7 @@ const authenticateJWT = require('../middleware/authenticationJwt');
 router.post('/registration', UserController.register);
 router.post('/login', UserController.login);
 router.get('/getUserInfo', authenticateJWT, UserController.getUserInfo);
+router.put('/editUser', authenticateJWT, UserController.editUser);
 router.put('/updateAddress', authenticateJWT, UserController.updateAddress);
 
 module.exports = router;

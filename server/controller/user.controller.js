@@ -63,3 +63,22 @@ exports.getUserInfo = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.editUser = async (req, res) => {
+    try {
+        const userId = req.userId; // Lấy userId từ decoded token trong middleware authenticateJWT
+        const { username, nameProfile, number, address, email } = req.body;
+
+        // Gọi service để cập nhật thông tin người dùng
+        const updatedUser = await UserService.updateUser(userId, { username, nameProfile, number, address, email });
+
+        // Trả về thông tin người dùng đã được cập nhật dưới dạng JSON response
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error('Error editing user information:', error);
+        if (error.message === 'User not found') {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};

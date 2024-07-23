@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pizzaorder/pizzaorder/models/order_history.dart';
 import 'package:pizzaorder/pizzaorder/services/order_service_history.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -26,8 +27,8 @@ class _HistoryPageState extends State<HistoryPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Handle back action
-            Navigator.pop(context);
+            final router = GoRouter.of(context);
+            router.go('/home');
           },
         ),
         title: const Text(

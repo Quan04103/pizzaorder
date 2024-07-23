@@ -22,24 +22,36 @@ class UserService {
         return jwt.sign(tokenData, secretKey, { expiresIn: jwt_expire });
     }
 
-static async updateUserAddress(iduser, newAddress) {
-    try {
-        const updatedUser = await UserModel.findOneAndUpdate(
-            { _id: iduser },
-            { $set: { address: newAddress } },
-            { new: true, runValidators: true, omitUndefined: true }
-        );
+    static async updateUserAddress(iduser, newAddress) {
+        try {
+            const updatedUser = await UserModel.findOneAndUpdate(
+                { _id: iduser },
+                { $set: { address: newAddress } },
+                { new: true, runValidators: true, omitUndefined: true }
+            );
 
-        if (!updatedUser) {
-            throw new Error('User not found');
+            if (!updatedUser) {
+                throw new Error('User not found');
+            }
+
+            return updatedUser;
+        } catch (error) {
+            throw error;
         }
-
-        return updatedUser;
-    } catch (error) {
-        throw error;
     }
-}
 
+    static async updateUser(userId, userData) {
+        try {
+            const updatedUser = await UserModel.findByIdAndUpdate(
+                userId,
+                { $set: userData },
+                { new: true } // Trả về thông tin người dùng đã được cập nhật
+            );
+        } catch (error) {
+            console.error('Error in updateUser service:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = UserService;

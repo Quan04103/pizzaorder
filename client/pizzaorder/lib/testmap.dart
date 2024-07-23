@@ -157,6 +157,7 @@ class FullMapTestState extends State<FullMapTest> {
                 child: Text(
                   coordinate['description'],
                   softWrap: true,
+                  overflow: TextOverflow.ellipsis, // Add this line
                 ),
               )
             ],

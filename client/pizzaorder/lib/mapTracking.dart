@@ -523,7 +523,7 @@ class MapTrackingState extends State<MapTracking> {
       ]
     }''';
 
-        await mapboxMap?.style
+    await mapboxMap?.style
             .addSource(GeoJsonSource(id: "line", data: geojson));
         var lineLayerJson = """{
      "type":"line",
@@ -566,15 +566,20 @@ class MapTrackingState extends State<MapTracking> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color.fromARGB(235, 227, 255, 232),
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => onPressedBack(),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              onPressedBack();
+            },
           ),
-          title: const Text('Theo dõi đơn hàng'),
+          title: const Text(
+            'Đang giao hàng',
+            style: TextStyle(color: Colors.white),
+          ),
+          toolbarHeight: 80,
           backgroundColor: Colors.red,
-          toolbarHeight: 35,
-          elevation: 0,
         ),
         body: Stack(
           children: [

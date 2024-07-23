@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class SelectCard extends StatelessWidget {
   final String content;
@@ -13,20 +14,23 @@ class SelectCard extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              content,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.black,
-            )
-          ],
+        GestureDetector(
+          onTap: onPressed,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                content,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Colors.black,
+              )
+            ],
+          ),
         ),
         const SizedBox(
           height: 10,

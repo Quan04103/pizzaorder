@@ -24,20 +24,23 @@ class _VoucherPageState extends State<VoucherPage> {
   int _selectedIndex = 0;
   int _selectedIndex1 = 1;
   SharedPreferences? pref;
-void initState() {
+  @override
+  void initState() {
     super.initState();
-     context.read<CouponBloc>().add(LoadCoupon());
+    context.read<CouponBloc>().add(LoadCoupon());
     initSharedPref();
-}
+  }
+
   void _onItemTapped1(int index) {
     setState(() {
       _selectedIndex1 = index;
     });
   }
 
-void initSharedPref() async {
+  void initSharedPref() async {
     pref = await SharedPreferences.getInstance();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CouponBloc, CouponState>(
@@ -86,12 +89,17 @@ void initSharedPref() async {
                     ElevatedButton(
                       onPressed: () {
                         if (state.isLoaded && state.coupons != null) {
-                          final CouponModel selectedCoupon = state.coupons![_selectedIndex];
+                          final CouponModel selectedCoupon =
+                              state.coupons![_selectedIndex];
                           debugPrint('Applying coupon: $selectedCoupon');
-                          final data1 = pref!.setString('data1', selectedCoupon.code!);
-                          final data2 = pref!.setInt('data2', selectedCoupon.value!);
-                           context.read<CouponBloc>().add(ApplyCoupon(selectedCoupon));
-                           final router = GoRouter.of(context);
+                          final data1 =
+                              pref!.setString('data1', selectedCoupon.code!);
+                          final data2 =
+                              pref!.setInt('data2', selectedCoupon.value!);
+                          context
+                              .read<CouponBloc>()
+                              .add(ApplyCoupon(selectedCoupon));
+                          final router = GoRouter.of(context);
                           router.go('/bagcart');
                         }
                       },
@@ -126,7 +134,8 @@ void initSharedPref() async {
                           },
                         );
                       } else {
-                        return const Center(child: Text('Không có dữ liệu voucher.'));
+                        return const Center(
+                            child: Text('Không có dữ liệu voucher.'));
                       }
                     },
                   ),
@@ -189,24 +198,28 @@ void initSharedPref() async {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 10, 0),
                                   child: Text(
                                     coupon.code ?? '',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
+                                      fontSize: 18.0,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const Text(
-                                  'Tất cả hình thức thanh toán',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                  child: Text(
+                                    'Tất cả hình thức thanh toán',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -243,7 +256,9 @@ void initSharedPref() async {
                     ],
                   ),
                   Icon(
-                    isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+                    isSelected
+                        ? Icons.check_circle
+                        : Icons.radio_button_unchecked,
                     color: isSelected ? Colors.orange : Colors.grey,
                   ),
                 ],
@@ -281,6 +296,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final Function(int) onItemTapped1;
 
   const CustomBottomNavigationBar({
+    super.key,
     required this.selectedIndex1,
     required this.onItemTapped1,
   });
