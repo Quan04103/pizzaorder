@@ -30,9 +30,10 @@ class _LoginFormState extends State<LoginForm> {
     router.go('/signup');
   }
 
-  void _onLogginButtonPressed(String token) {
+  void _onLogginButtonPressed() {
     final router = GoRouter.of(context);
-    router.go('/account', extra: token);
+    // router.go('/account', extra: token);
+    router.go('/home');
   }
 
   void _validateFields() {
@@ -74,7 +75,7 @@ class _LoginFormState extends State<LoginForm> {
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
-      child: BlocListener<AuthBloc, AuthState> (
+      child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) async {
           if (state is AuthLoginSuccess) {
             final token = pref.getString('token');
@@ -82,7 +83,7 @@ class _LoginFormState extends State<LoginForm> {
               _isCompleted = true;
             });
             await Future.delayed(const Duration(seconds: 3));
-            _onLogginButtonPressed(token ?? '');
+            _onLogginButtonPressed();
           } else if (state is AuthLoginFailure) {
             setState(() {
               _errorMessage = state.message;

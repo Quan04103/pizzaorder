@@ -4,12 +4,15 @@ import 'package:pizzaorder/mapTracking.dart';
 import 'package:pizzaorder/pages/access_method.dart';
 import 'package:pizzaorder/pages/account.dart';
 import 'package:pizzaorder/pages/complete_payment.dart';
+import 'package:pizzaorder/pages/edit_user.dart';
 import 'package:pizzaorder/pages/emptycart.dart';
 import 'package:pizzaorder/pages/favorites_page.dart';
 import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/get_started.dart';
 import 'package:pizzaorder/pages/giohang.dart';
+import 'package:pizzaorder/pages/history_page.dart';
 import 'package:pizzaorder/pages/log_in.dart';
+import 'package:pizzaorder/pages/log_out.dart';
 import 'package:pizzaorder/pages/myVoucher.dart';
 import 'package:pizzaorder/pages/payment_page_.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
@@ -61,8 +64,19 @@ class AppRouter {
           builder: (context, state) => const Login(),
         ),
         GoRoute(
+          path: '/logout',
+          builder: (context, state) => const LogOut(),
+        ),
+        GoRoute(
           path: '/signup',
           builder: (context, state) => const SignUp(),
+        ),
+        GoRoute(
+          path: '/edituser',
+          builder: (context, state) {
+            final token = state.extra as String;
+            return EditUserProfilePage(token: token);
+          },
         ),
         GoRoute(
           path: '/paymentCompelete',
@@ -93,6 +107,10 @@ class AppRouter {
           builder: (context, state) => const AllProductPage(
             categoryId: '6646fc283146973b72ad5eb2',
           ),
+        ),
+        GoRoute(
+          path: '/historypage',
+          builder: (context, state) => const HistoryPage(),
         ),
 
         GoRoute(

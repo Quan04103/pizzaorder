@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pizzaorder/pages/all_product_page.dart';
 import 'package:pizzaorder/pages/sign_up.dart';
 
@@ -19,7 +20,8 @@ class _EmptyCartState extends State<EmptyCart> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Handle back action
+            final router = GoRouter.of(context);
+            router.go('/home');
           },
         ),
         title: const Text(
