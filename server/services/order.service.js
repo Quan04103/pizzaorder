@@ -9,6 +9,14 @@ class OrderService {
             throw error.message;
         }
     }
+
+    static async getOrderByUserId(iduser) {
+        try {
+            return await OrderModel.find({ iduser });
+        } catch (error) {
+            throw error.message;
+        }
+    }
 }
 
 module.exports = OrderService;

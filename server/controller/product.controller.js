@@ -39,3 +39,22 @@ exports.getNewestProduct = async (req, res, next) => {
     }
 };
 
+exports.getProductById = async (req, res, next) => {
+    try {
+        const id = req.params.id; // Make sure your route uses 'id' as the parameter name
+        if (!id) {
+            return res.status(400).json({ message: 'Product ID is required' });
+        }
+        
+        const product = await ProductService.getProductById(id); // Assuming ProductService handles fetching
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.json(product);
+    } catch (error) {
+        next(error);
+    }
+};
+

@@ -10,3 +10,17 @@ exports.addOrder = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.getOrderByUserId = async (req, res, next) => {
+    try {
+        const { iduser } = req.params;
+        const orders = await OrderService.getOrderByUserId(iduser);
+        if (!orders) {
+            throw new Error('No orders found for this user');
+        }
+        res.status(200).json(orders);
+    } catch (error) {
+        next(error);
+    }
+};
+
