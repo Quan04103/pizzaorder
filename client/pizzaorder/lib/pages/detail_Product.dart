@@ -31,6 +31,9 @@ class _PizzaDetailsState extends State<PizzaDetails> {
     image: widget.product.image ?? '',
   );
   late num _unitPrice = 0.0;
+  final int _quantity = 1;
+  num _totalPrice = 0.0;
+
   late bool isFavorite;
   String? _selectedSupplement2;
 
@@ -43,6 +46,13 @@ class _PizzaDetailsState extends State<PizzaDetails> {
       setState(() {
         _unitPrice = widget.product.price ?? 0;
       });
+    });
+  }
+
+  void _updateTotalPrice() {
+    num newTotal = _unitPrice * _quantity;
+    setState(() {
+      _totalPrice = newTotal;
     });
   }
 
@@ -247,7 +257,6 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                               const SizedBox(
                                 height: 20,
                               ),
-                             
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 25),
                                 child: Column(
@@ -297,6 +306,12 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                                         onChanged: (newValue) {
                                           setState(() {
                                             _selectedSupplement2 = newValue;
+                                            num supplementPrice =
+                                                product.price ?? 0.0;
+                                            _unitPrice =
+                                                widget.product.price ?? 0;
+                                            _unitPrice += supplementPrice;
+                                            _updateTotalPrice();
                                           });
                                         },
                                         activeColor: Colors.red,
@@ -390,31 +405,103 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                                               )),
                                           InkWell(
                                             onTap: () {
+                                              // Thêm sản phẩm chính vào giỏ hàng
                                               context
                                                   .read<CartBloc>()
                                                   .add(AddProducts(orderItem));
 
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title:
-                                                        const Text('Thông báo'),
-                                                    content: const Text(
-                                                        'Thêm vào giỏ hàng thành công'),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        child: const Text('OK'),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                      ),
-                                                    ],
+                                              if (_selectedSupplement2 !=
+                                                  null) {
+                                                final pizzaBlocState = context
+                                                    .read<PizzaBloc>()
+                                                    .state;
+                                                if (pizzaBlocState.products !=
+                                                    null) {
+                                                  final selectedProduct =
+                                                      pizzaBlocState.products!
+                                                          .firstWhere(
+                                                    (product) =>
+                                                        product.name ==
+                                                        _selectedSupplement2,
                                                   );
-                                                },
-                                              );
+
+                                                  if (selectedProduct != null) {
+                                                    // Tạo một OrderItem mới cho sản phẩm bổ sung
+                                                    OrderItem
+                                                        supplementOrderItem =
+                                                        OrderItem(
+                                                      idproduct:
+                                                          selectedProduct.id ??
+                                                              '',
+                                                      quantity: 1,
+                                                      name: selectedProduct
+                                                              .name ??
+                                                          '',
+                                                      price: selectedProduct
+                                                              .price ??
+                                                          0,
+                                                      image: selectedProduct
+                                                              .image ??
+                                                          '',
+                                                      // Bạn có thể cập nhật lại nếu cần
+                                                    );
+
+                                                    context
+                                                        .read<CartBloc>()
+                                                        .add(AddProducts(
+                                                            supplementOrderItem));
+
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                              'Thông báo'),
+                                                          content: const Text(
+                                                              'Thêm vào giỏ hàng thành công'),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'OK'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  } else {
+                                                    // Xử lý khi không tìm thấy sản phẩm
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title:
+                                                              const Text('Lỗi'),
+                                                          content: const Text(
+                                                              'Không tìm thấy sản phẩm đã chọn.'),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'OK'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  }
+                                                }
+                                              }
                                             },
                                             child: Container(
                                               width: 45,
