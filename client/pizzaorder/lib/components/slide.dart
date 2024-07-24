@@ -7,10 +7,9 @@ List<Widget> banners = [
   // banner1(0xFF292C7E, 'images/image_banner1.png'),
   // banner1(0xFF007358, 'images/image_banner1.png'),
   // banner1(0xFFFF7A00, 'images/image_banner1.png'),
-  banner(0xFFE6361D),
-  banner(0xFF292C7E),
-  banner(0xFF007358),
-  banner(0xFFFF7A00),
+  banner(0xFFE6361D, 'assets/pizzar7.png', '199,000'),
+  banner(0xFF292C7E, 'assets/pizzar1.png', '169,000'),
+  banner(0xFF007358, 'assets/pizzar6.png', '159,000'),
 ];
 
 Widget slide() {

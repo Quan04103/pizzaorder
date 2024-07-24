@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget banner(int color) {
+Widget banner(int color, String img, String price) {
   return Container(
     margin: const EdgeInsets.all(10),
     padding: const EdgeInsets.all(15),
@@ -46,7 +46,7 @@ Widget banner(int color) {
                   minimumSize: const Size(60, 30),
                 ),
                 onPressed: () {},
-                child: const Text('199.000'),
+                child: Text(price),
               ),
             ],
           ),
@@ -57,11 +57,11 @@ Widget banner(int color) {
           child: Container(
             width: 200,
             height: 200,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
                 fit: BoxFit.contain,
-                image: AssetImage('assets/pizza.jpg'),
+                image: AssetImage(img),
                 //'images/image_banner1.png'
               ),
             ),
