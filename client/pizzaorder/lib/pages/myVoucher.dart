@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pizzaorder/components/BottomNavigationBar.dart';
 import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_bloc.dart';
 import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_event.dart';
 import 'package:pizzaorder/pizzaorder/bloc/coupon/coupon_state.dart';
@@ -14,16 +15,23 @@ class MyVoucher extends StatefulWidget {
   State<MyVoucher> createState() => _MyVoucherState();
 }
 
-void _onPressBack(BuildContext context) {
-  final router = GoRouter.of(context);
-  router.go('/home');
-}
-
 class _MyVoucherState extends State<MyVoucher> {
   @override
   void initState() {
     super.initState();
     context.read<CouponBloc>().add(LoadCoupon());
+  }
+
+  int _selectedIndex1 = 1;
+  void _onItemTapped1(int index) {
+    setState(() {
+      _selectedIndex1 = index;
+    });
+  }
+
+  void _onPressBack(BuildContext context) {
+    final router = GoRouter.of(context);
+    router.go('/home');
   }
 
   @override
@@ -74,6 +82,10 @@ class _MyVoucherState extends State<MyVoucher> {
             ),
           ),
           // Xóa nút reload (floatingActionButton)
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex1: _selectedIndex1,
+            onItemTapped1: _onItemTapped1,
+          ),
         );
       },
     );

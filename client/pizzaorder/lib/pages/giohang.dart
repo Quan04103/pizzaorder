@@ -153,7 +153,7 @@ class _GioHangState extends State<GioHang> {
                         _buildDeliveryAddress(),
                         _buildDeliveryOptions(),
                         _buildOrder(),
-                        _buildPaymentMethod(),
+                        //_buildPaymentMethod(),
                         _buildPromotionField(),
                         _buildInvoiceInfo(context),
                       ],
@@ -309,7 +309,7 @@ class _GioHangState extends State<GioHang> {
             DeliveryOptionItem(
               title: 'Ưu tiên',
               time: '< $duration',
-              price: '${NumberFormat('#,##0').format(distance * 20)} đ',
+              price: '${NumberFormat('#,##0').format(distance * 20)} VND',
               description: 'Đơn hàng ưu tiên, rút ngắn thời gian giao hàng.',
               selectedOption: _selectedOption,
               onSelected: (newOption) {
@@ -323,7 +323,7 @@ class _GioHangState extends State<GioHang> {
               title: 'Nhanh',
               time:
                   '${((durationValue / 60) < 10 ? (durationValue / 60).floor() - 5 : (durationValue / 60).floor() - 10)} phút',
-              price: '${NumberFormat('#,##0').format(distance * 25)} đ',
+              price: '${NumberFormat('#,##0').format(distance * 25)} VND',
               selectedOption: _selectedOption,
               onSelected: (newOption) {
                 setState(() {
@@ -336,7 +336,7 @@ class _GioHangState extends State<GioHang> {
               title: 'Tiết kiệm',
               time:
                   '${((durationValue / 60) < 10 ? (durationValue / 60).floor() + 20 : (durationValue / 60).floor() + 40)} phút',
-              price: '${NumberFormat('#,##0').format(distance * 15)} đ',
+              price: '${NumberFormat('#,##0').format(distance * 15)} VND',
               selectedOption: _selectedOption,
               onSelected: (newOption) {
                 setState(() {
@@ -379,7 +379,7 @@ class _GioHangState extends State<GioHang> {
                     const Spacer(),
                     TextButton(
                       onPressed: () {
-                        GoRouter.of(context).go('/');
+                        GoRouter.of(context).go('/all');
                       },
                       child: const Text(
                         'Thêm món',
@@ -562,65 +562,66 @@ class _GioHangState extends State<GioHang> {
         final data1 = pref?.getString('data1');
         final data2 = pref?.getInt('data2');
 
-        return Container(
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Thông tin hóa đơn',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+        return Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Thông tin hóa đơn',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              _buildInvoiceRow(
-                'Tạm tính',
-                '${state.total?.toStringAsFixed(0) ?? '0'} đ',
-              ),
-              _buildInvoiceRow(
-                'Phí vận chuyển',
-                '$_shippingFee đ',
-              ),
-              if (couponState.coupons != null &&
-                  couponState.coupons!.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildInvoiceRow(
-                      'Giảm giá ${data1 ?? ''}',
-                      '${data2 ?? 0} đ',
-                    ),
-                  ],
+                const SizedBox(height: 10),
+                _buildInvoiceRow(
+                  'Tạm tính',
+                  '${state.total?.toStringAsFixed(0) ?? '0'} VND',
                 ),
-              const Divider(),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     const Text(
-              //       'Tổng tiền',
-              //       style: TextStyle(
-              //         color: Colors.red,
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 20,
-              //       ),
-              //     ),
-              //     Text(
-              //       '${state.total != null ? (state.total! + _shippingFee - discount).toStringAsFixed(0) : '0'} đ',
-              //       style: const TextStyle(
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 16,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-            ],
+                _buildInvoiceRow('Phí vận chuyển',
+                    '${NumberFormat("#,##0", "vi_VN").format(_shippingFee)} VND'),
+                if (couponState.coupons != null &&
+                    couponState.coupons!.isNotEmpty)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInvoiceRow(
+                        'Giảm giá ${NumberFormat("#,##0", "vi_VN").format(double.tryParse(data1 ?? '0') ?? 0)} VND',
+                        '${NumberFormat("#,##0", "vi_VN").format(data2 ?? 0)} VND',
+                      )
+                    ],
+                  ),
+                const Divider(),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     const Text(
+                //       'Tổng tiền',
+                //       style: TextStyle(
+                //         color: Colors.red,
+                //         fontWeight: FontWeight.bold,
+                //         fontSize: 20,
+                //       ),
+                //     ),
+                //     Text(
+                //       '${state.total != null ? (state.total! + _shippingFee - discount).toStringAsFixed(0) : '0'} đ',
+                //       style: const TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //         fontSize: 16,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+              ],
+            ),
           ),
         );
       },
@@ -686,7 +687,7 @@ class _GioHangState extends State<GioHang> {
                       ),
                     ),
                     Text(
-                      '${totalSales.toStringAsFixed(0)} đ', // Dynamically display the total from the state
+                      '${NumberFormat("#,##0", "vi_VN").format(totalSales)} VND',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,

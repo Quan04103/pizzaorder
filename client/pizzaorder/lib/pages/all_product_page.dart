@@ -45,6 +45,7 @@ class _AllProductPageState extends State<AllProductPage> {
       appBar: AppBar(
         toolbarHeight: 25,
         backgroundColor: Colors.red,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -57,7 +58,7 @@ class _AllProductPageState extends State<AllProductPage> {
             ],
           ),
           const SizedBox(height: 15),
-          Search(),
+          const Search(),
           // Main content with stack for carousel and pizza cards
           Expanded(
             flex: 2,

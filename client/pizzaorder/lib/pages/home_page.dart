@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Search(),
+                const Search(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -120,16 +120,16 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                SizedBox(
-                  height: 2000,
+                const SizedBox(
+                  height: 600,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
+                    padding: EdgeInsets.only(bottom: 10.0),
                     child: PizzaSuggest(),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
-                      10, 0, 10, 60), // Loại bỏ padding
+                      10, 0, 10, 200), // Loại bỏ padding
                   child: Align(
                     alignment: Alignment.center, // Căn giữa màn hình
                     child: SizedBox(

@@ -240,45 +240,45 @@ class _AccountState extends State<Account> {
               ),
             ],
           ),
-          Positioned(
-            top: 240,
-            left: 55,
-            height: MediaQuery.of(context).size.height * .05,
-            width: MediaQuery.of(context).size.width * .7,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.yellow[300],
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(66, 0, 0, 0),
-                    blurRadius: 10.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(2, 10),
-                  ),
-                ],
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Đăng kí thành viên VIP',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 17,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 240,
+          //   left: 55,
+          //   height: MediaQuery.of(context).size.height * .05,
+          //   width: MediaQuery.of(context).size.width * .7,
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: Colors.yellow[300],
+          //       borderRadius: const BorderRadius.all(
+          //         Radius.circular(10),
+          //       ),
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           color: Color.fromARGB(66, 0, 0, 0),
+          //           blurRadius: 10.0,
+          //           spreadRadius: 2.0,
+          //           offset: Offset(2, 10),
+          //         ),
+          //       ],
+          //     ),
+          //     child: const Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         Text(
+          //           'Đăng kí thành viên VIP',
+          //           style: TextStyle(
+          //             fontSize: 20,
+          //             fontWeight: FontWeight.w800,
+          //           ),
+          //         ),
+          //         SizedBox(width: 20),
+          //         Icon(
+          //           Icons.arrow_forward_ios,
+          //           size: 17,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Positioned(
             bottom: 30,
             left: 55,

@@ -425,81 +425,53 @@ class _PizzaDetailsState extends State<PizzaDetails> {
                                                         _selectedSupplement2,
                                                   );
 
-                                                  if (selectedProduct != null) {
-                                                    // Tạo một OrderItem mới cho sản phẩm bổ sung
-                                                    OrderItem
-                                                        supplementOrderItem =
-                                                        OrderItem(
-                                                      idproduct:
-                                                          selectedProduct.id ??
-                                                              '',
-                                                      quantity: 1,
-                                                      name: selectedProduct
-                                                              .name ??
-                                                          '',
-                                                      price: selectedProduct
-                                                              .price ??
-                                                          0,
-                                                      image: selectedProduct
-                                                              .image ??
-                                                          '',
-                                                      // Bạn có thể cập nhật lại nếu cần
-                                                    );
+                                                  // Tạo một OrderItem mới cho sản phẩm bổ sung
+                                                  OrderItem
+                                                      supplementOrderItem =
+                                                      OrderItem(
+                                                    idproduct:
+                                                        selectedProduct.id ??
+                                                            '',
+                                                    quantity: 1,
+                                                    name:
+                                                        selectedProduct.name ??
+                                                            '',
+                                                    price:
+                                                        selectedProduct.price ??
+                                                            0,
+                                                    image:
+                                                        selectedProduct.image ??
+                                                            '',
+                                                    // Bạn có thể cập nhật lại nếu cần
+                                                  );
 
-                                                    context
-                                                        .read<CartBloc>()
-                                                        .add(AddProducts(
-                                                            supplementOrderItem));
+                                                  context.read<CartBloc>().add(
+                                                      AddProducts(
+                                                          supplementOrderItem));
 
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title: const Text(
-                                                              'Thông báo'),
-                                                          content: const Text(
-                                                              'Thêm vào giỏ hàng thành công'),
-                                                          actions: <Widget>[
-                                                            TextButton(
-                                                              child: const Text(
-                                                                  'OK'),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  } else {
-                                                    // Xử lý khi không tìm thấy sản phẩm
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title:
-                                                              const Text('Lỗi'),
-                                                          content: const Text(
-                                                              'Không tìm thấy sản phẩm đã chọn.'),
-                                                          actions: <Widget>[
-                                                            TextButton(
-                                                              child: const Text(
-                                                                  'OK'),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  }
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            'Thông báo'),
+                                                        content: const Text(
+                                                            'Thêm vào giỏ hàng thành công'),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            child: const Text(
+                                                                'OK'),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                 }
                                               }
                                             },

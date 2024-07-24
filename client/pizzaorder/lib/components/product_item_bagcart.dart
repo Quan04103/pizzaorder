@@ -113,7 +113,7 @@ class _ProductItemBagCartState extends State<ProductItemBagCart> {
             ),
           ),
           Text(
-            '${widget.cartItems.totalPrice.toStringAsFixed(2)}đ',
+            '${NumberFormat("#,##0", "vi_VN").format(widget.cartItems.totalPrice)} VND',
             style: const TextStyle(fontSize: 14),
           ),
         ],

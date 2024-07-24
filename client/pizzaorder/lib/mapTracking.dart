@@ -523,7 +523,7 @@ class MapTrackingState extends State<MapTracking> {
       ]
     }''';
 
-    await mapboxMap?.style
+        await mapboxMap?.style
             .addSource(GeoJsonSource(id: "line", data: geojson));
         var lineLayerJson = """{
      "type":"line",
@@ -578,7 +578,7 @@ class MapTrackingState extends State<MapTracking> {
             'Đang giao hàng',
             style: TextStyle(color: Colors.white),
           ),
-          toolbarHeight: 80,
+          toolbarHeight: 35,
           backgroundColor: Colors.red,
         ),
         body: Stack(
