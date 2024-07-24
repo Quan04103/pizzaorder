@@ -45,7 +45,7 @@ class _HistoryPageState extends State<HistoryPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No orders found'));
+            return const Center(child: Text('Không có đơn hàng'));
           } else {
             return Container(
               padding: const EdgeInsets.all(12.0),
