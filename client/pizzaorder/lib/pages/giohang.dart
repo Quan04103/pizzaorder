@@ -594,7 +594,7 @@ class _GioHangState extends State<GioHang> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildInvoiceRow(
-                        'Giảm giá ${NumberFormat("#,##0", "vi_VN").format(double.tryParse(data1 ?? '0') ?? 0)} VND',
+                        'Giảm giá ${data1 ?? ''}',
                         '${NumberFormat("#,##0", "vi_VN").format(data2 ?? 0)} VND',
                       )
                     ],
